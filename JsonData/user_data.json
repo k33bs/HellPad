@@ -1,0 +1,46 @@
+{
+    "equipped_stratagems": [
+        "Resupply",
+        "Reinforce",
+        "Eagle Airstrike",
+        "Eagle 500kg Bomb",
+        "Orbital Precision Strike",
+        "Orbital Railcannon Strike",
+        "Hellbomb",
+        "SEAF Artillery"
+    ],
+    "keybinds": [
+        {
+            "key_code": "0x11",
+            "letter": "T"
+        },
+        {
+            "key_code": "0x10",
+            "letter": "Y"
+        },
+        {
+            "key_code": "0x04",
+            "letter": "H"
+        },
+        {
+            "key_code": "0x2D",
+            "letter": "N"
+        },
+        {
+            "key_code": "0x20",
+            "letter": "U"
+        },
+        {
+            "key_code": "0x26",
+            "letter": "J"
+        },
+        {
+            "key_code": "0x2E",
+            "letter": "M"
+        },
+        {
+            "key_code": "0x28",
+            "letter": "K"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+# Xcode
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+*.resolved
+
+# Build artifacts
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# User-specific data (each user has their own)
+# Don't track user preferences in the repository
+*.xccheckout
+*.moved-aside

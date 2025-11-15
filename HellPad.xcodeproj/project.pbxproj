@@ -1,0 +1,862 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		267E641E2EC77D86001EDD15 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B92EC77D86001EDD15 /* HotkeyManager.swift */; };
+		267E641F2EC77D86001EDD15 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E64182EC77D86001EDD15 /* Constants.swift */; };
+		267E64202EC77D86001EDD15 /* EventTapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B82EC77D86001EDD15 /* EventTapManager.swift */; };
+		267E64212EC77D86001EDD15 /* KeyPressSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */; };
+		267E64222EC77D86001EDD15 /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641A2EC77D86001EDD15 /* AppSettingsView.swift */; };
+		267E64232EC77D86001EDD15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641B2EC77D86001EDD15 /* ContentView.swift */; };
+		267E64242EC77D86001EDD15 /* Stratagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B52EC77D86001EDD15 /* Stratagem.swift */; };
+		267E64252EC77D86001EDD15 /* StratagemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63BB2EC77D86001EDD15 /* StratagemManager.swift */; };
+		267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */; };
+		267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */; };
+		267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */; };
+		267E64292EC77D86001EDD15 /* ax-tx-13-guard-dog-dog-breath.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CC2EC77D86001EDD15 /* ax-tx-13-guard-dog-dog-breath.png */; };
+		267E642A2EC77D86001EDD15 /* stratagems.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B22EC77D86001EDD15 /* stratagems.json */; };
+		267E642B2EC77D86001EDD15 /* illumination-flare.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E82EC77D86001EDD15 /* illumination-flare.png */; };
+		267E642C2EC77D86001EDD15 /* eat-700-expendable-napalm.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DD2EC77D86001EDD15 /* eat-700-expendable-napalm.png */; };
+		267E642D2EC77D86001EDD15 /* a-flam-40-flame-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63BF2EC77D86001EDD15 /* a-flam-40-flame-sentry.png */; };
+		267E642E2EC77D86001EDD15 /* eagle-napalm-airstrike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D82EC77D86001EDD15 /* eagle-napalm-airstrike.png */; };
+		267E642F2EC77D86001EDD15 /* super-earth-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64132EC77D86001EDD15 /* super-earth-flag.png */; };
+		267E64302EC77D86001EDD15 /* a-mg-43-machine-gun-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C42EC77D86001EDD15 /* a-mg-43-machine-gun-sentry.png */; };
+		267E64312EC77D86001EDD15 /* ax-las-5-guard-dog-rover.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CA2EC77D86001EDD15 /* ax-las-5-guard-dog-rover.png */; };
+		267E64322EC77D86001EDD15 /* orbital-ems-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FB2EC77D86001EDD15 /* orbital-ems-strike.png */; };
+		267E64332EC77D86001EDD15 /* ax-mls-4x-rocket-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CB2EC77D86001EDD15 /* ax-mls-4x-rocket-sentry.png */; };
+		267E64342EC77D86001EDD15 /* orbital-napalm-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FF2EC77D86001EDD15 /* orbital-napalm-barrage.png */; };
+		267E64352EC77D86001EDD15 /* eat-17-expendable-anti-tank.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DC2EC77D86001EDD15 /* eat-17-expendable-anti-tank.png */; };
+		267E64362EC77D86001EDD15 /* orbital-railcannon-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64012EC77D86001EDD15 /* orbital-railcannon-strike.png */; };
+		267E64372EC77D86001EDD15 /* sh-51-directional-shield.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640F2EC77D86001EDD15 /* sh-51-directional-shield.png */; };
+		267E64382EC77D86001EDD15 /* a-m-12-mortar-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C22EC77D86001EDD15 /* a-m-12-mortar-sentry.png */; };
+		267E64392EC77D86001EDD15 /* faf-14-spear.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E02EC77D86001EDD15 /* faf-14-spear.png */; };
+		267E643A2EC77D86001EDD15 /* sh-20-ballistic-shield-backpack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640D2EC77D86001EDD15 /* sh-20-ballistic-shield-backpack.png */; };
+		267E643B2EC77D86001EDD15 /* las-98-laser-cannon.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EA2EC77D86001EDD15 /* las-98-laser-cannon.png */; };
+		267E643C2EC77D86001EDD15 /* orbital-380mm-he-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F92EC77D86001EDD15 /* orbital-380mm-he-barrage.png */; };
+		267E643D2EC77D86001EDD15 /* exo-49-emancipator-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DF2EC77D86001EDD15 /* exo-49-emancipator-exosuit.png */; };
+		267E643E2EC77D86001EDD15 /* md-17-anti-tank-mines.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F22EC77D86001EDD15 /* md-17-anti-tank-mines.png */; };
+		267E643F2EC77D86001EDD15 /* apw-1-anti-materiel-rifle.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C62EC77D86001EDD15 /* apw-1-anti-materiel-rifle.png */; };
+		267E64402EC77D86001EDD15 /* orbital-walking-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64032EC77D86001EDD15 /* orbital-walking-barrage.png */; };
+		267E64412EC77D86001EDD15 /* orbital-precision-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64002EC77D86001EDD15 /* orbital-precision-strike.png */; };
+		267E64422EC77D86001EDD15 /* sssd-delivery.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64112EC77D86001EDD15 /* sssd-delivery.png */; };
+		267E64432EC77D86001EDD15 /* a-m-23-ems-mortar-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C32EC77D86001EDD15 /* a-m-23-ems-mortar-sentry.png */; };
+		267E64442EC77D86001EDD15 /* e-gl-21-grenadier-battlement.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D22EC77D86001EDD15 /* e-gl-21-grenadier-battlement.png */; };
+		267E64452EC77D86001EDD15 /* eagle-airstrike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D62EC77D86001EDD15 /* eagle-airstrike.png */; };
+		267E64462EC77D86001EDD15 /* eagle-smoke-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DA2EC77D86001EDD15 /* eagle-smoke-strike.png */; };
+		267E64472EC77D86001EDD15 /* flam-40-flamethrower.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E12EC77D86001EDD15 /* flam-40-flamethrower.png */; };
+		267E64482EC77D86001EDD15 /* lift-182-warp-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EC2EC77D86001EDD15 /* lift-182-warp-pack.png */; };
+		267E64492EC77D86001EDD15 /* helldivers_keybinds_mac.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */; };
+		267E644A2EC77D86001EDD15 /* orbital-120mm-he-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F82EC77D86001EDD15 /* orbital-120mm-he-barrage.png */; };
+		267E644B2EC77D86001EDD15 /* a-arc-3-tesla-tower.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63BE2EC77D86001EDD15 /* a-arc-3-tesla-tower.png */; };
+		267E644C2EC77D86001EDD15 /* orbital-airburst-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FA2EC77D86001EDD15 /* orbital-airburst-strike.png */; };
+		267E644D2EC77D86001EDD15 /* mg-43-machine-gun.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F42EC77D86001EDD15 /* mg-43-machine-gun.png */; };
+		267E644E2EC77D86001EDD15 /* b-1-supply-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CD2EC77D86001EDD15 /* b-1-supply-pack.png */; };
+		267E644F2EC77D86001EDD15 /* gl-52-de-escalator.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E42EC77D86001EDD15 /* gl-52-de-escalator.png */; };
+		267E64502EC77D86001EDD15 /* mls-4x-commando.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F62EC77D86001EDD15 /* mls-4x-commando.png */; };
+		267E64512EC77D86001EDD15 /* lift-860-hover-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63ED2EC77D86001EDD15 /* lift-860-hover-pack.png */; };
+		267E64522EC77D86001EDD15 /* orbital-gas-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FC2EC77D86001EDD15 /* orbital-gas-strike.png */; };
+		267E64532EC77D86001EDD15 /* sta-x3-w-a-s-p-launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64122EC77D86001EDD15 /* sta-x3-w-a-s-p-launcher.png */; };
+		267E64542EC77D86001EDD15 /* a-las-98-laser-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C12EC77D86001EDD15 /* a-las-98-laser-sentry.png */; };
+		267E64552EC77D86001EDD15 /* arc-3-arc-thrower.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C72EC77D86001EDD15 /* arc-3-arc-thrower.png */; };
+		267E64562EC77D86001EDD15 /* m-105-stalwart.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EF2EC77D86001EDD15 /* m-105-stalwart.png */; };
+		267E64572EC77D86001EDD15 /* sh-32-shield-generator-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640E2EC77D86001EDD15 /* sh-32-shield-generator-pack.png */; };
+		267E64582EC77D86001EDD15 /* se-45-seismic-probe.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640B2EC77D86001EDD15 /* se-45-seismic-probe.png */; };
+		267E64592EC77D86001EDD15 /* resupply.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64072EC77D86001EDD15 /* resupply.png */; };
+		267E645A2EC77D86001EDD15 /* fx-12-shield-generator-relay.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E22EC77D86001EDD15 /* fx-12-shield-generator-relay.png */; };
+		267E645B2EC77D86001EDD15 /* eagle-110mm-rocket-pods.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D42EC77D86001EDD15 /* eagle-110mm-rocket-pods.png */; };
+		267E645C2EC77D86001EDD15 /* m-102-fast-recon-vehicle.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EE2EC77D86001EDD15 /* m-102-fast-recon-vehicle.png */; };
+		267E645D2EC77D86001EDD15 /* e-mg-101-hmg-emplacement.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D32EC77D86001EDD15 /* e-mg-101-hmg-emplacement.png */; };
+		267E645E2EC77D86001EDD15 /* mg-206-heavy-machine-gun.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F52EC77D86001EDD15 /* mg-206-heavy-machine-gun.png */; };
+		267E645F2EC77D86001EDD15 /* dark-fluid-vessel.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D02EC77D86001EDD15 /* dark-fluid-vessel.png */; };
+		267E64602EC77D86001EDD15 /* tx-41-sterilizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64152EC77D86001EDD15 /* tx-41-sterilizer.png */; };
+		267E64612EC77D86001EDD15 /* eagle-500kg-bomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D52EC77D86001EDD15 /* eagle-500kg-bomb.png */; };
+		267E64622EC77D86001EDD15 /* s-11-speargun.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640A2EC77D86001EDD15 /* s-11-speargun.png */; };
+		267E64632EC77D86001EDD15 /* jump-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E92EC77D86001EDD15 /* jump-pack.png */; };
+		267E64642EC77D86001EDD15 /* orbital-smoke-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64022EC77D86001EDD15 /* orbital-smoke-strike.png */; };
+		267E64652EC77D86001EDD15 /* eagle-cluster-bomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D72EC77D86001EDD15 /* eagle-cluster-bomb.png */; };
+		267E64662EC77D86001EDD15 /* upload-data.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64162EC77D86001EDD15 /* upload-data.png */; };
+		267E64672EC77D86001EDD15 /* ax-arc-3-guard-dog-k-9.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C92EC77D86001EDD15 /* ax-arc-3-guard-dog-k-9.png */; };
+		267E64682EC77D86001EDD15 /* ac-8-autocannon.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C52EC77D86001EDD15 /* ac-8-autocannon.png */; };
+		267E64692EC77D86001EDD15 /* tectonic-drill.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64142EC77D86001EDD15 /* tectonic-drill.png */; };
+		267E646A2EC77D86001EDD15 /* e-at-12-anti-tank-emplacement.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D12EC77D86001EDD15 /* e-at-12-anti-tank-emplacement.png */; };
+		267E646B2EC77D86001EDD15 /* orbital-laser.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FE2EC77D86001EDD15 /* orbital-laser.png */; };
+		267E646C2EC77D86001EDD15 /* ax-ar-23-guard-dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C82EC77D86001EDD15 /* ax-ar-23-guard-dog.png */; };
+		267E646D2EC77D86001EDD15 /* seaf-artillery.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E640C2EC77D86001EDD15 /* seaf-artillery.png */; };
+		267E646E2EC77D86001EDD15 /* prospecting-drill.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64052EC77D86001EDD15 /* prospecting-drill.png */; };
+		267E646F2EC77D86001EDD15 /* reinforce.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64062EC77D86001EDD15 /* reinforce.png */; };
+		267E64702EC77D86001EDD15 /* plas-45-epoch.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64042EC77D86001EDD15 /* plas-45-epoch.png */; };
+		267E64712EC77D86001EDD15 /* a-ac-8-autocannon-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63BD2EC77D86001EDD15 /* a-ac-8-autocannon-sentry.png */; };
+		267E64722EC77D86001EDD15 /* md-6-anti-personnel-minefield.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F02EC77D86001EDD15 /* md-6-anti-personnel-minefield.png */; };
+		267E64732EC77D86001EDD15 /* rl-77-airburst-rocket-launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64082EC77D86001EDD15 /* rl-77-airburst-rocket-launcher.png */; };
+		267E64742EC77D86001EDD15 /* eagle-strafing-run.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DB2EC77D86001EDD15 /* eagle-strafing-run.png */; };
+		267E64752EC77D86001EDD15 /* md-i4-incendiary-mines.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F32EC77D86001EDD15 /* md-i4-incendiary-mines.png */; };
+		267E64762EC77D86001EDD15 /* gl-21-grenade-launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E32EC77D86001EDD15 /* gl-21-grenade-launcher.png */; };
+		267E64772EC77D86001EDD15 /* exo-45-patriot-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DE2EC77D86001EDD15 /* exo-45-patriot-exosuit.png */; };
+		267E64782EC77D86001EDD15 /* hellbomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E62EC77D86001EDD15 /* hellbomb.png */; };
+		267E64792EC77D86001EDD15 /* orbital-gatling-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FD2EC77D86001EDD15 /* orbital-gatling-barrage.png */; };
+		267E647A2EC77D86001EDD15 /* sos-beacon.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64102EC77D86001EDD15 /* sos-beacon.png */; };
+		267E647B2EC77D86001EDD15 /* las-99-quasar-cannon.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EB2EC77D86001EDD15 /* las-99-quasar-cannon.png */; };
+		267E647C2EC77D86001EDD15 /* eagle-rearm.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63D92EC77D86001EDD15 /* eagle-rearm.png */; };
+		267E647D2EC77D86001EDD15 /* b-100-portable-hellbomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CE2EC77D86001EDD15 /* b-100-portable-hellbomb.png */; };
+		267E647E2EC77D86001EDD15 /* ms-11-solo-silo.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F72EC77D86001EDD15 /* ms-11-solo-silo.png */; };
+		267E647F2EC77D86001EDD15 /* user_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B32EC77D86001EDD15 /* user_data.json */; };
+		267E64802EC77D86001EDD15 /* a-g-16-gatling-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63C02EC77D86001EDD15 /* a-g-16-gatling-sentry.png */; };
+		267E64812EC77D86001EDD15 /* cqc-1-one-true-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CF2EC77D86001EDD15 /* cqc-1-one-true-flag.png */; };
+		267E64822EC77D86001EDD15 /* rs-422-railgun.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E64092EC77D86001EDD15 /* rs-422-railgun.png */; };
+		267E64832EC77D86001EDD15 /* hive-breaker-drill.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E72EC77D86001EDD15 /* hive-breaker-drill.png */; };
+		267E64842EC77D86001EDD15 /* md-8-gas-mines.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F12EC77D86001EDD15 /* md-8-gas-mines.png */; };
+		267E64852EC77D86001EDD15 /* gr-8-recoilless-rifle.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E52EC77D86001EDD15 /* gr-8-recoilless-rifle.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		267E639F2EC77CFB001EDD15 /* HellPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellPad.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Stratagem.swift"; sourceTree = "<group>"; };
+		267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = helldivers_keybinds_mac.json; sourceTree = "<group>"; };
+		267E63B22EC77D86001EDD15 /* stratagems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stratagems.json; sourceTree = "<group>"; };
+		267E63B32EC77D86001EDD15 /* user_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user_data.json; sourceTree = "<group>"; };
+		267E63B52EC77D86001EDD15 /* Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stratagem.swift; sourceTree = "<group>"; };
+		267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityManager.swift; sourceTree = "<group>"; };
+		267E63B82EC77D86001EDD15 /* EventTapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapManager.swift; sourceTree = "<group>"; };
+		267E63B92EC77D86001EDD15 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressSimulator.swift; sourceTree = "<group>"; };
+		267E63BB2EC77D86001EDD15 /* StratagemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemManager.swift; sourceTree = "<group>"; };
+		267E63BD2EC77D86001EDD15 /* a-ac-8-autocannon-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-ac-8-autocannon-sentry.png"; sourceTree = "<group>"; };
+		267E63BE2EC77D86001EDD15 /* a-arc-3-tesla-tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-arc-3-tesla-tower.png"; sourceTree = "<group>"; };
+		267E63BF2EC77D86001EDD15 /* a-flam-40-flame-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-flam-40-flame-sentry.png"; sourceTree = "<group>"; };
+		267E63C02EC77D86001EDD15 /* a-g-16-gatling-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-g-16-gatling-sentry.png"; sourceTree = "<group>"; };
+		267E63C12EC77D86001EDD15 /* a-las-98-laser-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-las-98-laser-sentry.png"; sourceTree = "<group>"; };
+		267E63C22EC77D86001EDD15 /* a-m-12-mortar-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-m-12-mortar-sentry.png"; sourceTree = "<group>"; };
+		267E63C32EC77D86001EDD15 /* a-m-23-ems-mortar-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-m-23-ems-mortar-sentry.png"; sourceTree = "<group>"; };
+		267E63C42EC77D86001EDD15 /* a-mg-43-machine-gun-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "a-mg-43-machine-gun-sentry.png"; sourceTree = "<group>"; };
+		267E63C52EC77D86001EDD15 /* ac-8-autocannon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ac-8-autocannon.png"; sourceTree = "<group>"; };
+		267E63C62EC77D86001EDD15 /* apw-1-anti-materiel-rifle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "apw-1-anti-materiel-rifle.png"; sourceTree = "<group>"; };
+		267E63C72EC77D86001EDD15 /* arc-3-arc-thrower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arc-3-arc-thrower.png"; sourceTree = "<group>"; };
+		267E63C82EC77D86001EDD15 /* ax-ar-23-guard-dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ax-ar-23-guard-dog.png"; sourceTree = "<group>"; };
+		267E63C92EC77D86001EDD15 /* ax-arc-3-guard-dog-k-9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ax-arc-3-guard-dog-k-9.png"; sourceTree = "<group>"; };
+		267E63CA2EC77D86001EDD15 /* ax-las-5-guard-dog-rover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ax-las-5-guard-dog-rover.png"; sourceTree = "<group>"; };
+		267E63CB2EC77D86001EDD15 /* ax-mls-4x-rocket-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ax-mls-4x-rocket-sentry.png"; sourceTree = "<group>"; };
+		267E63CC2EC77D86001EDD15 /* ax-tx-13-guard-dog-dog-breath.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ax-tx-13-guard-dog-dog-breath.png"; sourceTree = "<group>"; };
+		267E63CD2EC77D86001EDD15 /* b-1-supply-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "b-1-supply-pack.png"; sourceTree = "<group>"; };
+		267E63CE2EC77D86001EDD15 /* b-100-portable-hellbomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "b-100-portable-hellbomb.png"; sourceTree = "<group>"; };
+		267E63CF2EC77D86001EDD15 /* cqc-1-one-true-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-1-one-true-flag.png"; sourceTree = "<group>"; };
+		267E63D02EC77D86001EDD15 /* dark-fluid-vessel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dark-fluid-vessel.png"; sourceTree = "<group>"; };
+		267E63D12EC77D86001EDD15 /* e-at-12-anti-tank-emplacement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e-at-12-anti-tank-emplacement.png"; sourceTree = "<group>"; };
+		267E63D22EC77D86001EDD15 /* e-gl-21-grenadier-battlement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e-gl-21-grenadier-battlement.png"; sourceTree = "<group>"; };
+		267E63D32EC77D86001EDD15 /* e-mg-101-hmg-emplacement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "e-mg-101-hmg-emplacement.png"; sourceTree = "<group>"; };
+		267E63D42EC77D86001EDD15 /* eagle-110mm-rocket-pods.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-110mm-rocket-pods.png"; sourceTree = "<group>"; };
+		267E63D52EC77D86001EDD15 /* eagle-500kg-bomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-500kg-bomb.png"; sourceTree = "<group>"; };
+		267E63D62EC77D86001EDD15 /* eagle-airstrike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-airstrike.png"; sourceTree = "<group>"; };
+		267E63D72EC77D86001EDD15 /* eagle-cluster-bomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-cluster-bomb.png"; sourceTree = "<group>"; };
+		267E63D82EC77D86001EDD15 /* eagle-napalm-airstrike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-napalm-airstrike.png"; sourceTree = "<group>"; };
+		267E63D92EC77D86001EDD15 /* eagle-rearm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-rearm.png"; sourceTree = "<group>"; };
+		267E63DA2EC77D86001EDD15 /* eagle-smoke-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-smoke-strike.png"; sourceTree = "<group>"; };
+		267E63DB2EC77D86001EDD15 /* eagle-strafing-run.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eagle-strafing-run.png"; sourceTree = "<group>"; };
+		267E63DC2EC77D86001EDD15 /* eat-17-expendable-anti-tank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eat-17-expendable-anti-tank.png"; sourceTree = "<group>"; };
+		267E63DD2EC77D86001EDD15 /* eat-700-expendable-napalm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eat-700-expendable-napalm.png"; sourceTree = "<group>"; };
+		267E63DE2EC77D86001EDD15 /* exo-45-patriot-exosuit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exo-45-patriot-exosuit.png"; sourceTree = "<group>"; };
+		267E63DF2EC77D86001EDD15 /* exo-49-emancipator-exosuit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exo-49-emancipator-exosuit.png"; sourceTree = "<group>"; };
+		267E63E02EC77D86001EDD15 /* faf-14-spear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "faf-14-spear.png"; sourceTree = "<group>"; };
+		267E63E12EC77D86001EDD15 /* flam-40-flamethrower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flam-40-flamethrower.png"; sourceTree = "<group>"; };
+		267E63E22EC77D86001EDD15 /* fx-12-shield-generator-relay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fx-12-shield-generator-relay.png"; sourceTree = "<group>"; };
+		267E63E32EC77D86001EDD15 /* gl-21-grenade-launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-21-grenade-launcher.png"; sourceTree = "<group>"; };
+		267E63E42EC77D86001EDD15 /* gl-52-de-escalator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-52-de-escalator.png"; sourceTree = "<group>"; };
+		267E63E52EC77D86001EDD15 /* gr-8-recoilless-rifle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gr-8-recoilless-rifle.png"; sourceTree = "<group>"; };
+		267E63E62EC77D86001EDD15 /* hellbomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hellbomb.png; sourceTree = "<group>"; };
+		267E63E72EC77D86001EDD15 /* hive-breaker-drill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hive-breaker-drill.png"; sourceTree = "<group>"; };
+		267E63E82EC77D86001EDD15 /* illumination-flare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "illumination-flare.png"; sourceTree = "<group>"; };
+		267E63E92EC77D86001EDD15 /* jump-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jump-pack.png"; sourceTree = "<group>"; };
+		267E63EA2EC77D86001EDD15 /* las-98-laser-cannon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "las-98-laser-cannon.png"; sourceTree = "<group>"; };
+		267E63EB2EC77D86001EDD15 /* las-99-quasar-cannon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "las-99-quasar-cannon.png"; sourceTree = "<group>"; };
+		267E63EC2EC77D86001EDD15 /* lift-182-warp-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lift-182-warp-pack.png"; sourceTree = "<group>"; };
+		267E63ED2EC77D86001EDD15 /* lift-860-hover-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lift-860-hover-pack.png"; sourceTree = "<group>"; };
+		267E63EE2EC77D86001EDD15 /* m-102-fast-recon-vehicle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-102-fast-recon-vehicle.png"; sourceTree = "<group>"; };
+		267E63EF2EC77D86001EDD15 /* m-105-stalwart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-105-stalwart.png"; sourceTree = "<group>"; };
+		267E63F02EC77D86001EDD15 /* md-6-anti-personnel-minefield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "md-6-anti-personnel-minefield.png"; sourceTree = "<group>"; };
+		267E63F12EC77D86001EDD15 /* md-8-gas-mines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "md-8-gas-mines.png"; sourceTree = "<group>"; };
+		267E63F22EC77D86001EDD15 /* md-17-anti-tank-mines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "md-17-anti-tank-mines.png"; sourceTree = "<group>"; };
+		267E63F32EC77D86001EDD15 /* md-i4-incendiary-mines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "md-i4-incendiary-mines.png"; sourceTree = "<group>"; };
+		267E63F42EC77D86001EDD15 /* mg-43-machine-gun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mg-43-machine-gun.png"; sourceTree = "<group>"; };
+		267E63F52EC77D86001EDD15 /* mg-206-heavy-machine-gun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mg-206-heavy-machine-gun.png"; sourceTree = "<group>"; };
+		267E63F62EC77D86001EDD15 /* mls-4x-commando.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mls-4x-commando.png"; sourceTree = "<group>"; };
+		267E63F72EC77D86001EDD15 /* ms-11-solo-silo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ms-11-solo-silo.png"; sourceTree = "<group>"; };
+		267E63F82EC77D86001EDD15 /* orbital-120mm-he-barrage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-120mm-he-barrage.png"; sourceTree = "<group>"; };
+		267E63F92EC77D86001EDD15 /* orbital-380mm-he-barrage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-380mm-he-barrage.png"; sourceTree = "<group>"; };
+		267E63FA2EC77D86001EDD15 /* orbital-airburst-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-airburst-strike.png"; sourceTree = "<group>"; };
+		267E63FB2EC77D86001EDD15 /* orbital-ems-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-ems-strike.png"; sourceTree = "<group>"; };
+		267E63FC2EC77D86001EDD15 /* orbital-gas-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-gas-strike.png"; sourceTree = "<group>"; };
+		267E63FD2EC77D86001EDD15 /* orbital-gatling-barrage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-gatling-barrage.png"; sourceTree = "<group>"; };
+		267E63FE2EC77D86001EDD15 /* orbital-laser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-laser.png"; sourceTree = "<group>"; };
+		267E63FF2EC77D86001EDD15 /* orbital-napalm-barrage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-napalm-barrage.png"; sourceTree = "<group>"; };
+		267E64002EC77D86001EDD15 /* orbital-precision-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-precision-strike.png"; sourceTree = "<group>"; };
+		267E64012EC77D86001EDD15 /* orbital-railcannon-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-railcannon-strike.png"; sourceTree = "<group>"; };
+		267E64022EC77D86001EDD15 /* orbital-smoke-strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-smoke-strike.png"; sourceTree = "<group>"; };
+		267E64032EC77D86001EDD15 /* orbital-walking-barrage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orbital-walking-barrage.png"; sourceTree = "<group>"; };
+		267E64042EC77D86001EDD15 /* plas-45-epoch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plas-45-epoch.png"; sourceTree = "<group>"; };
+		267E64052EC77D86001EDD15 /* prospecting-drill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prospecting-drill.png"; sourceTree = "<group>"; };
+		267E64062EC77D86001EDD15 /* reinforce.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reinforce.png; sourceTree = "<group>"; };
+		267E64072EC77D86001EDD15 /* resupply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = resupply.png; sourceTree = "<group>"; };
+		267E64082EC77D86001EDD15 /* rl-77-airburst-rocket-launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rl-77-airburst-rocket-launcher.png"; sourceTree = "<group>"; };
+		267E64092EC77D86001EDD15 /* rs-422-railgun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rs-422-railgun.png"; sourceTree = "<group>"; };
+		267E640A2EC77D86001EDD15 /* s-11-speargun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "s-11-speargun.png"; sourceTree = "<group>"; };
+		267E640B2EC77D86001EDD15 /* se-45-seismic-probe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "se-45-seismic-probe.png"; sourceTree = "<group>"; };
+		267E640C2EC77D86001EDD15 /* seaf-artillery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "seaf-artillery.png"; sourceTree = "<group>"; };
+		267E640D2EC77D86001EDD15 /* sh-20-ballistic-shield-backpack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sh-20-ballistic-shield-backpack.png"; sourceTree = "<group>"; };
+		267E640E2EC77D86001EDD15 /* sh-32-shield-generator-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sh-32-shield-generator-pack.png"; sourceTree = "<group>"; };
+		267E640F2EC77D86001EDD15 /* sh-51-directional-shield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sh-51-directional-shield.png"; sourceTree = "<group>"; };
+		267E64102EC77D86001EDD15 /* sos-beacon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sos-beacon.png"; sourceTree = "<group>"; };
+		267E64112EC77D86001EDD15 /* sssd-delivery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sssd-delivery.png"; sourceTree = "<group>"; };
+		267E64122EC77D86001EDD15 /* sta-x3-w-a-s-p-launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sta-x3-w-a-s-p-launcher.png"; sourceTree = "<group>"; };
+		267E64132EC77D86001EDD15 /* super-earth-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "super-earth-flag.png"; sourceTree = "<group>"; };
+		267E64142EC77D86001EDD15 /* tectonic-drill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tectonic-drill.png"; sourceTree = "<group>"; };
+		267E64152EC77D86001EDD15 /* tx-41-sterilizer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tx-41-sterilizer.png"; sourceTree = "<group>"; };
+		267E64162EC77D86001EDD15 /* upload-data.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload-data.png"; sourceTree = "<group>"; };
+		267E64182EC77D86001EDD15 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		267E641A2EC77D86001EDD15 /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
+		267E641B2EC77D86001EDD15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemPickerView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		267E64872EC77E8F001EDD15 /* Exceptions for "HellPad" folder in "HellPad" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 267E639E2EC77CFB001EDD15 /* HellPad */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		267E63A12EC77CFB001EDD15 /* HellPad */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				267E64872EC77E8F001EDD15 /* Exceptions for "HellPad" folder in "HellPad" target */,
+			);
+			path = HellPad;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		267E639C2EC77CFB001EDD15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		267E63962EC77CFB001EDD15 = {
+			isa = PBXGroup;
+			children = (
+				267E63B02EC77D86001EDD15 /* Extensions */,
+				267E63B42EC77D86001EDD15 /* JsonData */,
+				267E63B62EC77D86001EDD15 /* Models */,
+				267E63BC2EC77D86001EDD15 /* Services */,
+				267E64172EC77D86001EDD15 /* StratagemIcons */,
+				267E64192EC77D86001EDD15 /* Utils */,
+				267E641D2EC77D86001EDD15 /* Views */,
+				267E63A12EC77CFB001EDD15 /* HellPad */,
+				267E63A02EC77CFB001EDD15 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		267E63A02EC77CFB001EDD15 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				267E639F2EC77CFB001EDD15 /* HellPad.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		267E63B02EC77D86001EDD15 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		267E63B42EC77D86001EDD15 /* JsonData */ = {
+			isa = PBXGroup;
+			children = (
+				267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */,
+				267E63B22EC77D86001EDD15 /* stratagems.json */,
+				267E63B32EC77D86001EDD15 /* user_data.json */,
+			);
+			path = JsonData;
+			sourceTree = "<group>";
+		};
+		267E63B62EC77D86001EDD15 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				267E63B52EC77D86001EDD15 /* Stratagem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		267E63BC2EC77D86001EDD15 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */,
+				267E63B82EC77D86001EDD15 /* EventTapManager.swift */,
+				267E63B92EC77D86001EDD15 /* HotkeyManager.swift */,
+				267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */,
+				267E63BB2EC77D86001EDD15 /* StratagemManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		267E64172EC77D86001EDD15 /* StratagemIcons */ = {
+			isa = PBXGroup;
+			children = (
+				267E63BD2EC77D86001EDD15 /* a-ac-8-autocannon-sentry.png */,
+				267E63BE2EC77D86001EDD15 /* a-arc-3-tesla-tower.png */,
+				267E63BF2EC77D86001EDD15 /* a-flam-40-flame-sentry.png */,
+				267E63C02EC77D86001EDD15 /* a-g-16-gatling-sentry.png */,
+				267E63C12EC77D86001EDD15 /* a-las-98-laser-sentry.png */,
+				267E63C22EC77D86001EDD15 /* a-m-12-mortar-sentry.png */,
+				267E63C32EC77D86001EDD15 /* a-m-23-ems-mortar-sentry.png */,
+				267E63C42EC77D86001EDD15 /* a-mg-43-machine-gun-sentry.png */,
+				267E63C52EC77D86001EDD15 /* ac-8-autocannon.png */,
+				267E63C62EC77D86001EDD15 /* apw-1-anti-materiel-rifle.png */,
+				267E63C72EC77D86001EDD15 /* arc-3-arc-thrower.png */,
+				267E63C82EC77D86001EDD15 /* ax-ar-23-guard-dog.png */,
+				267E63C92EC77D86001EDD15 /* ax-arc-3-guard-dog-k-9.png */,
+				267E63CA2EC77D86001EDD15 /* ax-las-5-guard-dog-rover.png */,
+				267E63CB2EC77D86001EDD15 /* ax-mls-4x-rocket-sentry.png */,
+				267E63CC2EC77D86001EDD15 /* ax-tx-13-guard-dog-dog-breath.png */,
+				267E63CD2EC77D86001EDD15 /* b-1-supply-pack.png */,
+				267E63CE2EC77D86001EDD15 /* b-100-portable-hellbomb.png */,
+				267E63CF2EC77D86001EDD15 /* cqc-1-one-true-flag.png */,
+				267E63D02EC77D86001EDD15 /* dark-fluid-vessel.png */,
+				267E63D12EC77D86001EDD15 /* e-at-12-anti-tank-emplacement.png */,
+				267E63D22EC77D86001EDD15 /* e-gl-21-grenadier-battlement.png */,
+				267E63D32EC77D86001EDD15 /* e-mg-101-hmg-emplacement.png */,
+				267E63D42EC77D86001EDD15 /* eagle-110mm-rocket-pods.png */,
+				267E63D52EC77D86001EDD15 /* eagle-500kg-bomb.png */,
+				267E63D62EC77D86001EDD15 /* eagle-airstrike.png */,
+				267E63D72EC77D86001EDD15 /* eagle-cluster-bomb.png */,
+				267E63D82EC77D86001EDD15 /* eagle-napalm-airstrike.png */,
+				267E63D92EC77D86001EDD15 /* eagle-rearm.png */,
+				267E63DA2EC77D86001EDD15 /* eagle-smoke-strike.png */,
+				267E63DB2EC77D86001EDD15 /* eagle-strafing-run.png */,
+				267E63DC2EC77D86001EDD15 /* eat-17-expendable-anti-tank.png */,
+				267E63DD2EC77D86001EDD15 /* eat-700-expendable-napalm.png */,
+				267E63DE2EC77D86001EDD15 /* exo-45-patriot-exosuit.png */,
+				267E63DF2EC77D86001EDD15 /* exo-49-emancipator-exosuit.png */,
+				267E63E02EC77D86001EDD15 /* faf-14-spear.png */,
+				267E63E12EC77D86001EDD15 /* flam-40-flamethrower.png */,
+				267E63E22EC77D86001EDD15 /* fx-12-shield-generator-relay.png */,
+				267E63E32EC77D86001EDD15 /* gl-21-grenade-launcher.png */,
+				267E63E42EC77D86001EDD15 /* gl-52-de-escalator.png */,
+				267E63E52EC77D86001EDD15 /* gr-8-recoilless-rifle.png */,
+				267E63E62EC77D86001EDD15 /* hellbomb.png */,
+				267E63E72EC77D86001EDD15 /* hive-breaker-drill.png */,
+				267E63E82EC77D86001EDD15 /* illumination-flare.png */,
+				267E63E92EC77D86001EDD15 /* jump-pack.png */,
+				267E63EA2EC77D86001EDD15 /* las-98-laser-cannon.png */,
+				267E63EB2EC77D86001EDD15 /* las-99-quasar-cannon.png */,
+				267E63EC2EC77D86001EDD15 /* lift-182-warp-pack.png */,
+				267E63ED2EC77D86001EDD15 /* lift-860-hover-pack.png */,
+				267E63EE2EC77D86001EDD15 /* m-102-fast-recon-vehicle.png */,
+				267E63EF2EC77D86001EDD15 /* m-105-stalwart.png */,
+				267E63F02EC77D86001EDD15 /* md-6-anti-personnel-minefield.png */,
+				267E63F12EC77D86001EDD15 /* md-8-gas-mines.png */,
+				267E63F22EC77D86001EDD15 /* md-17-anti-tank-mines.png */,
+				267E63F32EC77D86001EDD15 /* md-i4-incendiary-mines.png */,
+				267E63F42EC77D86001EDD15 /* mg-43-machine-gun.png */,
+				267E63F52EC77D86001EDD15 /* mg-206-heavy-machine-gun.png */,
+				267E63F62EC77D86001EDD15 /* mls-4x-commando.png */,
+				267E63F72EC77D86001EDD15 /* ms-11-solo-silo.png */,
+				267E63F82EC77D86001EDD15 /* orbital-120mm-he-barrage.png */,
+				267E63F92EC77D86001EDD15 /* orbital-380mm-he-barrage.png */,
+				267E63FA2EC77D86001EDD15 /* orbital-airburst-strike.png */,
+				267E63FB2EC77D86001EDD15 /* orbital-ems-strike.png */,
+				267E63FC2EC77D86001EDD15 /* orbital-gas-strike.png */,
+				267E63FD2EC77D86001EDD15 /* orbital-gatling-barrage.png */,
+				267E63FE2EC77D86001EDD15 /* orbital-laser.png */,
+				267E63FF2EC77D86001EDD15 /* orbital-napalm-barrage.png */,
+				267E64002EC77D86001EDD15 /* orbital-precision-strike.png */,
+				267E64012EC77D86001EDD15 /* orbital-railcannon-strike.png */,
+				267E64022EC77D86001EDD15 /* orbital-smoke-strike.png */,
+				267E64032EC77D86001EDD15 /* orbital-walking-barrage.png */,
+				267E64042EC77D86001EDD15 /* plas-45-epoch.png */,
+				267E64052EC77D86001EDD15 /* prospecting-drill.png */,
+				267E64062EC77D86001EDD15 /* reinforce.png */,
+				267E64072EC77D86001EDD15 /* resupply.png */,
+				267E64082EC77D86001EDD15 /* rl-77-airburst-rocket-launcher.png */,
+				267E64092EC77D86001EDD15 /* rs-422-railgun.png */,
+				267E640A2EC77D86001EDD15 /* s-11-speargun.png */,
+				267E640B2EC77D86001EDD15 /* se-45-seismic-probe.png */,
+				267E640C2EC77D86001EDD15 /* seaf-artillery.png */,
+				267E640D2EC77D86001EDD15 /* sh-20-ballistic-shield-backpack.png */,
+				267E640E2EC77D86001EDD15 /* sh-32-shield-generator-pack.png */,
+				267E640F2EC77D86001EDD15 /* sh-51-directional-shield.png */,
+				267E64102EC77D86001EDD15 /* sos-beacon.png */,
+				267E64112EC77D86001EDD15 /* sssd-delivery.png */,
+				267E64122EC77D86001EDD15 /* sta-x3-w-a-s-p-launcher.png */,
+				267E64132EC77D86001EDD15 /* super-earth-flag.png */,
+				267E64142EC77D86001EDD15 /* tectonic-drill.png */,
+				267E64152EC77D86001EDD15 /* tx-41-sterilizer.png */,
+				267E64162EC77D86001EDD15 /* upload-data.png */,
+			);
+			path = StratagemIcons;
+			sourceTree = "<group>";
+		};
+		267E64192EC77D86001EDD15 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				267E64182EC77D86001EDD15 /* Constants.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		267E641D2EC77D86001EDD15 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				267E641A2EC77D86001EDD15 /* AppSettingsView.swift */,
+				267E641B2EC77D86001EDD15 /* ContentView.swift */,
+				267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		267E639E2EC77CFB001EDD15 /* HellPad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 267E63AA2EC77CFC001EDD15 /* Build configuration list for PBXNativeTarget "HellPad" */;
+			buildPhases = (
+				267E639B2EC77CFB001EDD15 /* Sources */,
+				267E639C2EC77CFB001EDD15 /* Frameworks */,
+				267E639D2EC77CFB001EDD15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				267E63A12EC77CFB001EDD15 /* HellPad */,
+			);
+			name = HellPad;
+			packageProductDependencies = (
+			);
+			productName = HellPad;
+			productReference = 267E639F2EC77CFB001EDD15 /* HellPad.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		267E63972EC77CFB001EDD15 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2610;
+				LastUpgradeCheck = 2610;
+				TargetAttributes = {
+					267E639E2EC77CFB001EDD15 = {
+						CreatedOnToolsVersion = 26.1;
+						LastSwiftMigration = 2610;
+					};
+				};
+			};
+			buildConfigurationList = 267E639A2EC77CFB001EDD15 /* Build configuration list for PBXProject "HellPad" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 267E63962EC77CFB001EDD15;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 267E63A02EC77CFB001EDD15 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				267E639E2EC77CFB001EDD15 /* HellPad */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		267E639D2EC77CFB001EDD15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				267E64292EC77D86001EDD15 /* ax-tx-13-guard-dog-dog-breath.png in Resources */,
+				267E642A2EC77D86001EDD15 /* stratagems.json in Resources */,
+				267E642B2EC77D86001EDD15 /* illumination-flare.png in Resources */,
+				267E642C2EC77D86001EDD15 /* eat-700-expendable-napalm.png in Resources */,
+				267E642D2EC77D86001EDD15 /* a-flam-40-flame-sentry.png in Resources */,
+				267E642E2EC77D86001EDD15 /* eagle-napalm-airstrike.png in Resources */,
+				267E642F2EC77D86001EDD15 /* super-earth-flag.png in Resources */,
+				267E64302EC77D86001EDD15 /* a-mg-43-machine-gun-sentry.png in Resources */,
+				267E64312EC77D86001EDD15 /* ax-las-5-guard-dog-rover.png in Resources */,
+				267E64322EC77D86001EDD15 /* orbital-ems-strike.png in Resources */,
+				267E64332EC77D86001EDD15 /* ax-mls-4x-rocket-sentry.png in Resources */,
+				267E64342EC77D86001EDD15 /* orbital-napalm-barrage.png in Resources */,
+				267E64352EC77D86001EDD15 /* eat-17-expendable-anti-tank.png in Resources */,
+				267E64362EC77D86001EDD15 /* orbital-railcannon-strike.png in Resources */,
+				267E64372EC77D86001EDD15 /* sh-51-directional-shield.png in Resources */,
+				267E64382EC77D86001EDD15 /* a-m-12-mortar-sentry.png in Resources */,
+				267E64392EC77D86001EDD15 /* faf-14-spear.png in Resources */,
+				267E643A2EC77D86001EDD15 /* sh-20-ballistic-shield-backpack.png in Resources */,
+				267E643B2EC77D86001EDD15 /* las-98-laser-cannon.png in Resources */,
+				267E643C2EC77D86001EDD15 /* orbital-380mm-he-barrage.png in Resources */,
+				267E643D2EC77D86001EDD15 /* exo-49-emancipator-exosuit.png in Resources */,
+				267E643E2EC77D86001EDD15 /* md-17-anti-tank-mines.png in Resources */,
+				267E643F2EC77D86001EDD15 /* apw-1-anti-materiel-rifle.png in Resources */,
+				267E64402EC77D86001EDD15 /* orbital-walking-barrage.png in Resources */,
+				267E64412EC77D86001EDD15 /* orbital-precision-strike.png in Resources */,
+				267E64422EC77D86001EDD15 /* sssd-delivery.png in Resources */,
+				267E64432EC77D86001EDD15 /* a-m-23-ems-mortar-sentry.png in Resources */,
+				267E64442EC77D86001EDD15 /* e-gl-21-grenadier-battlement.png in Resources */,
+				267E64452EC77D86001EDD15 /* eagle-airstrike.png in Resources */,
+				267E64462EC77D86001EDD15 /* eagle-smoke-strike.png in Resources */,
+				267E64472EC77D86001EDD15 /* flam-40-flamethrower.png in Resources */,
+				267E64482EC77D86001EDD15 /* lift-182-warp-pack.png in Resources */,
+				267E64492EC77D86001EDD15 /* helldivers_keybinds_mac.json in Resources */,
+				267E644A2EC77D86001EDD15 /* orbital-120mm-he-barrage.png in Resources */,
+				267E644B2EC77D86001EDD15 /* a-arc-3-tesla-tower.png in Resources */,
+				267E644C2EC77D86001EDD15 /* orbital-airburst-strike.png in Resources */,
+				267E644D2EC77D86001EDD15 /* mg-43-machine-gun.png in Resources */,
+				267E644E2EC77D86001EDD15 /* b-1-supply-pack.png in Resources */,
+				267E644F2EC77D86001EDD15 /* gl-52-de-escalator.png in Resources */,
+				267E64502EC77D86001EDD15 /* mls-4x-commando.png in Resources */,
+				267E64512EC77D86001EDD15 /* lift-860-hover-pack.png in Resources */,
+				267E64522EC77D86001EDD15 /* orbital-gas-strike.png in Resources */,
+				267E64532EC77D86001EDD15 /* sta-x3-w-a-s-p-launcher.png in Resources */,
+				267E64542EC77D86001EDD15 /* a-las-98-laser-sentry.png in Resources */,
+				267E64552EC77D86001EDD15 /* arc-3-arc-thrower.png in Resources */,
+				267E64562EC77D86001EDD15 /* m-105-stalwart.png in Resources */,
+				267E64572EC77D86001EDD15 /* sh-32-shield-generator-pack.png in Resources */,
+				267E64582EC77D86001EDD15 /* se-45-seismic-probe.png in Resources */,
+				267E64592EC77D86001EDD15 /* resupply.png in Resources */,
+				267E645A2EC77D86001EDD15 /* fx-12-shield-generator-relay.png in Resources */,
+				267E645B2EC77D86001EDD15 /* eagle-110mm-rocket-pods.png in Resources */,
+				267E645C2EC77D86001EDD15 /* m-102-fast-recon-vehicle.png in Resources */,
+				267E645D2EC77D86001EDD15 /* e-mg-101-hmg-emplacement.png in Resources */,
+				267E645E2EC77D86001EDD15 /* mg-206-heavy-machine-gun.png in Resources */,
+				267E645F2EC77D86001EDD15 /* dark-fluid-vessel.png in Resources */,
+				267E64602EC77D86001EDD15 /* tx-41-sterilizer.png in Resources */,
+				267E64612EC77D86001EDD15 /* eagle-500kg-bomb.png in Resources */,
+				267E64622EC77D86001EDD15 /* s-11-speargun.png in Resources */,
+				267E64632EC77D86001EDD15 /* jump-pack.png in Resources */,
+				267E64642EC77D86001EDD15 /* orbital-smoke-strike.png in Resources */,
+				267E64652EC77D86001EDD15 /* eagle-cluster-bomb.png in Resources */,
+				267E64662EC77D86001EDD15 /* upload-data.png in Resources */,
+				267E64672EC77D86001EDD15 /* ax-arc-3-guard-dog-k-9.png in Resources */,
+				267E64682EC77D86001EDD15 /* ac-8-autocannon.png in Resources */,
+				267E64692EC77D86001EDD15 /* tectonic-drill.png in Resources */,
+				267E646A2EC77D86001EDD15 /* e-at-12-anti-tank-emplacement.png in Resources */,
+				267E646B2EC77D86001EDD15 /* orbital-laser.png in Resources */,
+				267E646C2EC77D86001EDD15 /* ax-ar-23-guard-dog.png in Resources */,
+				267E646D2EC77D86001EDD15 /* seaf-artillery.png in Resources */,
+				267E646E2EC77D86001EDD15 /* prospecting-drill.png in Resources */,
+				267E646F2EC77D86001EDD15 /* reinforce.png in Resources */,
+				267E64702EC77D86001EDD15 /* plas-45-epoch.png in Resources */,
+				267E64712EC77D86001EDD15 /* a-ac-8-autocannon-sentry.png in Resources */,
+				267E64722EC77D86001EDD15 /* md-6-anti-personnel-minefield.png in Resources */,
+				267E64732EC77D86001EDD15 /* rl-77-airburst-rocket-launcher.png in Resources */,
+				267E64742EC77D86001EDD15 /* eagle-strafing-run.png in Resources */,
+				267E64752EC77D86001EDD15 /* md-i4-incendiary-mines.png in Resources */,
+				267E64762EC77D86001EDD15 /* gl-21-grenade-launcher.png in Resources */,
+				267E64772EC77D86001EDD15 /* exo-45-patriot-exosuit.png in Resources */,
+				267E64782EC77D86001EDD15 /* hellbomb.png in Resources */,
+				267E64792EC77D86001EDD15 /* orbital-gatling-barrage.png in Resources */,
+				267E647A2EC77D86001EDD15 /* sos-beacon.png in Resources */,
+				267E647B2EC77D86001EDD15 /* las-99-quasar-cannon.png in Resources */,
+				267E647C2EC77D86001EDD15 /* eagle-rearm.png in Resources */,
+				267E647D2EC77D86001EDD15 /* b-100-portable-hellbomb.png in Resources */,
+				267E647E2EC77D86001EDD15 /* ms-11-solo-silo.png in Resources */,
+				267E647F2EC77D86001EDD15 /* user_data.json in Resources */,
+				267E64802EC77D86001EDD15 /* a-g-16-gatling-sentry.png in Resources */,
+				267E64812EC77D86001EDD15 /* cqc-1-one-true-flag.png in Resources */,
+				267E64822EC77D86001EDD15 /* rs-422-railgun.png in Resources */,
+				267E64832EC77D86001EDD15 /* hive-breaker-drill.png in Resources */,
+				267E64842EC77D86001EDD15 /* md-8-gas-mines.png in Resources */,
+				267E64852EC77D86001EDD15 /* gr-8-recoilless-rifle.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		267E639B2EC77CFB001EDD15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				267E641E2EC77D86001EDD15 /* HotkeyManager.swift in Sources */,
+				267E641F2EC77D86001EDD15 /* Constants.swift in Sources */,
+				267E64202EC77D86001EDD15 /* EventTapManager.swift in Sources */,
+				267E64212EC77D86001EDD15 /* KeyPressSimulator.swift in Sources */,
+				267E64222EC77D86001EDD15 /* AppSettingsView.swift in Sources */,
+				267E64232EC77D86001EDD15 /* ContentView.swift in Sources */,
+				267E64242EC77D86001EDD15 /* Stratagem.swift in Sources */,
+				267E64252EC77D86001EDD15 /* StratagemManager.swift in Sources */,
+				267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */,
+				267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */,
+				267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		267E63A82EC77CFC001EDD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		267E63A92EC77CFC001EDD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		267E63AB2EC77CFC001EDD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HellPad/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HellPad;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "HellPad needs to simulate keypresses to execute stratagems.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		267E63AC2EC77CFC001EDD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HellPad/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HellPad;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "HellPad needs to simulate keypresses to execute stratagems.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		267E639A2EC77CFB001EDD15 /* Build configuration list for PBXProject "HellPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				267E63A82EC77CFC001EDD15 /* Debug */,
+				267E63A92EC77CFC001EDD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		267E63AA2EC77CFC001EDD15 /* Build configuration list for PBXNativeTarget "HellPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				267E63AB2EC77CFC001EDD15 /* Debug */,
+				267E63AC2EC77CFC001EDD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 267E63972EC77CFB001EDD15 /* Project object */;
+}

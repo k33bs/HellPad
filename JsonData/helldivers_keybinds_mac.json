@@ -1,0 +1,8 @@
+{
+    "stratagem_menu": "0x3B",
+    "up": "0x7E",
+    "left": "0x7B",
+    "down": "0x7D",
+    "right": "0x7C",
+    "_comment": "macOS key codes: stratagem_menu=Left Control (0x3B), arrow keys: up=0x7E, left=0x7B, down=0x7D, right=0x7C"
+}
