@@ -86,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "HellPad v1.0.1"
+        alert.messageText = "HellPad v1.0.3"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 
@@ -124,9 +124,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         if settingsWindow == nil {
-            let settingsView = AppSettingsView(stratagemManager: manager, closeAction: { [weak self] in
-                self?.settingsWindow?.close()
-            })
+            let settingsView = AppSettingsView(stratagemManager: manager)
             settingsWindow = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 600, height: 400),
                 styleMask: [.titled, .closable],

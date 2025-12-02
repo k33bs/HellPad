@@ -16,10 +16,12 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 - **8 Customizable Stratagem Slots** - Assign any stratagem to any slot
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
-- **Combo Mode** - Hold Shift and press multiple keys to queue stratagems, release to execute sequentially
+- **Combo Mode** - Hold a configurable combo key and press multiple hotkeys to queue stratagems, release to execute sequentially
 - **Smart Detection** - Only works when your configured apps are active (prevents accidental triggers)
 - **Pause/Resume** - Ctrl+P to temporarily disable hotkeys
 - **Rebindable Keys** - Change any hotkey to your preference
+- **Configurable Game Controls** - Customize the stratagem menu key, directional keys (WASD or arrows), and activation mode
+- **Hold or Toggle Mode** - Choose between holding the menu key or tapping once to open
 - **Visual Feedback** - Yellow flash on activation, cyan glow for queued combos
 - **Menu Bar App** - Stays out of your way with floating window option
 
@@ -33,7 +35,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.1.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.3.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -66,11 +68,11 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 
 ### Combo Mode
 
-1. Hold **Shift**
+1. Hold the **Combo Queue Key** (default: Shift, configurable in Controls tab)
 2. Press keys to queue stratagems (icons glow cyan)
-3. Release **Shift** to execute sequence
+3. Release the combo key to execute sequence
 4. Click mouse when each stratagem appears to throw it (3 second timeout)
-5. Press **Shift+ESC** to cancel combo
+5. Press **ComboKey+ESC** to cancel combo
 
 ### Pause/Resume
 
@@ -94,6 +96,18 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 1. Click menu bar icon
 2. Select "Configure Apps..."
 3. Add apps where hotkeys should work (e.g., HELLDIVERS™ 2, Chrome, Boosteroid)
+
+### Configure Game Controls
+
+1. Click menu bar icon → "Configure Apps..."
+2. Select the **Controls** tab
+3. Customize:
+   - **Stratagem Menu Key** - The key that opens the stratagem menu in-game (default: Control)
+   - **Combo Queue Key** - The key to hold for queuing multiple stratagems (default: Shift)
+   - **Activation Mode** - Hold (default) or Toggle
+     - *Hold*: Hold the menu key while pressing directions
+     - *Toggle*: Press menu key once, then press directions
+   - **Directional Keys** - Map Up/Down/Left/Right to any keys (default: WASD, can use arrow keys)
 
 ## Permissions
 
@@ -144,6 +158,31 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 **Stratagem Icons:** [Helldivers-2-Stratagems-icons-svg](https://github.com/nvigneux/Helldivers-2-Stratagems-icons-svg) by Nicolas Vigneux
 
 Developed for the HELLDIVERS™ 2 community.
+
+## Version History
+
+### v1.0.3
+- **Configurable Combo Queue Key** - Rebind the key used to queue multiple stratagems (default: Shift)
+- **Fixed modifier key handling** - Super keys like Control now work correctly in HELLDIVERS
+- **Improved combo execution** - Click buffering fixed to prevent accidental throws
+- Removed Done button from settings (closes via window controls)
+
+### v1.0.2
+- **Configurable Game Controls** - New Controls tab in settings
+  - Customize the stratagem menu key (default: Control)
+  - Choose between Hold or Toggle activation modes
+  - Rebindable directional keys (WASD, arrow keys, or any keys)
+- Settings window now has tabbed interface (Apps / Controls)
+
+### v1.0.1
+- Initial public release
+- 8 customizable stratagem slots with global hotkeys
+- Combo mode for queueing multiple stratagems
+- Smart app detection
+- Pause/Resume with Ctrl+P
+- Rebindable slot hotkeys
+- Visual feedback (flash, combo glow)
+- Menu bar app with floating window
 
 ---
 

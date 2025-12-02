@@ -16,15 +16,25 @@ class StratagemManager: ObservableObject {
     @Published var comboQueue: [Int] = []
     @Published var isExecutingCombo: Bool = false
     @Published var isExecutingStratagem: Bool = false  // Block input during single stratagem execution
+
+    // Configurable game keybinds
+    @Published var superKey: Keybind = Keybind(keyCode: "0x3B", letter: "⌃")  // Default: Control
+    @Published var activationMode: ActivationMode = .hold
+    @Published var directionalKeys: DirectionalKeybinds = .defaultWASD
+    @Published var comboKey: Keybind = Keybind(keyCode: "0x38", letter: "⇧")  // Default: Left Shift
     private var comboExecutionSemaphore: DispatchSemaphore?
     private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
     private let pauseStateLock = NSLock()
     private let comboStateLock = NSLock()
+    private let executingLock = NSLock()
+    private var _isExecutingFlag = false  // Thread-safe flag for immediate checking
+    private let appActiveLock = NSLock()
+    private var _isAllowedAppActive = false  // Cached app state to avoid IPC in event tap
+    private var appObserver: NSObjectProtocol?
     private let eventTapManager = EventTapManager()
     private let keySimulator = KeyPressSimulator()
     private var stratagemLookup: [String: Stratagem] = [:]
-    private var helldiversKeybinds: HelldiversKeybinds?
     private var userDataURL: URL?
     private var keyCodeToSlotIndex: [CGKeyCode: Int] = [:]
 
@@ -32,8 +42,36 @@ class StratagemManager: ObservableObject {
         setupUserDataDirectory()
         loadStratagems()
         loadUserData()
-        loadHelldiversKeybinds()
+        setupAppObserver()
         setupHotkeys()
+    }
+
+    private func setupAppObserver() {
+        // Cache active app state to avoid IPC calls in event tap callback
+        let updateAppState = { [weak self] in
+            guard let self = self else { return }
+            let isActive = self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+            self.appActiveLock.lock()
+            self._isAllowedAppActive = isActive
+            self.appActiveLock.unlock()
+        }
+
+        // Initial check
+        updateAppState()
+
+        // Observe app activation changes
+        appObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { _ in updateAppState() }
+    }
+
+    private func updateCachedAppState() {
+        let isActive = keySimulator.isAllowedAppActive(allowedApps: allowedApps)
+        appActiveLock.lock()
+        _isAllowedAppActive = isActive
+        appActiveLock.unlock()
     }
 
     private func setupUserDataDirectory() {
@@ -88,19 +126,13 @@ class StratagemManager: ObservableObject {
 
         equippedStratagems = userData.equippedStratagems
         keybinds = userData.keybinds
-        allowedApps = userData.allowedApps ?? ["HELLDIVERS 2"]  // Use default if not in file
-    }
+        allowedApps = userData.allowedApps ?? ["HELLDIVERS 2"]
 
-    private func loadHelldiversKeybinds() {
-        guard let url = Bundle.main.url(forResource: "helldivers_keybinds_mac", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let keybinds = try? JSONDecoder().decode(HelldiversKeybinds.self, from: data) else {
-            logger.error("Failed to load helldivers_keybinds_mac.json - FATAL")
-            showFatalError(message: "Critical Error: helldivers_keybinds_mac.json is missing or corrupt.\n\nPlease reinstall the application.")
-            return
-        }
-
-        helldiversKeybinds = keybinds
+        // Load new configurable keybind settings (with defaults for backwards compatibility)
+        superKey = userData.superKey ?? Keybind(keyCode: "0x3B", letter: "⌃")
+        activationMode = userData.activationMode ?? .hold
+        directionalKeys = userData.directionalKeys ?? .defaultWASD
+        comboKey = userData.comboKey ?? Keybind(keyCode: "0x38", letter: "⇧")
     }
 
     private func showFatalError(message: String) {
@@ -145,12 +177,17 @@ class StratagemManager: ObservableObject {
         }
         keyCodeLock.unlock()
 
+        // Set the configurable combo key code
+        if let comboKeyCode = keySimulator.hexStringToKeyCode(comboKey.keyCode) {
+            eventTapManager.comboKeyCode = comboKeyCode
+        }
+
         // Listen for keypresses globally
-        eventTapManager.onKeyPressed = { [weak self] (keyCode: CGKeyCode, isShiftHeld: Bool, isCtrlHeld: Bool) -> Bool in
+        eventTapManager.onKeyPressed = { [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
             guard let self = self else { return false }
 
-            // Shift+ESC cancels any active combo
-            if keyCode == HBConstants.KeyCode.escape && isShiftHeld {
+            // ComboKey+ESC cancels any active combo
+            if keyCode == HBConstants.KeyCode.escape && isComboKeyHeld {
                 if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
                     self.comboStateLock.lock()
                     let isExecuting = self.isExecutingCombo
@@ -202,24 +239,39 @@ class StratagemManager: ObservableObject {
             let slotIndex = self.keyCodeToSlotIndex[keyCode]
             self.keyCodeLock.unlock()
 
+            // Check if this is the combo key itself being pressed
+            let comboKeyCode = self.keySimulator.hexStringToKeyCode(self.comboKey.keyCode)
+            let isComboKey = (comboKeyCode != nil && keyCode == comboKeyCode!)
+
             guard let slotIndex = slotIndex else {
+                // Not our hotkey - but if it's the combo key in an allowed app, consume it
+                if isComboKey && self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
+                    return true  // Consume combo key press to prevent typing
+                }
                 return false  // Not our key, pass it through
             }
 
-            // Block hotkeys while stratagem is executing
-            if self.isExecutingStratagem {
+            // Block hotkeys while stratagem is executing (use lock-protected flag)
+            self.executingLock.lock()
+            let isExecuting = self._isExecutingFlag
+            self.executingLock.unlock()
+            if isExecuting {
                 return true  // Consume but ignore
             }
 
             // Only consume the key if an allowed app is active
             if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
-                // Ctrl+key passes through (used by game for stratagem menu)
-                if isCtrlHeld {
-                    return false
+                // Check if the configured Super Key is PHYSICALLY held (manual menu interaction)
+                // Use .hidSystemState to ignore virtual key state from our simulated events
+                if let superKeyCode = self.keySimulator.hexStringToKeyCode(self.superKey.keyCode) {
+                    let isSuperKeyHeld = CGEventSource.keyState(.hidSystemState, key: superKeyCode)
+                    if isSuperKeyHeld {
+                        return false
+                    }
                 }
 
-                if isShiftHeld {
-                    // Shift+key adds to combo queue (main thread for @Published property)
+                if isComboKeyHeld {
+                    // ComboKey+key adds to combo queue (main thread for @Published property)
                     DispatchQueue.main.async {
                         if !self.comboQueue.contains(slotIndex) {
                             self.comboQueue.append(slotIndex)
@@ -238,8 +290,8 @@ class StratagemManager: ObservableObject {
             }
         }
 
-        // When Shift is released, execute the queued combo
-        eventTapManager.onShiftReleased = { [weak self] in
+        // When combo key is released, execute the queued combo
+        eventTapManager.onComboKeyReleased = { [weak self] in
             guard let self = self else { return }
 
             self.comboStateLock.lock()
@@ -280,7 +332,24 @@ class StratagemManager: ObservableObject {
     private func executeCombo(slots: [Int]) {
         logger.info("Executing combo sequence")
 
+        // Capture configuration on main thread to avoid race conditions
+        let capturedStratagems = self.equippedStratagems
+        let capturedSuperKey = self.superKey
+        let capturedDirectionalKeys = self.directionalKeys
+        let capturedActivationMode = self.activationMode
+        let capturedStratagemLookup = self.stratagemLookup
+
         comboExecutionSemaphore = DispatchSemaphore(value: 0)
+
+        // Block hotkey input during combo execution (lock-protected flag)
+        executingLock.lock()
+        _isExecutingFlag = true
+        executingLock.unlock()
+
+        // Update UI
+        DispatchQueue.main.async {
+            self.isExecutingStratagem = true
+        }
 
         // Execute all stratagems in sequence on serial queue
         stratagemExecutionQueue.async {
@@ -295,10 +364,20 @@ class StratagemManager: ObservableObject {
                     break
                 }
 
-                self.executeStratagemAtSlot(slotIndex: slotIndex)
+                self.executeStratagemAtSlotWithConfig(
+                    slotIndex: slotIndex,
+                    equippedStratagems: capturedStratagems,
+                    stratagemLookup: capturedStratagemLookup,
+                    superKey: capturedSuperKey,
+                    directionalKeys: capturedDirectionalKeys,
+                    activationMode: capturedActivationMode
+                )
 
                 // Wait for player to throw this stratagem before continuing
                 if index < slots.count - 1 {
+                    // Drain any clicks that happened during stratagem execution
+                    while self.comboExecutionSemaphore?.wait(timeout: .now()) == .success {}
+
                     logger.debug("Waiting for click to throw...")
                     // Give player 3 seconds to click
                     let result = self.comboExecutionSemaphore?.wait(timeout: .now() + HBConstants.Timing.comboWaitTimeout)
@@ -322,14 +401,46 @@ class StratagemManager: ObservableObject {
                 }
             }
 
-            // Clean up on main thread with lock
+            // Clear lock-protected flag immediately (no queue dependency)
+            self.executingLock.lock()
+            self._isExecutingFlag = false
+            self.executingLock.unlock()
+
+            // Update UI on main thread
             DispatchQueue.main.async {
                 self.comboStateLock.lock()
                 self.isExecutingCombo = false
                 self.comboStateLock.unlock()
+                self.isExecutingStratagem = false
             }
             self.comboExecutionSemaphore = nil
         }
+    }
+
+    // Thread-safe version that uses captured config values
+    private func executeStratagemAtSlotWithConfig(
+        slotIndex: Int,
+        equippedStratagems: [String],
+        stratagemLookup: [String: Stratagem],
+        superKey: Keybind,
+        directionalKeys: DirectionalKeybinds,
+        activationMode: ActivationMode
+    ) {
+        guard slotIndex < equippedStratagems.count else { return }
+
+        let stratagemName = equippedStratagems[slotIndex]
+        guard let stratagem = stratagemLookup[stratagemName],
+              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
+            return
+        }
+
+        logger.info("Executing stratagem: \(stratagemName)")
+        keySimulator.executeStratagem(
+            sequence: stratagem.sequence,
+            superKeyCode: superKeyCode,
+            directionalKeys: directionalKeys,
+            activationMode: activationMode
+        )
     }
 
     private func handleHotkeyPressed(slotIndex: Int) {
@@ -337,11 +448,15 @@ class StratagemManager: ObservableObject {
 
         guard slotIndex < equippedStratagems.count else { return }
 
-        // Trigger flash INSTANTLY on main thread
-        DispatchQueue.main.async {
-            self.flashingSlotIndex = slotIndex
-            self.isExecutingStratagem = true
-        }
+        // Block immediately with lock-protected flag (thread-safe, no queue dependency)
+        executingLock.lock()
+        _isExecutingFlag = true
+        executingLock.unlock()
+
+        // Update UI on main thread
+        isExecutingStratagem = true
+        flashingSlotIndex = slotIndex
+
         DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.flashDuration) {
             self.flashingSlotIndex = nil
         }
@@ -350,7 +465,12 @@ class StratagemManager: ObservableObject {
         stratagemExecutionQueue.async {
             self.executeStratagemAtSlot(slotIndex: slotIndex)
 
-            // Clear executing flag when done
+            // Clear lock-protected flag immediately (no queue dependency)
+            self.executingLock.lock()
+            self._isExecutingFlag = false
+            self.executingLock.unlock()
+
+            // Update UI on main thread
             DispatchQueue.main.async {
                 self.isExecutingStratagem = false
             }
@@ -362,14 +482,17 @@ class StratagemManager: ObservableObject {
 
         let stratagemName = equippedStratagems[slotIndex]
         guard let stratagem = stratagemLookup[stratagemName],
-              let helldiversKeybinds = helldiversKeybinds,
-              let menuKeyCode = keySimulator.hexStringToKeyCode(helldiversKeybinds.stratagemMenu) else {
+              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
             return
         }
 
         logger.info("Executing stratagem: \(stratagemName)")
-        keySimulator.executeStratagem(sequence: stratagem.sequence,
-                                      stratagemMenuKeyCode: menuKeyCode)
+        keySimulator.executeStratagem(
+            sequence: stratagem.sequence,
+            superKeyCode: superKeyCode,
+            directionalKeys: directionalKeys,
+            activationMode: activationMode
+        )
     }
 
     func updateEquippedStratagem(at index: Int, with stratagemName: String) {
@@ -406,11 +529,20 @@ class StratagemManager: ObservableObject {
 
     func saveAllSettings() {
         saveUserData()
+        updateCachedAppState()  // Refresh cache in case allowed apps changed
     }
 
     private func saveUserData() {
         // Save to Application Support, not bundle
-        let userData = UserData(equippedStratagems: equippedStratagems, keybinds: keybinds, allowedApps: allowedApps)
+        let userData = UserData(
+            equippedStratagems: equippedStratagems,
+            keybinds: keybinds,
+            allowedApps: allowedApps,
+            superKey: superKey,
+            activationMode: activationMode,
+            directionalKeys: directionalKeys,
+            comboKey: comboKey
+        )
         guard let data = try? JSONEncoder().encode(userData),
               let url = userDataURL else {
             logger.error("Failed to save user_data.json - no valid URL")
@@ -423,5 +555,44 @@ class StratagemManager: ObservableObject {
         } catch {
             logger.error("Failed to write user_data.json: \(error.localizedDescription)")
         }
+    }
+
+    // MARK: - Game Keybind Settings
+
+    func updateSuperKey(keyCode: String, letter: String) {
+        superKey = Keybind(keyCode: keyCode, letter: letter)
+        saveUserData()
+        logger.info("Super key updated to '\(letter)'")
+    }
+
+    func updateActivationMode(_ mode: ActivationMode) {
+        activationMode = mode
+        saveUserData()
+        logger.info("Activation mode updated to '\(mode.rawValue)'")
+    }
+
+    func updateDirectionalKey(_ direction: String, keyCode: String, letter: String) {
+        let newKeybind = Keybind(keyCode: keyCode, letter: letter)
+        switch direction {
+        case "up":
+            directionalKeys.up = newKeybind
+        case "down":
+            directionalKeys.down = newKeybind
+        case "left":
+            directionalKeys.left = newKeybind
+        case "right":
+            directionalKeys.right = newKeybind
+        default:
+            return
+        }
+        saveUserData()
+        logger.info("Directional key '\(direction)' updated to '\(letter)'")
+    }
+
+    func updateComboKey(keyCode: String, letter: String) {
+        comboKey = Keybind(keyCode: keyCode, letter: letter)
+        saveUserData()
+        setupHotkeys()  // Re-setup to use new combo key
+        logger.info("Combo key updated to '\(letter)'")
     }
 }

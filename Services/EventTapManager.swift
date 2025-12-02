@@ -8,18 +8,39 @@ private let logger = Logger(subsystem: "com.hellpad.app", category: "input")
 class EventTapManager {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private let shiftStateLock = NSLock()
-    private var wasShiftPressed: Bool = false  // Track previous Shift state
-    var onKeyPressed: ((CGKeyCode, Bool, Bool) -> Bool)?  // (keyCode, isShiftHeld, isCtrlHeld) -> shouldConsume
-    var onShiftReleased: (() -> Void)?  // Called when Shift key is released
+    private let comboKeyStateLock = NSLock()
+    private var wasComboKeyPressed: Bool = false  // Track previous combo key state
+    private var _comboKeyCode: CGKeyCode = 0x38   // Default: Left Shift
+
+    var comboKeyCode: CGKeyCode {
+        get {
+            comboKeyStateLock.lock()
+            defer { comboKeyStateLock.unlock() }
+            return _comboKeyCode
+        }
+        set {
+            comboKeyStateLock.lock()
+            _comboKeyCode = newValue
+            comboKeyStateLock.unlock()
+        }
+    }
+
+    var onKeyPressed: ((CGKeyCode, Bool, Bool) -> Bool)?  // (keyCode, isComboKeyHeld, isCtrlHeld) -> shouldConsume
+    var onComboKeyReleased: (() -> Void)?  // Called when combo key is released
     var onMouseClicked: (() -> Void)?  // Called when left mouse button is clicked
 
     func setupEventTap() {
         // Clean up any existing event tap first
         disable()
 
-        // Create event tap to monitor key down, flags changed, and left mouse down events
+        // Reset state to avoid stale values from previous tap
+        comboKeyStateLock.lock()
+        wasComboKeyPressed = false
+        comboKeyStateLock.unlock()
+
+        // Create event tap to monitor key down, key up, flags changed, and left mouse down events
         let eventMask = (1 << CGEventType.keyDown.rawValue) |
+                        (1 << CGEventType.keyUp.rawValue) |
                         (1 << CGEventType.flagsChanged.rawValue) |
                         (1 << CGEventType.leftMouseDown.rawValue)
 
@@ -31,34 +52,55 @@ class EventTapManager {
             callback: { (proxy, type, event, refcon) -> Unmanaged<CGEvent>? in
                 let manager = Unmanaged<EventTapManager>.fromOpaque(refcon!).takeUnretainedValue()
 
+                // Get the current combo key code (thread-safe)
+                manager.comboKeyStateLock.lock()
+                let comboKey = manager._comboKeyCode
+                manager.comboKeyStateLock.unlock()
+
                 if type == .keyDown {
                     let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-                    let isShiftHeld = event.flags.contains(.maskShift)
+
+                    // Check if combo key is held using physical key state
+                    let isComboKeyHeld = CGEventSource.keyState(.hidSystemState, key: comboKey)
                     let isCtrlHeld = event.flags.contains(.maskControl)
 
-                    // Update shift state on key down too (thread-safe)
-                    manager.shiftStateLock.lock()
-                    manager.wasShiftPressed = isShiftHeld
-                    manager.shiftStateLock.unlock()
+                    // Update combo key state on key down too (thread-safe)
+                    manager.comboKeyStateLock.lock()
+                    manager.wasComboKeyPressed = isComboKeyHeld
+                    manager.comboKeyStateLock.unlock()
 
                     // Call the callback to check if we should handle this key
-                    if let shouldConsume = manager.onKeyPressed?(keyCode, isShiftHeld, isCtrlHeld), shouldConsume {
+                    if let shouldConsume = manager.onKeyPressed?(keyCode, isComboKeyHeld, isCtrlHeld), shouldConsume {
                         // Return nil to consume the event (block it from propagating)
                         return nil
                     }
+                } else if type == .keyUp {
+                    let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
+
+                    // Check if the released key is our combo key (for non-modifier combo keys)
+                    if keyCode == comboKey {
+                        manager.comboKeyStateLock.lock()
+                        let wasPressed = manager.wasComboKeyPressed
+                        manager.wasComboKeyPressed = false
+                        manager.comboKeyStateLock.unlock()
+
+                        if wasPressed {
+                            manager.onComboKeyReleased?()
+                        }
+                    }
                 } else if type == .flagsChanged {
-                    // Detect when Shift key is released (was pressed, now not pressed)
-                    let isShiftPressed = event.flags.contains(.maskShift)
+                    // For modifier combo keys, detect when they are released
+                    let isComboKeyPressed = CGEventSource.keyState(.hidSystemState, key: comboKey)
 
                     // Thread-safe state check and update
-                    manager.shiftStateLock.lock()
-                    let wasPressed = manager.wasShiftPressed
-                    manager.wasShiftPressed = isShiftPressed
-                    manager.shiftStateLock.unlock()
+                    manager.comboKeyStateLock.lock()
+                    let wasPressed = manager.wasComboKeyPressed
+                    manager.wasComboKeyPressed = isComboKeyPressed
+                    manager.comboKeyStateLock.unlock()
 
                     // Only trigger if transitioning from pressed to released
-                    if wasPressed && !isShiftPressed {
-                        manager.onShiftReleased?()
+                    if wasPressed && !isComboKeyPressed {
+                        manager.onComboKeyReleased?()
                     }
                 } else if type == .leftMouseDown {
                     // Notify about mouse click
@@ -91,7 +133,7 @@ class EventTapManager {
 
         eventTap = tap
         runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+        CFRunLoopAddSource(CFRunLoopGetMain(), runLoopSource, .commonModes)  // Use main run loop explicitly
         CGEvent.tapEnable(tap: tap, enable: true)
     }
 

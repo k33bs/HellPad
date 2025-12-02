@@ -50,7 +50,6 @@
 		267E64462EC77D86001EDD15 /* eagle-smoke-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63DA2EC77D86001EDD15 /* eagle-smoke-strike.png */; };
 		267E64472EC77D86001EDD15 /* flam-40-flamethrower.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E12EC77D86001EDD15 /* flam-40-flamethrower.png */; };
 		267E64482EC77D86001EDD15 /* lift-182-warp-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63EC2EC77D86001EDD15 /* lift-182-warp-pack.png */; };
-		267E64492EC77D86001EDD15 /* helldivers_keybinds_mac.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */; };
 		267E644A2EC77D86001EDD15 /* orbital-120mm-he-barrage.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F82EC77D86001EDD15 /* orbital-120mm-he-barrage.png */; };
 		267E644B2EC77D86001EDD15 /* a-arc-3-tesla-tower.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63BE2EC77D86001EDD15 /* a-arc-3-tesla-tower.png */; };
 		267E644C2EC77D86001EDD15 /* orbital-airburst-strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63FA2EC77D86001EDD15 /* orbital-airburst-strike.png */; };
@@ -116,7 +115,6 @@
 /* Begin PBXFileReference section */
 		267E639F2EC77CFB001EDD15 /* HellPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellPad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Stratagem.swift"; sourceTree = "<group>"; };
-		267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = helldivers_keybinds_mac.json; sourceTree = "<group>"; };
 		267E63B22EC77D86001EDD15 /* stratagems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stratagems.json; sourceTree = "<group>"; };
 		267E63B32EC77D86001EDD15 /* user_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user_data.json; sourceTree = "<group>"; };
 		267E63B52EC77D86001EDD15 /* Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stratagem.swift; sourceTree = "<group>"; };
@@ -287,7 +285,6 @@
 		267E63B42EC77D86001EDD15 /* JsonData */ = {
 			isa = PBXGroup;
 			children = (
-				267E63B12EC77D86001EDD15 /* helldivers_keybinds_mac.json */,
 				267E63B22EC77D86001EDD15 /* stratagems.json */,
 				267E63B32EC77D86001EDD15 /* user_data.json */,
 			);
@@ -526,7 +523,6 @@
 				267E64462EC77D86001EDD15 /* eagle-smoke-strike.png in Resources */,
 				267E64472EC77D86001EDD15 /* flam-40-flamethrower.png in Resources */,
 				267E64482EC77D86001EDD15 /* lift-182-warp-pack.png in Resources */,
-				267E64492EC77D86001EDD15 /* helldivers_keybinds_mac.json in Resources */,
 				267E644A2EC77D86001EDD15 /* orbital-120mm-he-barrage.png in Resources */,
 				267E644B2EC77D86001EDD15 /* a-arc-3-tesla-tower.png in Resources */,
 				267E644C2EC77D86001EDD15 /* orbital-airburst-strike.png in Resources */,
