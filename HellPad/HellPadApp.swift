@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 @main
 struct HellPadApp: App {
@@ -18,6 +19,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var alwaysOnTopMenuItem: NSMenuItem?
     var stratagemManager: StratagemManager?
 
+    // Loadout menu management
+    private var loadoutMenuItems: [NSMenuItem] = []
+    private var loadoutSeparatorBefore: NSMenuItem?
+    private var loadoutSeparatorAfter: NSMenuItem?
+    private var loadoutCancellables = Set<AnyCancellable>()
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hide from dock
         NSApp.setActivationPolicy(.accessory)
@@ -35,6 +42,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         // Create menu
         let menu = NSMenu()
+
+        // Save Loadout item
+        menu.addItem(NSMenuItem(title: "Save Loadout...", action: #selector(showSaveLoadoutDialog), keyEquivalent: ""))
+
+        // Separators and placeholder for loadout items (will be populated dynamically)
+        loadoutSeparatorBefore = NSMenuItem.separator()
+        menu.addItem(loadoutSeparatorBefore!)
+        // Dynamic loadout items will be inserted here
+        loadoutSeparatorAfter = NSMenuItem.separator()
+        menu.addItem(loadoutSeparatorAfter!)
+
         menu.addItem(NSMenuItem(title: "Configure Apps...", action: #selector(showAppSettings), keyEquivalent: ""))
 
         // Add "Always on top" toggle - default ON
@@ -52,6 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         // Check accessibility permissions
         AccessibilityManager.shared.ensureAccessibilityPermission {
             self.createFloatingWindow()
+            self.setupLoadoutMenuObservers()
         }
     }
 
@@ -174,5 +193,162 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         NSApplication.shared.terminate(nil)
         return false
+    }
+
+    // MARK: - Loadout Menu Management
+
+    private func setupLoadoutMenuObservers() {
+        guard let manager = stratagemManager else { return }
+
+        // Observe loadouts and activeLoadoutId changes
+        manager.$loadouts
+            .combineLatest(manager.$activeLoadoutId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _, _ in
+                self?.rebuildLoadoutMenuItems()
+            }
+            .store(in: &loadoutCancellables)
+
+        // Initial build
+        rebuildLoadoutMenuItems()
+    }
+
+    private func rebuildLoadoutMenuItems() {
+        guard let menu = statusItem?.menu,
+              let manager = stratagemManager,
+              let separatorBefore = loadoutSeparatorBefore,
+              let separatorAfter = loadoutSeparatorAfter else { return }
+
+        // Find indices
+        guard let beforeIndex = menu.items.firstIndex(of: separatorBefore),
+              let afterIndex = menu.items.firstIndex(of: separatorAfter) else { return }
+
+        // Remove existing loadout items (between the separators)
+        for item in loadoutMenuItems {
+            menu.removeItem(item)
+        }
+        loadoutMenuItems.removeAll()
+
+        // Hide separators if no loadouts
+        separatorBefore.isHidden = manager.loadouts.isEmpty
+        separatorAfter.isHidden = manager.loadouts.isEmpty
+
+        // Add loadout items
+        var insertIndex = beforeIndex + 1
+        for loadout in manager.loadouts {
+            let item = NSMenuItem(title: loadout.name, action: #selector(loadoutMenuItemClicked(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = loadout.id
+            item.state = (manager.activeLoadoutId == loadout.id) ? .on : .off
+
+            menu.insertItem(item, at: insertIndex)
+            loadoutMenuItems.append(item)
+            insertIndex += 1
+        }
+    }
+
+    @objc func loadoutMenuItemClicked(_ sender: NSMenuItem) {
+        guard let loadoutId = sender.representedObject as? UUID,
+              let manager = stratagemManager else { return }
+        manager.loadLoadout(id: loadoutId)
+    }
+
+    @objc func showSaveLoadoutDialog() {
+        guard let manager = stratagemManager else { return }
+
+        let alert = NSAlert()
+        alert.messageText = "Save Loadout"
+        alert.informativeText = "Enter a name for a new loadout, or select an existing one to overwrite."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Save")
+        alert.addButton(withTitle: "Cancel")
+
+        // Create accessory view
+        let hasExistingLoadouts = !manager.loadouts.isEmpty
+        let viewHeight: CGFloat = hasExistingLoadouts ? 58 : 24
+
+        let accessoryView = NSView(frame: NSRect(x: 0, y: 0, width: 280, height: viewHeight))
+
+        // Name text field
+        let textField = NSTextField(frame: NSRect(x: 0, y: viewHeight - 24, width: 280, height: 22))
+        textField.placeholderString = generateUniqueLoadoutName(manager: manager)
+        accessoryView.addSubview(textField)
+
+        // Overwrite dropdown (only if loadouts exist)
+        var dropdown: NSPopUpButton?
+        if hasExistingLoadouts {
+            dropdown = NSPopUpButton(frame: NSRect(x: 0, y: 0, width: 280, height: 26))
+            dropdown!.addItem(withTitle: "Create New")
+            dropdown!.menu?.addItem(NSMenuItem.separator())
+            for loadout in manager.loadouts {
+                dropdown!.addItem(withTitle: "Overwrite: \(loadout.name)")
+            }
+            accessoryView.addSubview(dropdown!)
+        }
+
+        alert.accessoryView = accessoryView
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            let defaultName = generateUniqueLoadoutName(manager: manager)
+            let enteredName = textField.stringValue.trimmingCharacters(in: .whitespaces)
+            let userTypedName = !enteredName.isEmpty
+
+            if let dropdown = dropdown {
+                let selectedIndex = dropdown.indexOfSelectedItem
+                if selectedIndex <= 1 {  // "Create New" or separator
+                    let name = userTypedName ? enteredName : defaultName
+
+                    // Check for duplicate name (defaultName is already unique, but user input might not be)
+                    if userTypedName && manager.loadouts.contains(where: { $0.name == name }) {
+                        showDuplicateNameError(name: name)
+                        return
+                    }
+                    manager.saveLoadout(name: name)
+                } else {
+                    // Overwriting existing loadout
+                    let loadoutIndex = selectedIndex - 2
+                    let loadoutToOverwrite = manager.loadouts[loadoutIndex]
+
+                    // Use original name unless user typed a name
+                    let name = userTypedName ? enteredName : loadoutToOverwrite.name
+
+                    // Check for duplicate name (but allow keeping same name on overwrite)
+                    if name != loadoutToOverwrite.name && manager.loadouts.contains(where: { $0.name == name }) {
+                        showDuplicateNameError(name: name)
+                        return
+                    }
+                    manager.saveLoadout(name: name, overwriteId: loadoutToOverwrite.id)
+                }
+            } else {
+                let name = userTypedName ? enteredName : defaultName
+
+                // Check for duplicate name (defaultName is already unique, but user input might not be)
+                if userTypedName && manager.loadouts.contains(where: { $0.name == name }) {
+                    showDuplicateNameError(name: name)
+                    return
+                }
+                manager.saveLoadout(name: name)
+            }
+        }
+    }
+
+    private func showDuplicateNameError(name: String) {
+        let alert = NSAlert()
+        alert.messageText = "Duplicate Name"
+        alert.informativeText = "A loadout named \"\(name)\" already exists. Please choose a different name."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    private func generateUniqueLoadoutName(manager: StratagemManager) -> String {
+        var counter = manager.loadouts.count + 1
+        var name = "Loadout \(counter)"
+        while manager.loadouts.contains(where: { $0.name == name }) {
+            counter += 1
+            name = "Loadout \(counter)"
+        }
+        return name
     }
 }

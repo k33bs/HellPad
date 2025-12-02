@@ -62,6 +62,20 @@ struct DirectionalKeybinds: Codable {
     }
 }
 
+struct Loadout: Codable, Identifiable {
+    let id: UUID
+    var name: String
+    var equippedStratagems: [String]  // 8 stratagem names
+    var keybinds: [Keybind]           // 8 slot keybinds
+
+    init(id: UUID = UUID(), name: String, equippedStratagems: [String], keybinds: [Keybind]) {
+        self.id = id
+        self.name = name
+        self.equippedStratagems = equippedStratagems
+        self.keybinds = keybinds
+    }
+}
+
 struct UserData: Codable {
     var equippedStratagems: [String]
     var keybinds: [Keybind]
@@ -70,6 +84,8 @@ struct UserData: Codable {
     var activationMode: ActivationMode?  // Optional for backwards compatibility (default: hold)
     var directionalKeys: DirectionalKeybinds?  // Optional for backwards compatibility (default: WASD)
     var comboKey: Keybind?      // Optional for backwards compatibility (default: Shift)
+    var loadouts: [Loadout]?    // Optional for backwards compatibility
+    var activeLoadoutId: String? // UUID as string, nil when no loadout active or dirty
 
     enum CodingKeys: String, CodingKey {
         case equippedStratagems = "equipped_stratagems"
@@ -79,5 +95,7 @@ struct UserData: Codable {
         case activationMode = "activation_mode"
         case directionalKeys = "directional_keys"
         case comboKey = "combo_key"
+        case loadouts
+        case activeLoadoutId = "active_loadout_id"
     }
 }

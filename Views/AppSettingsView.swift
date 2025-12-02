@@ -16,6 +16,9 @@ struct AppSettingsView: View {
                 TabButton(title: "Controls", isSelected: selectedTab == 1) {
                     selectedTab = 1
                 }
+                TabButton(title: "Loadouts", isSelected: selectedTab == 2) {
+                    selectedTab = 2
+                }
                 Spacer()
             }
             .padding(.horizontal)
@@ -31,6 +34,9 @@ struct AppSettingsView: View {
 
                 ControlsTabView(stratagemManager: stratagemManager)
                     .opacity(selectedTab == 1 ? 1 : 0)
+
+                LoadoutsTabView(stratagemManager: stratagemManager)
+                    .opacity(selectedTab == 2 ? 1 : 0)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
@@ -451,6 +457,92 @@ struct ControlsTabView: View {
         case 0x38: return "⇧"  // Shift
         default:
             return event.charactersIgnoringModifiers?.uppercased() ?? "?"
+        }
+    }
+}
+
+// MARK: - Loadouts Tab
+
+struct LoadoutsTabView: View {
+    @ObservedObject var stratagemManager: StratagemManager
+    @State private var loadoutToDelete: Loadout? = nil
+    @State private var showDeleteConfirmation = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Manage your saved stratagem loadouts. Click a loadout in the menu bar to switch.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            if stratagemManager.loadouts.isEmpty {
+                VStack(spacing: 8) {
+                    Spacer()
+                    Image(systemName: "tray")
+                        .font(.system(size: 40))
+                        .foregroundColor(.secondary)
+                    Text("No loadouts saved")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    Text("Use \"Save Loadout...\" from the menu bar to create one.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                List {
+                    ForEach(stratagemManager.loadouts) { loadout in
+                        HStack(spacing: 12) {
+                            // Active indicator
+                            if stratagemManager.activeLoadoutId == loadout.id {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                    .frame(width: 20)
+                            } else {
+                                Color.clear
+                                    .frame(width: 20, height: 20)
+                            }
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(loadout.name)
+                                    .fontWeight(.medium)
+                                Text(loadout.equippedStratagems.prefix(4).joined(separator: ", "))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(1)
+                            }
+
+                            Spacer()
+
+                            // Load button
+                            Button("Load") {
+                                stratagemManager.loadLoadout(id: loadout.id)
+                            }
+                            .disabled(stratagemManager.activeLoadoutId == loadout.id)
+
+                            // Delete button
+                            Button(action: {
+                                loadoutToDelete = loadout
+                                showDeleteConfirmation = true
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+        }
+        .padding()
+        .alert("Delete Loadout?", isPresented: $showDeleteConfirmation, presenting: loadoutToDelete) { loadout in
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                stratagemManager.deleteLoadout(id: loadout.id)
+            }
+        } message: { loadout in
+            Text("Are you sure you want to delete \"\(loadout.name)\"? This cannot be undone.")
         }
     }
 }

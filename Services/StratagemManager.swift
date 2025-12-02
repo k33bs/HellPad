@@ -22,6 +22,8 @@ class StratagemManager: ObservableObject {
     @Published var activationMode: ActivationMode = .hold
     @Published var directionalKeys: DirectionalKeybinds = .defaultWASD
     @Published var comboKey: Keybind = Keybind(keyCode: "0x38", letter: "⇧")  // Default: Left Shift
+    @Published var loadouts: [Loadout] = []
+    @Published var activeLoadoutId: UUID? = nil  // nil = dirty/no loadout active
     private var comboExecutionSemaphore: DispatchSemaphore?
     private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
@@ -133,6 +135,10 @@ class StratagemManager: ObservableObject {
         activationMode = userData.activationMode ?? .hold
         directionalKeys = userData.directionalKeys ?? .defaultWASD
         comboKey = userData.comboKey ?? Keybind(keyCode: "0x38", letter: "⇧")
+
+        // Load loadouts (optional for backwards compatibility)
+        loadouts = userData.loadouts ?? []
+        activeLoadoutId = userData.activeLoadoutId.flatMap { UUID(uuidString: $0) }
     }
 
     private func showFatalError(message: String) {
@@ -498,6 +504,7 @@ class StratagemManager: ObservableObject {
     func updateEquippedStratagem(at index: Int, with stratagemName: String) {
         guard index < equippedStratagems.count else { return }
         equippedStratagems[index] = stratagemName
+        activeLoadoutId = nil  // Mark as dirty - config modified
         saveUserData()
     }
 
@@ -513,6 +520,7 @@ class StratagemManager: ObservableObject {
 
         // Update keybind
         keybinds[index] = Keybind(keyCode: keyCode, letter: letter)
+        activeLoadoutId = nil  // Mark as dirty - config modified
 
         // Re-setup event tap with new keybinds
         setupHotkeys()
@@ -541,7 +549,9 @@ class StratagemManager: ObservableObject {
             superKey: superKey,
             activationMode: activationMode,
             directionalKeys: directionalKeys,
-            comboKey: comboKey
+            comboKey: comboKey,
+            loadouts: loadouts,
+            activeLoadoutId: activeLoadoutId?.uuidString
         )
         guard let data = try? JSONEncoder().encode(userData),
               let url = userDataURL else {
@@ -594,5 +604,58 @@ class StratagemManager: ObservableObject {
         saveUserData()
         setupHotkeys()  // Re-setup to use new combo key
         logger.info("Combo key updated to '\(letter)'")
+    }
+
+    // MARK: - Loadout Management
+
+    func saveLoadout(name: String, overwriteId: UUID? = nil) {
+        let loadout = Loadout(
+            id: overwriteId ?? UUID(),
+            name: name,
+            equippedStratagems: equippedStratagems,
+            keybinds: keybinds
+        )
+
+        if let overwriteId = overwriteId,
+           let index = loadouts.firstIndex(where: { $0.id == overwriteId }) {
+            // Overwrite existing loadout
+            loadouts[index] = loadout
+            logger.info("Overwrote loadout: \(name)")
+        } else {
+            // Add new loadout
+            loadouts.append(loadout)
+            logger.info("Saved new loadout: \(name)")
+        }
+
+        activeLoadoutId = loadout.id
+        saveUserData()
+    }
+
+    func loadLoadout(id: UUID) {
+        guard let loadout = loadouts.first(where: { $0.id == id }) else {
+            logger.error("Loadout not found: \(id)")
+            return
+        }
+
+        equippedStratagems = loadout.equippedStratagems
+        keybinds = loadout.keybinds
+        activeLoadoutId = id
+
+        // Re-setup hotkeys since keybinds changed
+        setupHotkeys()
+        saveUserData()
+        logger.info("Loaded loadout: \(loadout.name)")
+    }
+
+    func deleteLoadout(id: UUID) {
+        loadouts.removeAll { $0.id == id }
+
+        // If deleted loadout was active, clear active state
+        if activeLoadoutId == id {
+            activeLoadoutId = nil
+        }
+
+        saveUserData()
+        logger.info("Deleted loadout: \(id)")
     }
 }
