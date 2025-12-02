@@ -15,6 +15,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 ## Features
 
 - **8 Customizable Stratagem Slots** - Assign any stratagem to any slot
+- **Loadouts** - Save and load different stratagem configurations from the menu bar
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
 - **Combo Mode** - Hold a configurable combo key and press multiple hotkeys to queue stratagems, release to execute sequentially
 - **Smart Detection** - Only works when your configured apps are active (prevents accidental triggers)
@@ -35,7 +36,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.3.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.4.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -160,6 +161,14 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.0.4
+- **Loadouts** - Save and load different stratagem/keybind configurations
+  - Save current setup via "Save Loadout..." in menu bar
+  - Switch loadouts instantly from the menu bar dropdown
+  - Manage loadouts in Settings → Loadouts tab
+  - Checkmark indicates active loadout (clears when you modify settings)
+  - Duplicate names prevented, unique default names generated
 
 ### v1.0.3
 - **Configurable Combo Queue Key** - Rebind the key used to queue multiple stratagems (default: Shift)
