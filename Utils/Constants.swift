@@ -42,6 +42,14 @@ enum HBConstants {
         static let pickerIconSize: CGFloat = 27  // Adjustable icon size
         static let pickerColumns: Int = 6        // Number of columns
         static let pickerSpacing: CGFloat = 3    // Space between icons
+        static let pickerWidth: CGFloat = 186
+        static let pickerHeight: CGFloat = 475
+
+        // Hover Preview
+        static let hoverScale: CGFloat = 2.5
+        static let hoverPadding: CGFloat = 45    // Half of scaled icon size for edge clamping
+        static var hoverMaxX: CGFloat { pickerWidth - hoverPadding }
+        static var hoverMaxY: CGFloat { pickerHeight - hoverPadding }
     }
 
     // MARK: - Visual Effects

@@ -6,44 +6,78 @@ struct StratagemPickerView: View {
     let onSelect: (Stratagem) -> Void
     let onCancel: () -> Void
     @State private var escKeyMonitor: Any?
+    @State private var hoveredStratagem: Stratagem?
+    @State private var hoverPosition: CGPoint = .zero
 
-    var columns: [GridItem] {
-        Array(repeating: GridItem(.fixed(HBConstants.UI.pickerIconSize), spacing: HBConstants.UI.pickerSpacing),
-              count: HBConstants.UI.pickerColumns)
-    }
+    private static let columns = Array(
+        repeating: GridItem(.fixed(HBConstants.UI.pickerIconSize), spacing: HBConstants.UI.pickerSpacing),
+        count: HBConstants.UI.pickerColumns
+    )
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Scrollable Grid (no header - click outside to close)
+        ZStack {
             ScrollView {
-                LazyVGrid(columns: columns, alignment: .leading, spacing: HBConstants.UI.pickerSpacing) {
+                LazyVGrid(columns: Self.columns, alignment: .leading, spacing: HBConstants.UI.pickerSpacing) {
                     ForEach(stratagems) { stratagem in
                         PickerIconButton(
                             stratagem: stratagem,
                             isCurrentlySelected: stratagem.name == currentlySelected,
-                            onSelect: onSelect
+                            onSelect: onSelect,
+                            onHover: { isHovered, position in
+                                if isHovered {
+                                    // Lock position when entering to prevent drift while hovering
+                                    if hoveredStratagem?.id != stratagem.id {
+                                        hoverPosition = position
+                                    }
+                                    withAnimation(.easeOut(duration: 0.12)) {
+                                        hoveredStratagem = stratagem
+                                    }
+                                } else if hoveredStratagem?.id == stratagem.id {
+                                    withAnimation(.easeOut(duration: 0.12)) {
+                                        hoveredStratagem = nil
+                                    }
+                                }
+                            }
                         )
                     }
                 }
                 .padding(5)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .background(Color.black)
+
+            // Magnified overlay - rendered separately for z-ordering
+            if let hovered = hoveredStratagem,
+               let image = NSImage.stratagemIcon(named: hovered.name) {
+                Image(nsImage: image)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: HBConstants.UI.pickerIconSize - 4, height: HBConstants.UI.pickerIconSize - 4)
+                    .padding(2)
+                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
+                    .cornerRadius(2)
+                    .scaleEffect(HBConstants.UI.hoverScale)
+                    .shadow(color: .black, radius: 4)
+                    .position(
+                        x: min(max(hoverPosition.x, HBConstants.UI.hoverPadding), HBConstants.UI.hoverMaxX),
+                        y: min(max(hoverPosition.y, HBConstants.UI.hoverPadding), HBConstants.UI.hoverMaxY)
+                    )
+                    .allowsHitTesting(false)
+            }
         }
-        .frame(width: 186, height: 475)  // Match main window size exactly
+        .coordinateSpace(name: "picker")
+        .frame(width: HBConstants.UI.pickerWidth, height: HBConstants.UI.pickerHeight)
         .background(Color.black)
         .onAppear {
-            // Set up ESC key listener
             escKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 if event.keyCode == HBConstants.KeyCode.escape {
                     onCancel()
-                    return nil  // Consume ESC
+                    return nil
                 }
                 return event
             }
         }
         .onDisappear {
-            // Clean up ESC key monitor
             if let monitor = escKeyMonitor {
                 NSEvent.removeMonitor(monitor)
                 escKeyMonitor = nil
@@ -56,36 +90,43 @@ struct PickerIconButton: View {
     let stratagem: Stratagem
     let isCurrentlySelected: Bool
     let onSelect: (Stratagem) -> Void
+    var onHover: ((Bool, CGPoint) -> Void)? = nil
     @State private var isHovered = false
 
     var body: some View {
-        Button(action: {
-            onSelect(stratagem)
-        }) {
-            if let image = NSImage.stratagemIcon(named: stratagem.name) {
-                Image(nsImage: image)
-                    .resizable()
-                    .interpolation(.high)
-                    .scaledToFit()
-                    .frame(width: HBConstants.UI.pickerIconSize,
-                           height: HBConstants.UI.pickerIconSize)
-            } else {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: HBConstants.UI.pickerIconSize,
-                           height: HBConstants.UI.pickerIconSize)
+        GeometryReader { geo in
+            Button(action: {
+                onSelect(stratagem)
+            }) {
+                if let image = NSImage.stratagemIcon(named: stratagem.name) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: HBConstants.UI.pickerIconSize,
+                               height: HBConstants.UI.pickerIconSize)
+                } else {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: HBConstants.UI.pickerIconSize,
+                               height: HBConstants.UI.pickerIconSize)
+                }
             }
+            .buttonStyle(PlainButtonStyle())
+            .background(
+                isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
+                isHovered ? Color(red: 0.2, green: 0.2, blue: 0.2) :
+                Color(red: 0.1, green: 0.1, blue: 0.1)
+            )
+            .cornerRadius(3)
+            .onHover { hovering in
+                isHovered = hovering
+                let frame = geo.frame(in: .named("picker"))
+                let center = CGPoint(x: frame.midX, y: frame.midY)
+                onHover?(hovering, center)
+            }
+            .help(stratagem.name)
         }
-        .buttonStyle(PlainButtonStyle())
-        .background(
-            isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(0.3) :
-            isHovered ? Color.white.opacity(0.2) :
-            Color(red: 0.1, green: 0.1, blue: 0.1)
-        )
-        .cornerRadius(3)
-        .onHover { hovering in
-            isHovered = hovering
-        }
-        .help(stratagem.name)  // Tooltip shows full name
+        .frame(width: HBConstants.UI.pickerIconSize, height: HBConstants.UI.pickerIconSize)
     }
 }
