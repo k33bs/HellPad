@@ -156,7 +156,9 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 **Inspired by:** [HellBuddy](https://github.com/chris-codes1/HellBuddy) by chris-codes1 - This is the original Windows application that inspired this port.
 
-**Stratagem Icons:** [Helldivers-2-Stratagems-icons-svg](https://github.com/nvigneux/Helldivers-2-Stratagems-icons-svg) by Nicolas Vigneux
+**Stratagem Data:** [Helldivers-2-Stratagem-JSON-Generator](https://github.com/k33bs/Helldivers-2-Stratagem-JSON-Generator) - Icons, sequences, and metadata
+
+**SVG Source:** [Helldivers-2-Stratagems-icons-svg](https://github.com/nvigneux/Helldivers-2-Stratagems-icons-svg) by Nicolas Vigneux
 
 Developed for the HELLDIVERS™ 2 community.
 
