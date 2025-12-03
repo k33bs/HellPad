@@ -4,9 +4,17 @@ struct Stratagem: Codable, Identifiable, Hashable {
     let id = UUID()
     let name: String
     let sequence: [String]
+    let category: String
 
     enum CodingKeys: String, CodingKey {
-        case name, sequence
+        case name, sequence, category
+    }
+
+    // Category sort order matching in-game grouping
+    static let categoryOrder = ["Common", "Objectives", "Offensive", "Supply", "Defense"]
+
+    var categorySortIndex: Int {
+        Self.categoryOrder.firstIndex(of: category) ?? 999
     }
 
     func hash(into hasher: inout Hasher) {

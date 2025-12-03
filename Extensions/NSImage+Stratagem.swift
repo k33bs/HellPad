@@ -32,9 +32,12 @@ extension NSImage {
 
 extension String {
     func slugified() -> String {
+        // Match generator's toKebabCase: remove special chars, then replace spaces with hyphens
         return self
             .lowercased()
-            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
+            .replacingOccurrences(of: "[^a-z0-9\\s-]", with: "", options: .regularExpression)  // Remove special chars (keep spaces/hyphens)
+            .replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)  // Replace spaces with hyphens
+            .replacingOccurrences(of: "-+", with: "-", options: .regularExpression)  // Collapse multiple hyphens
             .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
     }
 }

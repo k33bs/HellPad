@@ -1,560 +1,653 @@
 [
   {
-    "name": "LIFT-860 Hover Pack",
-    "sequence": ["S", "W", "W", "S", "A", "D"],
-    "dept": "Borderline Justice",
-    "icon": "lift-860-hover-pack.png"
-  },
-  {
-    "name": "A/ARC-3 Tesla Tower",
-    "sequence": ["S", "W", "D", "W", "A", "D"],
-    "dept": "Bridge",
-    "icon": "aarc-3-tesla-tower.png"
-  },
-  {
-    "name": "E/GL-21 Grenadier Battlement",
-    "sequence": ["S", "D", "S", "A", "D"],
-    "dept": "Bridge",
-    "icon": "egl-21-grenadier-battlement.png"
-  },
-  {
-    "name": "E/MG-101 HMG Emplacement",
-    "sequence": ["S", "W", "A", "D", "D", "A"],
-    "dept": "Bridge",
-    "icon": "emg-101-hmg-emplacement.png"
-  },
-  {
-    "name": "FX-12 Shield Generator Relay",
-    "sequence": ["S", "S", "A", "D", "A", "D"],
-    "dept": "Bridge",
-    "icon": "fx-12-shield-generator-relay.png"
-  },
-  {
-    "name": "Orbital EMS Strike",
-    "sequence": ["D", "D", "A", "S"],
-    "dept": "Bridge",
-    "icon": "orbital-ems-strike.png"
-  },
-  {
-    "name": "Orbital Gas Strike",
-    "sequence": ["D", "D", "S", "D"],
-    "dept": "Bridge",
-    "icon": "orbital-gas-strike.png"
-  },
-  {
-    "name": "Orbital Precision Strike",
-    "sequence": ["D", "D", "W"],
-    "dept": "Bridge",
-    "icon": "orbital-precision-strike.png"
-  },
-  {
-    "name": "Orbital Smoke Strike",
-    "sequence": ["D", "D", "S", "W"],
-    "dept": "Bridge",
-    "icon": "orbital-smoke-strike.png"
-  },
-  {
-    "name": "AX/TX-13 Guard Dog Dog Breath",
-    "sequence": ["S", "W", "A", "W", "D", "W"],
-    "dept": "Chemical Agents",
-    "icon": "axtx-13-guard-dog-dog-breath.png"
-  },
-  {
-    "name": "TX-41 Sterilizer",
-    "sequence": ["S", "A", "W", "S", "A"],
-    "dept": "Chemical Agents",
-    "icon": "tx-41-sterilizer.png"
-  },
-  {
     "name": "Eagle Rearm",
     "sequence": ["W", "W", "A", "W", "D"],
+    "category": "Common",
     "dept": "Common",
     "icon": "eagle-rearm.png"
   },
   {
     "name": "Reinforce",
     "sequence": ["W", "S", "D", "A", "W"],
+    "category": "Common",
     "dept": "Common",
     "icon": "reinforce.png"
   },
   {
     "name": "Resupply",
     "sequence": ["S", "S", "W", "D"],
+    "category": "Common",
     "dept": "Common",
     "icon": "resupply.png"
   },
   {
     "name": "SOS Beacon",
     "sequence": ["W", "S", "D", "W"],
+    "category": "Common",
     "dept": "Common",
     "icon": "sos-beacon.png"
   },
   {
-    "name": "A/LAS-98 Laser Sentry",
-    "sequence": ["S", "W", "D", "S", "W", "D"],
-    "dept": "Control Group",
-    "icon": "alas-98-laser-sentry.png"
-  },
-  {
-    "name": "LIFT-182 Warp Pack",
-    "sequence": ["S", "A", "D", "S", "A", "D"],
-    "dept": "Control Group",
-    "icon": "lift-182-warp-pack.png"
-  },
-  {
-    "name": "PLAS-45 Epoch",
-    "sequence": ["S", "A", "W", "A", "D"],
-    "dept": "Control Group",
-    "icon": "plas-45-epoch.png"
-  },
-  {
-    "name": "EAT-700 Expendable Napalm",
-    "sequence": ["S", "S", "A", "W", "A"],
-    "dept": "Dust Devils",
-    "icon": "eat-700-expendable-napalm.png"
-  },
-  {
-    "name": "MS-11 Solo Silo",
-    "sequence": ["S", "W", "D", "S", "S"],
-    "dept": "Dust Devils",
-    "icon": "ms-11-solo-silo.png"
-  },
-  {
-    "name": "S-11 Speargun",
-    "sequence": ["S", "D", "S", "A", "W", "D"],
-    "dept": "Dust Devils",
-    "icon": "s-11-speargun.png"
-  },
-  {
-    "name": "ARC-3 Arc Thrower",
-    "sequence": ["S", "D", "S", "W", "A", "A"],
-    "dept": "Engineering Bay",
-    "icon": "arc-3-arc-thrower.png"
-  },
-  {
-    "name": "AX/LAS-5 Guard Dog Rover",
-    "sequence": ["S", "W", "A", "W", "D", "D"],
-    "dept": "Engineering Bay",
-    "icon": "axlas-5-guard-dog-rover.png"
-  },
-  {
-    "name": "B-1 Supply Pack",
-    "sequence": ["S", "A", "S", "W", "W", "S"],
-    "dept": "Engineering Bay",
-    "icon": "b-1-supply-pack.png"
-  },
-  {
-    "name": "GL-21 Grenade Launcher",
-    "sequence": ["S", "A", "W", "A", "S"],
-    "dept": "Engineering Bay",
-    "icon": "gl-21-grenade-launcher.png"
-  },
-  {
-    "name": "LAS-98 Laser Cannon",
-    "sequence": ["S", "A", "S", "W", "A"],
-    "dept": "Engineering Bay",
-    "icon": "las-98-laser-cannon.png"
-  },
-  {
-    "name": "LAS-99 Quasar Cannon",
-    "sequence": ["S", "S", "W", "A", "D"],
-    "dept": "Engineering Bay",
-    "icon": "las-99-quasar-cannon.png"
-  },
-  {
-    "name": "MD-17 Anti-Tank Mines",
-    "sequence": ["S", "A", "W", "W"],
-    "dept": "Engineering Bay",
-    "icon": "md-17-anti-tank-mines.png"
-  },
-  {
-    "name": "MD-6 Anti-Personnel Minefield",
-    "sequence": ["S", "A", "W", "D"],
-    "dept": "Engineering Bay",
-    "icon": "md-6-anti-personnel-minefield.png"
-  },
-  {
-    "name": "MD-8 Gas Mines",
-    "sequence": ["S", "A", "A", "D"],
-    "dept": "Engineering Bay",
-    "icon": "md-8-gas-mines.png"
-  },
-  {
-    "name": "MD-I4 Incendiary Mines",
-    "sequence": ["S", "A", "A", "S"],
-    "dept": "Engineering Bay",
-    "icon": "md-i4-incendiary-mines.png"
-  },
-  {
-    "name": "SH-20 Ballistic Shield Backpack",
-    "sequence": ["S", "A", "S", "S", "W", "A"],
-    "dept": "Engineering Bay",
-    "icon": "sh-20-ballistic-shield-backpack.png"
-  },
-  {
-    "name": "SH-32 Shield Generator Pack",
-    "sequence": ["S", "W", "A", "D", "A", "D"],
-    "dept": "Engineering Bay",
-    "icon": "sh-32-shield-generator-pack.png"
-  },
-  {
-    "name": "AX/ARC-3 Guard Dog K-9",
-    "sequence": ["S", "W", "A", "W", "D", "A"],
-    "dept": "Force of Law",
-    "icon": "axarc-3-guard-dog-k-9.png"
-  },
-  {
-    "name": "GL-52 De-Escalator",
-    "sequence": ["S", "D", "W", "A", "D"],
-    "dept": "Force of Law",
-    "icon": "gl-52-de-escalator.png"
-  },
-  {
-    "name": "Eagle 110mm Rocket Pods",
-    "sequence": ["W", "D", "W", "A"],
-    "dept": "Hangar",
-    "icon": "eagle-110mm-rocket-pods.png"
-  },
-  {
-    "name": "Eagle 500kg Bomb",
-    "sequence": ["W", "D", "S", "S", "S"],
-    "dept": "Hangar",
-    "icon": "eagle-500kg-bomb.png"
-  },
-  {
-    "name": "Eagle Airstrike",
-    "sequence": ["W", "D", "S", "D"],
-    "dept": "Hangar",
-    "icon": "eagle-airstrike.png"
-  },
-  {
-    "name": "Eagle Cluster Bomb",
-    "sequence": ["W", "D", "S", "S", "D"],
-    "dept": "Hangar",
-    "icon": "eagle-cluster-bomb.png"
-  },
-  {
-    "name": "Eagle Napalm Airstrike",
-    "sequence": ["W", "D", "S", "W"],
-    "dept": "Hangar",
-    "icon": "eagle-napalm-airstrike.png"
-  },
-  {
-    "name": "Eagle Smoke Strike",
-    "sequence": ["W", "D", "W", "S"],
-    "dept": "Hangar",
-    "icon": "eagle-smoke-strike.png"
-  },
-  {
-    "name": "Eagle Strafing Run",
-    "sequence": ["W", "D", "D"],
-    "dept": "Hangar",
-    "icon": "eagle-strafing-run.png"
-  },
-  {
-    "name": "Jump Pack",
-    "sequence": ["S", "W", "W", "S", "W"],
-    "dept": "Hangar",
-    "icon": "jump-pack.png"
-  },
-  {
-    "name": "M-102 Fast Recon Vehicle",
-    "sequence": ["A", "S", "D", "S", "D", "S", "W"],
-    "dept": "Hangar",
-    "icon": "m-102-fast-recon-vehicle.png"
-  },
-  {
-    "name": "CQC-1 One True Flag",
-    "sequence": ["S", "A", "D", "D", "W"],
-    "dept": "Masters of Ceremony",
-    "icon": "cqc-1-one-true-flag.png"
-  },
-  {
     "name": "Dark Fluid Vessel",
     "sequence": ["W", "A", "D", "S", "W", "W"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "dark-fluid-vessel.png"
   },
   {
     "name": "Hellbomb",
     "sequence": ["S", "W", "A", "S", "W", "D", "S", "W"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "hellbomb.png"
   },
   {
     "name": "Hive Breaker Drill",
     "sequence": ["A", "W", "S", "D", "S", "S"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "hive-breaker-drill.png"
   },
   {
     "name": "Illumination Flare",
     "sequence": ["D", "D", "D", "A", "A", "A"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "illumination-flare.png"
   },
   {
     "name": "Prospecting Drill",
     "sequence": ["S", "S", "A", "D", "S", "S"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "prospecting-drill.png"
   },
   {
     "name": "SE-45 Seismic Probe",
     "sequence": ["W", "W", "A", "D", "S", "S"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "se-45-seismic-probe.png"
   },
   {
     "name": "SEAF Artillery",
     "sequence": ["D", "W", "W", "S"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "seaf-artillery.png"
   },
   {
     "name": "SSSD Delivery",
     "sequence": ["S", "S", "S", "W", "W"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "sssd-delivery.png"
   },
   {
     "name": "Super Earth Flag",
     "sequence": ["S", "W", "S", "W"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "super-earth-flag.png"
   },
   {
     "name": "Tectonic Drill",
     "sequence": ["W", "S", "W", "S", "W", "S"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "tectonic-drill.png"
   },
   {
     "name": "Upload Data",
     "sequence": ["A", "D", "W", "W", "W"],
+    "category": "Objectives",
     "dept": "Objectives",
     "icon": "upload-data.png"
   },
   {
+    "name": "Eagle 110mm Rocket Pods",
+    "sequence": ["W", "D", "W", "A"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-110mm-rocket-pods.png"
+  },
+  {
+    "name": "Eagle 500kg Bomb",
+    "sequence": ["W", "D", "S", "S", "S"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-500kg-bomb.png"
+  },
+  {
+    "name": "Eagle Airstrike",
+    "sequence": ["W", "D", "S", "D"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-airstrike.png"
+  },
+  {
+    "name": "Eagle Cluster Bomb",
+    "sequence": ["W", "D", "S", "S", "D"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-cluster-bomb.png"
+  },
+  {
+    "name": "Eagle Napalm Airstrike",
+    "sequence": ["W", "D", "S", "W"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-napalm-airstrike.png"
+  },
+  {
+    "name": "Eagle Smoke Strike",
+    "sequence": ["W", "D", "W", "S"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-smoke-strike.png"
+  },
+  {
+    "name": "Eagle Strafing Run",
+    "sequence": ["W", "D", "D"],
+    "category": "Offensive",
+    "dept": "Hangar",
+    "icon": "eagle-strafing-run.png"
+  },
+  {
     "name": "Orbital 120mm HE Barrage",
     "sequence": ["D", "D", "S", "A", "D", "S"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-120mm-he-barrage.png"
   },
   {
     "name": "Orbital 380mm HE Barrage",
     "sequence": ["D", "S", "W", "W", "A", "S", "S"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-380mm-he-barrage.png"
   },
   {
     "name": "Orbital Airburst Strike",
     "sequence": ["D", "D", "D"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-airburst-strike.png"
   },
   {
+    "name": "Orbital EMS Strike",
+    "sequence": ["D", "D", "A", "S"],
+    "category": "Offensive",
+    "dept": "Bridge",
+    "icon": "orbital-ems-strike.png"
+  },
+  {
+    "name": "Orbital Gas Strike",
+    "sequence": ["D", "D", "S", "D"],
+    "category": "Offensive",
+    "dept": "Bridge",
+    "icon": "orbital-gas-strike.png"
+  },
+  {
     "name": "Orbital Gatling Barrage",
     "sequence": ["D", "S", "A", "W", "W"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-gatling-barrage.png"
   },
   {
     "name": "Orbital Laser",
     "sequence": ["D", "S", "W", "D", "S"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-laser.png"
   },
   {
     "name": "Orbital Napalm Barrage",
     "sequence": ["D", "D", "S", "A", "D", "W"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-napalm-barrage.png"
   },
   {
+    "name": "Orbital Precision Strike",
+    "sequence": ["D", "D", "W"],
+    "category": "Offensive",
+    "dept": "Bridge",
+    "icon": "orbital-precision-strike.png"
+  },
+  {
     "name": "Orbital Railcannon Strike",
     "sequence": ["D", "W", "S", "S", "D"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-railcannon-strike.png"
   },
   {
+    "name": "Orbital Smoke Strike",
+    "sequence": ["D", "D", "S", "W"],
+    "category": "Offensive",
+    "dept": "Bridge",
+    "icon": "orbital-smoke-strike.png"
+  },
+  {
     "name": "Orbital Walking Barrage",
     "sequence": ["D", "S", "D", "S", "D", "S"],
+    "category": "Offensive",
     "dept": "Orbital Cannons",
     "icon": "orbital-walking-barrage.png"
   },
   {
     "name": "AC-8 Autocannon",
     "sequence": ["S", "A", "S", "W", "W", "D"],
+    "category": "Supply",
     "dept": "Patriotic Administration Center",
     "icon": "ac-8-autocannon.png"
   },
   {
     "name": "APW-1 Anti-Materiel Rifle",
     "sequence": ["S", "A", "D", "W", "S"],
+    "category": "Supply",
     "dept": "Patriotic Administration Center",
     "icon": "apw-1-anti-materiel-rifle.png"
   },
   {
-    "name": "EAT-17 Expendable Anti-Tank",
-    "sequence": ["S", "S", "A", "W", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "eat-17-expendable-anti-tank.png"
-  },
-  {
-    "name": "FAF-14 Spear",
-    "sequence": ["S", "S", "W", "S", "S"],
-    "dept": "Patriotic Administration Center",
-    "icon": "faf-14-spear.png"
-  },
-  {
-    "name": "FLAM-40 Flamethrower",
-    "sequence": ["S", "A", "W", "S", "W"],
-    "dept": "Patriotic Administration Center",
-    "icon": "flam-40-flamethrower.png"
-  },
-  {
-    "name": "GR-8 Recoilless Rifle",
-    "sequence": ["S", "A", "D", "D", "A"],
-    "dept": "Patriotic Administration Center",
-    "icon": "gr-8-recoilless-rifle.png"
-  },
-  {
-    "name": "M-105 Stalwart",
-    "sequence": ["S", "A", "S", "W", "W", "A"],
-    "dept": "Patriotic Administration Center",
-    "icon": "m-105-stalwart.png"
-  },
-  {
-    "name": "MG-206 Heavy Machine Gun",
-    "sequence": ["S", "A", "W", "S", "S"],
-    "dept": "Patriotic Administration Center",
-    "icon": "mg-206-heavy-machine-gun.png"
-  },
-  {
-    "name": "MG-43 Machine Gun",
-    "sequence": ["S", "A", "S", "W", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "mg-43-machine-gun.png"
-  },
-  {
-    "name": "MLS-4X Commando",
-    "sequence": ["S", "A", "W", "S", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "mls-4x-commando.png"
-  },
-  {
-    "name": "RL-77 Airburst Rocket Launcher",
-    "sequence": ["S", "W", "W", "A", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "rl-77-airburst-rocket-launcher.png"
-  },
-  {
-    "name": "RS-422 Railgun",
-    "sequence": ["S", "D", "S", "W", "A", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "rs-422-railgun.png"
-  },
-  {
-    "name": "StA-X3 W.A.S.P. Launcher",
-    "sequence": ["S", "S", "W", "S", "D"],
-    "dept": "Patriotic Administration Center",
-    "icon": "sta-x3-wasp-launcher.png"
-  },
-  {
-    "name": "AX/FLAM-75 Guard Dog Hot Dog",
-    "sequence": ["S", "W", "A", "W", "A", "A"],
-    "dept": "Python Commandos",
-    "icon": "axflam-75-guard-dog-hot-dog.png"
-  },
-  {
-    "name": "CQC-9 Defoliation Tool",
-    "sequence": ["S", "A", "D", "D", "S"],
-    "dept": "Python Commandos",
-    "icon": "cqc-9-defoliation-tool.png"
-  },
-  {
-    "name": "M-1000 Maxigun",
-    "sequence": ["S", "A", "D", "S", "W", "W"],
-    "dept": "Python Commandos",
-    "icon": "m-1000-maxigun.png"
-  },
-  {
-    "name": "A/AC-8 Autocannon Sentry",
-    "sequence": ["S", "W", "D", "W", "A", "W"],
-    "dept": "Robotics Workshop",
-    "icon": "aac-8-autocannon-sentry.png"
-  },
-  {
-    "name": "A/G-16 Gatling Sentry",
-    "sequence": ["S", "W", "D", "A"],
-    "dept": "Robotics Workshop",
-    "icon": "ag-16-gatling-sentry.png"
-  },
-  {
-    "name": "A/M-12 Mortar Sentry",
-    "sequence": ["S", "W", "D", "D", "S"],
-    "dept": "Robotics Workshop",
-    "icon": "am-12-mortar-sentry.png"
-  },
-  {
-    "name": "A/M-23 EMS Mortar Sentry",
-    "sequence": ["S", "W", "D", "S", "D"],
-    "dept": "Robotics Workshop",
-    "icon": "am-23-ems-mortar-sentry.png"
-  },
-  {
-    "name": "A/MG-43 Machine Gun Sentry",
-    "sequence": ["S", "W", "D", "D", "W"],
-    "dept": "Robotics Workshop",
-    "icon": "amg-43-machine-gun-sentry.png"
+    "name": "ARC-3 Arc Thrower",
+    "sequence": ["S", "D", "S", "W", "A", "A"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "arc-3-arc-thrower.png"
   },
   {
     "name": "AX/AR-23 Guard Dog",
     "sequence": ["S", "W", "A", "W", "D", "S"],
+    "category": "Supply",
     "dept": "Robotics Workshop",
     "icon": "axar-23-guard-dog.png"
   },
   {
-    "name": "AX/MLS-4X Rocket Sentry",
-    "sequence": ["S", "W", "D", "D", "A"],
-    "dept": "Robotics Workshop",
-    "icon": "axmls-4x-rocket-sentry.png"
+    "name": "AX/ARC-3 Guard Dog K-9",
+    "sequence": ["S", "W", "A", "W", "D", "A"],
+    "category": "Supply",
+    "dept": "Force of Law",
+    "icon": "axarc-3-guard-dog-k-9.png"
+  },
+  {
+    "name": "AX/FLAM-75 Guard Dog Hot Dog",
+    "sequence": ["S", "W", "A", "W", "A", "A"],
+    "category": "Supply",
+    "dept": "Python Commandos",
+    "icon": "axflam-75-guard-dog-hot-dog.png"
+  },
+  {
+    "name": "AX/LAS-5 Guard Dog Rover",
+    "sequence": ["S", "W", "A", "W", "D", "D"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "axlas-5-guard-dog-rover.png"
+  },
+  {
+    "name": "AX/TX-13 Guard Dog Dog Breath",
+    "sequence": ["S", "W", "A", "W", "D", "W"],
+    "category": "Supply",
+    "dept": "Chemical Agents",
+    "icon": "axtx-13-guard-dog-dog-breath.png"
+  },
+  {
+    "name": "B-1 Supply Pack",
+    "sequence": ["S", "A", "S", "W", "W", "S"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "b-1-supply-pack.png"
+  },
+  {
+    "name": "B-100 Portable Hellbomb",
+    "sequence": ["S", "D", "W", "W", "W"],
+    "category": "Supply",
+    "dept": "Servants of Freedom",
+    "icon": "b-100-portable-hellbomb.png"
+  },
+  {
+    "name": "CQC-1 One True Flag",
+    "sequence": ["S", "A", "D", "D", "W"],
+    "category": "Supply",
+    "dept": "Masters of Ceremony",
+    "icon": "cqc-1-one-true-flag.png"
+  },
+  {
+    "name": "CQC-9 Defoliation Tool",
+    "sequence": ["S", "A", "D", "D", "S"],
+    "category": "Supply",
+    "dept": "Python Commandos",
+    "icon": "cqc-9-defoliation-tool.png"
+  },
+  {
+    "name": "EAT-17 Expendable Anti-Tank",
+    "sequence": ["S", "S", "A", "W", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "eat-17-expendable-anti-tank.png"
+  },
+  {
+    "name": "EAT-700 Expendable Napalm",
+    "sequence": ["S", "S", "A", "W", "A"],
+    "category": "Supply",
+    "dept": "Dust Devils",
+    "icon": "eat-700-expendable-napalm.png"
   },
   {
     "name": "EXO-45 Patriot Exosuit",
     "sequence": ["A", "S", "D", "W", "A", "S", "S"],
+    "category": "Supply",
     "dept": "Robotics Workshop",
     "icon": "exo-45-patriot-exosuit.png"
   },
   {
     "name": "EXO-49 Emancipator Exosuit",
     "sequence": ["A", "S", "D", "W", "A", "S", "W"],
+    "category": "Supply",
     "dept": "Robotics Workshop",
     "icon": "exo-49-emancipator-exosuit.png"
   },
   {
-    "name": "B-100 Portable Hellbomb",
-    "sequence": ["S", "D", "W", "W", "W"],
-    "dept": "Servants of Freedom",
-    "icon": "b-100-portable-hellbomb.png"
+    "name": "FAF-14 Spear",
+    "sequence": ["S", "S", "W", "S", "S"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "faf-14-spear.png"
   },
   {
-    "name": "A/FLAM-40 Flame Sentry",
-    "sequence": ["S", "W", "D", "S", "W", "W"],
-    "dept": "Urban Legends",
-    "icon": "aflam-40-flame-sentry.png"
+    "name": "FLAM-40 Flamethrower",
+    "sequence": ["S", "A", "W", "S", "W"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "flam-40-flamethrower.png"
   },
   {
-    "name": "E/AT-12 Anti-Tank Emplacement",
-    "sequence": ["S", "W", "A", "D", "D", "D"],
-    "dept": "Urban Legends",
-    "icon": "eat-12-anti-tank-emplacement.png"
+    "name": "GL-21 Grenade Launcher",
+    "sequence": ["S", "A", "W", "A", "S"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "gl-21-grenade-launcher.png"
+  },
+  {
+    "name": "GL-52 De-Escalator",
+    "sequence": ["S", "D", "W", "A", "D"],
+    "category": "Supply",
+    "dept": "Force of Law",
+    "icon": "gl-52-de-escalator.png"
+  },
+  {
+    "name": "GR-8 Recoilless Rifle",
+    "sequence": ["S", "A", "D", "D", "A"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "gr-8-recoilless-rifle.png"
+  },
+  {
+    "name": "Jump Pack",
+    "sequence": ["S", "W", "W", "S", "W"],
+    "category": "Supply",
+    "dept": "Hangar",
+    "icon": "jump-pack.png"
+  },
+  {
+    "name": "LAS-98 Laser Cannon",
+    "sequence": ["S", "A", "S", "W", "A"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "las-98-laser-cannon.png"
+  },
+  {
+    "name": "LAS-99 Quasar Cannon",
+    "sequence": ["S", "S", "W", "A", "D"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "las-99-quasar-cannon.png"
+  },
+  {
+    "name": "LIFT-182 Warp Pack",
+    "sequence": ["S", "A", "D", "S", "A", "D"],
+    "category": "Supply",
+    "dept": "Control Group",
+    "icon": "lift-182-warp-pack.png"
+  },
+  {
+    "name": "LIFT-860 Hover Pack",
+    "sequence": ["S", "W", "W", "S", "A", "D"],
+    "category": "Supply",
+    "dept": "Borderline Justice",
+    "icon": "lift-860-hover-pack.png"
+  },
+  {
+    "name": "M-1000 Maxigun",
+    "sequence": ["S", "A", "D", "S", "W", "W"],
+    "category": "Supply",
+    "dept": "Python Commandos",
+    "icon": "m-1000-maxigun.png"
+  },
+  {
+    "name": "M-102 Fast Recon Vehicle",
+    "sequence": ["A", "S", "D", "S", "D", "S", "W"],
+    "category": "Supply",
+    "dept": "Hangar",
+    "icon": "m-102-fast-recon-vehicle.png"
+  },
+  {
+    "name": "M-105 Stalwart",
+    "sequence": ["S", "A", "S", "W", "W", "A"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "m-105-stalwart.png"
+  },
+  {
+    "name": "MG-206 Heavy Machine Gun",
+    "sequence": ["S", "A", "W", "S", "S"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "mg-206-heavy-machine-gun.png"
+  },
+  {
+    "name": "MG-43 Machine Gun",
+    "sequence": ["S", "A", "S", "W", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "mg-43-machine-gun.png"
+  },
+  {
+    "name": "MLS-4X Commando",
+    "sequence": ["S", "A", "W", "S", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "mls-4x-commando.png"
+  },
+  {
+    "name": "MS-11 Solo Silo",
+    "sequence": ["S", "W", "D", "S", "S"],
+    "category": "Supply",
+    "dept": "Dust Devils",
+    "icon": "ms-11-solo-silo.png"
+  },
+  {
+    "name": "PLAS-45 Epoch",
+    "sequence": ["S", "A", "W", "A", "D"],
+    "category": "Supply",
+    "dept": "Control Group",
+    "icon": "plas-45-epoch.png"
+  },
+  {
+    "name": "RL-77 Airburst Rocket Launcher",
+    "sequence": ["S", "W", "W", "A", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "rl-77-airburst-rocket-launcher.png"
+  },
+  {
+    "name": "RS-422 Railgun",
+    "sequence": ["S", "D", "S", "W", "A", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "rs-422-railgun.png"
+  },
+  {
+    "name": "S-11 Speargun",
+    "sequence": ["S", "D", "S", "A", "W", "D"],
+    "category": "Supply",
+    "dept": "Dust Devils",
+    "icon": "s-11-speargun.png"
+  },
+  {
+    "name": "SH-20 Ballistic Shield Backpack",
+    "sequence": ["S", "A", "S", "S", "W", "A"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "sh-20-ballistic-shield-backpack.png"
+  },
+  {
+    "name": "SH-32 Shield Generator Pack",
+    "sequence": ["S", "W", "A", "D", "A", "D"],
+    "category": "Supply",
+    "dept": "Engineering Bay",
+    "icon": "sh-32-shield-generator-pack.png"
   },
   {
     "name": "SH-51 Directional Shield",
     "sequence": ["S", "W", "A", "D", "W", "W"],
+    "category": "Supply",
     "dept": "Urban Legends",
     "icon": "sh-51-directional-shield.png"
+  },
+  {
+    "name": "StA-X3 W.A.S.P. Launcher",
+    "sequence": ["S", "S", "W", "S", "D"],
+    "category": "Supply",
+    "dept": "Patriotic Administration Center",
+    "icon": "sta-x3-wasp-launcher.png"
+  },
+  {
+    "name": "TX-41 Sterilizer",
+    "sequence": ["S", "A", "W", "S", "A"],
+    "category": "Supply",
+    "dept": "Chemical Agents",
+    "icon": "tx-41-sterilizer.png"
+  },
+  {
+    "name": "A/AC-8 Autocannon Sentry",
+    "sequence": ["S", "W", "D", "W", "A", "W"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "aac-8-autocannon-sentry.png"
+  },
+  {
+    "name": "A/ARC-3 Tesla Tower",
+    "sequence": ["S", "W", "D", "W", "A", "D"],
+    "category": "Defense",
+    "dept": "Bridge",
+    "icon": "aarc-3-tesla-tower.png"
+  },
+  {
+    "name": "A/FLAM-40 Flame Sentry",
+    "sequence": ["S", "W", "D", "S", "W", "W"],
+    "category": "Defense",
+    "dept": "Urban Legends",
+    "icon": "aflam-40-flame-sentry.png"
+  },
+  {
+    "name": "A/G-16 Gatling Sentry",
+    "sequence": ["S", "W", "D", "A"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "ag-16-gatling-sentry.png"
+  },
+  {
+    "name": "A/LAS-98 Laser Sentry",
+    "sequence": ["S", "W", "D", "S", "W", "D"],
+    "category": "Defense",
+    "dept": "Control Group",
+    "icon": "alas-98-laser-sentry.png"
+  },
+  {
+    "name": "A/M-12 Mortar Sentry",
+    "sequence": ["S", "W", "D", "D", "S"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "am-12-mortar-sentry.png"
+  },
+  {
+    "name": "A/M-23 EMS Mortar Sentry",
+    "sequence": ["S", "W", "D", "S", "D"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "am-23-ems-mortar-sentry.png"
+  },
+  {
+    "name": "A/MG-43 Machine Gun Sentry",
+    "sequence": ["S", "W", "D", "D", "W"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "amg-43-machine-gun-sentry.png"
+  },
+  {
+    "name": "AX/MLS-4X Rocket Sentry",
+    "sequence": ["S", "W", "D", "D", "A"],
+    "category": "Defense",
+    "dept": "Robotics Workshop",
+    "icon": "axmls-4x-rocket-sentry.png"
+  },
+  {
+    "name": "E/AT-12 Anti-Tank Emplacement",
+    "sequence": ["S", "W", "A", "D", "D", "D"],
+    "category": "Defense",
+    "dept": "Urban Legends",
+    "icon": "eat-12-anti-tank-emplacement.png"
+  },
+  {
+    "name": "E/GL-21 Grenadier Battlement",
+    "sequence": ["S", "D", "S", "A", "D"],
+    "category": "Defense",
+    "dept": "Bridge",
+    "icon": "egl-21-grenadier-battlement.png"
+  },
+  {
+    "name": "E/MG-101 HMG Emplacement",
+    "sequence": ["S", "W", "A", "D", "D", "A"],
+    "category": "Defense",
+    "dept": "Bridge",
+    "icon": "emg-101-hmg-emplacement.png"
+  },
+  {
+    "name": "FX-12 Shield Generator Relay",
+    "sequence": ["S", "S", "A", "D", "A", "D"],
+    "category": "Defense",
+    "dept": "Bridge",
+    "icon": "fx-12-shield-generator-relay.png"
+  },
+  {
+    "name": "MD-17 Anti-Tank Mines",
+    "sequence": ["S", "A", "W", "W"],
+    "category": "Defense",
+    "dept": "Engineering Bay",
+    "icon": "md-17-anti-tank-mines.png"
+  },
+  {
+    "name": "MD-6 Anti-Personnel Minefield",
+    "sequence": ["S", "A", "W", "D"],
+    "category": "Defense",
+    "dept": "Engineering Bay",
+    "icon": "md-6-anti-personnel-minefield.png"
+  },
+  {
+    "name": "MD-8 Gas Mines",
+    "sequence": ["S", "A", "A", "D"],
+    "category": "Defense",
+    "dept": "Engineering Bay",
+    "icon": "md-8-gas-mines.png"
+  },
+  {
+    "name": "MD-I4 Incendiary Mines",
+    "sequence": ["S", "A", "A", "S"],
+    "category": "Defense",
+    "dept": "Engineering Bay",
+    "icon": "md-i4-incendiary-mines.png"
   }
 ]

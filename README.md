@@ -36,7 +36,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.4.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.5.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -163,6 +163,15 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.0.5
+- **Python Commandos Warbond** - Added 3 new stratagems:
+  - M-1000 Maxigun
+  - AX/FLAM-75 Guard Dog Hot Dog
+  - CQC-9 Defoliation Tool
+- **Category Sorting** - Stratagem picker now groups icons by category matching in-game order:
+  - Common → Objectives → Offensive → Supply → Defense
+- Updated all 93 stratagem icons (zopflipng optimized)
 
 ### v1.0.4
 - **Loadouts** - Save and load different stratagem/keybind configurations

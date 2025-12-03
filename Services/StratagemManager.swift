@@ -109,7 +109,8 @@ class StratagemManager: ObservableObject {
             return
         }
 
-        allStratagems = stratagems
+        // Sort by category order (Common, Objectives, Offensive, Supply, Defense)
+        allStratagems = stratagems.sorted { $0.categorySortIndex < $1.categorySortIndex }
         for stratagem in stratagems {
             stratagemLookup[stratagem.name] = stratagem
         }
