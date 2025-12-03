@@ -6,10 +6,19 @@ struct StratagemPickerView: View {
     let hoverPreviewEnabled: Bool
     let onSelect: (Stratagem) -> Void
     let onCancel: () -> Void
-    @State private var escKeyMonitor: Any?
+    @State private var keyMonitor: Any?
     @State private var hoveredStratagem: Stratagem?
     @State private var hoverPosition: CGPoint = .zero
     @State private var hoverDebounceTask: DispatchWorkItem?
+    @State private var searchQuery: String = ""
+    @State private var selectedIndex: Int = 0
+
+    private var filteredStratagems: [Stratagem] {
+        if searchQuery.isEmpty {
+            return stratagems
+        }
+        return stratagems.filter { $0.name.localizedCaseInsensitiveContains(searchQuery) }
+    }
 
     private static let columns = Array(
         repeating: GridItem(.fixed(HBConstants.UI.pickerIconSize), spacing: HBConstants.UI.pickerSpacing),
@@ -20,10 +29,11 @@ struct StratagemPickerView: View {
         ZStack {
             ScrollView {
                 LazyVGrid(columns: Self.columns, alignment: .leading, spacing: HBConstants.UI.pickerSpacing) {
-                    ForEach(stratagems) { stratagem in
+                    ForEach(Array(filteredStratagems.enumerated()), id: \.element.id) { index, stratagem in
                         PickerIconButton(
                             stratagem: stratagem,
                             isCurrentlySelected: stratagem.name == currentlySelected,
+                            isKeyboardSelected: index == selectedIndex && !searchQuery.isEmpty,
                             onSelect: onSelect,
                             onHover: { isHovered, position in
                                 if isHovered {
@@ -75,23 +85,123 @@ struct StratagemPickerView: View {
                     )
                     .allowsHitTesting(false)
             }
+
+            // Search bar at bottom
+            if !searchQuery.isEmpty {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        Text(searchQuery)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text("\(filteredStratagems.count) results")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+                    .cornerRadius(6)
+                    .padding(5)
+                }
+                .allowsHitTesting(false)
+            }
         }
         .coordinateSpace(name: "picker")
         .frame(width: HBConstants.UI.pickerWidth, height: HBConstants.UI.pickerHeight)
         .background(Color.black)
         .onAppear {
-            escKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                // Ignore events with Command, Control, or Option modifiers (allow system shortcuts)
+                let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+                if modifiers.contains(.command) || modifiers.contains(.control) || modifiers.contains(.option) {
+                    return event
+                }
+
+                // ESC: clear search or close picker
                 if event.keyCode == HBConstants.KeyCode.escape {
+                    if !searchQuery.isEmpty {
+                        searchQuery = ""
+                        selectedIndex = 0
+                        return nil
+                    }
                     onCancel()
                     return nil
                 }
+
+                // Enter: select current item
+                if event.keyCode == 0x24 {  // Return key
+                    if !searchQuery.isEmpty && selectedIndex < filteredStratagems.count {
+                        onSelect(filteredStratagems[selectedIndex])
+                        return nil
+                    }
+                    return event
+                }
+
+                // Arrow keys: navigate grid (6 columns)
+                let columns = HBConstants.UI.pickerColumns
+                switch event.keyCode {
+                case 0x7B:  // Left arrow
+                    if selectedIndex > 0 {
+                        selectedIndex -= 1
+                    }
+                    return nil
+                case 0x7C:  // Right arrow
+                    if selectedIndex < filteredStratagems.count - 1 {
+                        selectedIndex += 1
+                    }
+                    return nil
+                case 0x7E:  // Up arrow
+                    if selectedIndex >= columns {
+                        selectedIndex -= columns
+                    }
+                    return nil
+                case 0x7D:  // Down arrow
+                    if selectedIndex + columns < filteredStratagems.count {
+                        selectedIndex += columns
+                    } else if selectedIndex < filteredStratagems.count - 1 {
+                        // No icon directly below - jump to last icon
+                        selectedIndex = filteredStratagems.count - 1
+                    }
+                    return nil
+                default:
+                    break
+                }
+
+                // Backspace: remove last character
+                if event.keyCode == 0x33 {  // Delete key
+                    if !searchQuery.isEmpty {
+                        searchQuery.removeLast()
+                        selectedIndex = 0
+                        // Clear hover preview when search changes
+                        hoverDebounceTask?.cancel()
+                        hoveredStratagem = nil
+                    }
+                    return nil
+                }
+
+                // Type letters/numbers to search (always lowercase)
+                if let chars = event.charactersIgnoringModifiers?.lowercased(), !chars.isEmpty {
+                    let char = chars.first!
+                    if char.isLetter || char.isNumber || char == " " {
+                        searchQuery += String(char)
+                        selectedIndex = 0
+                        // Clear hover preview when search changes
+                        hoverDebounceTask?.cancel()
+                        hoveredStratagem = nil
+                        return nil
+                    }
+                }
+
                 return event
             }
         }
         .onDisappear {
-            if let monitor = escKeyMonitor {
+            if let monitor = keyMonitor {
                 NSEvent.removeMonitor(monitor)
-                escKeyMonitor = nil
+                keyMonitor = nil
             }
         }
     }
@@ -100,6 +210,7 @@ struct StratagemPickerView: View {
 struct PickerIconButton: View {
     let stratagem: Stratagem
     let isCurrentlySelected: Bool
+    var isKeyboardSelected: Bool = false
     let onSelect: (Stratagem) -> Void
     var onHover: ((Bool, CGPoint) -> Void)? = nil
     @State private var isHovered = false
@@ -130,6 +241,11 @@ struct PickerIconButton: View {
                 Color(red: 0.1, green: 0.1, blue: 0.1)
             )
             .cornerRadius(3)
+            .overlay(
+                // White inner border for keyboard selection
+                RoundedRectangle(cornerRadius: 3)
+                    .strokeBorder(Color.white, lineWidth: isKeyboardSelected ? 2 : 0)
+            )
             .onHover { hovering in
                 isHovered = hovering
                 let frame = geo.frame(in: .named("picker"))

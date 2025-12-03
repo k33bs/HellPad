@@ -36,7 +36,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.5.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.6.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -82,8 +82,10 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 ### Customize Stratagems
 
 - Click any stratagem icon to open the picker
-- Select a new stratagem from the grid
-- Press ESC or click outside to cancel
+- **Type-to-Search** - Type letters to filter stratagems
+- **Keyboard Navigation** - Use arrow keys to navigate, Enter to select
+- Press ESC to clear search or close picker
+- Click outside to cancel
 
 ### Rebind Keys
 
@@ -163,6 +165,17 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.0.6
+- **Type-to-Search** - Filter stratagems in the picker by typing
+  - Type letters/numbers to search (case-insensitive)
+  - White border appears on first match (indicates keyboard navigation available)
+  - Backspace to delete characters
+  - ESC to clear search or close picker
+- **Keyboard Navigation** - Navigate filtered results with keyboard
+  - Arrow keys to move selection between icons
+  - Enter to select highlighted stratagem
+  - Down arrow jumps to last icon when no icon directly below
 
 ### v1.0.5
 - **Python Commandos Warbond** - Added 3 new stratagems:

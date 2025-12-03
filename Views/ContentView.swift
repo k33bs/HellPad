@@ -116,7 +116,7 @@ struct ContentView: View {
 
     private func getKeybindText(for index: Int) -> String {
         if listeningForKeybind && selectedKeybindIndex == index {
-            return "<press key>"
+            return "..."
         } else {
             return stratagemManager.keybinds[index].letter
         }
