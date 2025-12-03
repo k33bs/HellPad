@@ -183,9 +183,10 @@ struct ControlsTabView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Stratagem Menu Key
-            VStack(alignment: .leading, spacing: 8) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Stratagem Menu Key
+                VStack(alignment: .leading, spacing: 8) {
                 Text("Stratagem Menu Key")
                     .font(.subheadline)
                     .fontWeight(.medium)
@@ -303,8 +304,31 @@ struct ControlsTabView: View {
                     }
                 }
             }
+
+            Divider()
+
+            // Hover Preview
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle(isOn: Binding(
+                    get: { stratagemManager.hoverPreviewEnabled },
+                    set: {
+                        stratagemManager.hoverPreviewEnabled = $0
+                        stratagemManager.saveAllSettings()
+                    }
+                )) {
+                    Text("Hover Preview")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                .toggleStyle(.switch)
+
+                Text("Show magnified icon when hovering in stratagem picker")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding()
+        }
         .onDisappear {
             stopListening()
         }

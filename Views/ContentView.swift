@@ -94,6 +94,7 @@ struct ContentView: View {
                 StratagemPickerView(
                     stratagems: stratagemManager.allStratagems,
                     currentlySelected: stratagemManager.equippedStratagems[selectedSlotIndex],
+                    hoverPreviewEnabled: stratagemManager.hoverPreviewEnabled,
                     onSelect: { stratagem in
                         stratagemManager.updateEquippedStratagem(at: selectedSlotIndex, with: stratagem.name)
                         showingStratagemPicker = false

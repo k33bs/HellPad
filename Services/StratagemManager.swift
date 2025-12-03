@@ -24,6 +24,7 @@ class StratagemManager: ObservableObject {
     @Published var comboKey: Keybind = Keybind(keyCode: "0x38", letter: "⇧")  // Default: Left Shift
     @Published var loadouts: [Loadout] = []
     @Published var activeLoadoutId: UUID? = nil  // nil = dirty/no loadout active
+    @Published var hoverPreviewEnabled: Bool = true
     private var comboExecutionSemaphore: DispatchSemaphore?
     private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
@@ -140,6 +141,7 @@ class StratagemManager: ObservableObject {
         // Load loadouts (optional for backwards compatibility)
         loadouts = userData.loadouts ?? []
         activeLoadoutId = userData.activeLoadoutId.flatMap { UUID(uuidString: $0) }
+        hoverPreviewEnabled = userData.hoverPreviewEnabled ?? true
     }
 
     private func showFatalError(message: String) {
@@ -552,7 +554,8 @@ class StratagemManager: ObservableObject {
             directionalKeys: directionalKeys,
             comboKey: comboKey,
             loadouts: loadouts,
-            activeLoadoutId: activeLoadoutId?.uuidString
+            activeLoadoutId: activeLoadoutId?.uuidString,
+            hoverPreviewEnabled: hoverPreviewEnabled
         )
         guard let data = try? JSONEncoder().encode(userData),
               let url = userDataURL else {

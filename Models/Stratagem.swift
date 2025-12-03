@@ -94,6 +94,7 @@ struct UserData: Codable {
     var comboKey: Keybind?      // Optional for backwards compatibility (default: Shift)
     var loadouts: [Loadout]?    // Optional for backwards compatibility
     var activeLoadoutId: String? // UUID as string, nil when no loadout active or dirty
+    var hoverPreviewEnabled: Bool?  // Optional for backwards compatibility (default: true)
 
     enum CodingKeys: String, CodingKey {
         case equippedStratagems = "equipped_stratagems"
@@ -105,5 +106,6 @@ struct UserData: Codable {
         case comboKey = "combo_key"
         case loadouts
         case activeLoadoutId = "active_loadout_id"
+        case hoverPreviewEnabled = "hover_preview_enabled"
     }
 }

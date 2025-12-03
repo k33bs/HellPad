@@ -20,6 +20,11 @@ extension NSImage {
             return nil
         }
 
+        // Set image size to half of pixels to treat as @2x Retina asset
+        if let rep = image.representations.first {
+            image.size = NSSize(width: CGFloat(rep.pixelsWide) / 2.0, height: CGFloat(rep.pixelsHigh) / 2.0)
+        }
+
         // Cache the image
         stratagemIconCache[slug] = image
         return image

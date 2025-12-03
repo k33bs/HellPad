@@ -3,11 +3,13 @@ import SwiftUI
 struct StratagemPickerView: View {
     let stratagems: [Stratagem]
     let currentlySelected: String
+    let hoverPreviewEnabled: Bool
     let onSelect: (Stratagem) -> Void
     let onCancel: () -> Void
     @State private var escKeyMonitor: Any?
     @State private var hoveredStratagem: Stratagem?
     @State private var hoverPosition: CGPoint = .zero
+    @State private var hoverDebounceTask: DispatchWorkItem?
 
     private static let columns = Array(
         repeating: GridItem(.fixed(HBConstants.UI.pickerIconSize), spacing: HBConstants.UI.pickerSpacing),
@@ -25,14 +27,23 @@ struct StratagemPickerView: View {
                             onSelect: onSelect,
                             onHover: { isHovered, position in
                                 if isHovered {
-                                    // Lock position when entering to prevent drift while hovering
-                                    if hoveredStratagem?.id != stratagem.id {
-                                        hoverPosition = position
+                                    // Cancel any pending hover
+                                    hoverDebounceTask?.cancel()
+
+                                    // Lock position when entering
+                                    hoverPosition = position
+
+                                    // Debounce: wait 220ms before showing preview
+                                    let task = DispatchWorkItem {
+                                        withAnimation(.easeOut(duration: 0.12)) {
+                                            hoveredStratagem = stratagem
+                                        }
                                     }
-                                    withAnimation(.easeOut(duration: 0.12)) {
-                                        hoveredStratagem = stratagem
-                                    }
+                                    hoverDebounceTask = task
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.22, execute: task)
                                 } else if hoveredStratagem?.id == stratagem.id {
+                                    // Cancel pending and hide immediately
+                                    hoverDebounceTask?.cancel()
                                     withAnimation(.easeOut(duration: 0.12)) {
                                         hoveredStratagem = nil
                                     }
@@ -46,17 +57,17 @@ struct StratagemPickerView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
             // Magnified overlay - rendered separately for z-ordering
-            if let hovered = hoveredStratagem,
+            if hoverPreviewEnabled,
+               let hovered = hoveredStratagem,
                let image = NSImage.stratagemIcon(named: hovered.name) {
                 Image(nsImage: image)
                     .resizable()
                     .interpolation(.high)
                     .scaledToFit()
-                    .frame(width: HBConstants.UI.pickerIconSize - 4, height: HBConstants.UI.pickerIconSize - 4)
-                    .padding(2)
+                    .frame(width: HBConstants.UI.hoverPreviewSize, height: HBConstants.UI.hoverPreviewSize)
+                    .padding(3)
                     .background(Color(red: 0.1, green: 0.1, blue: 0.1))
-                    .cornerRadius(2)
-                    .scaleEffect(HBConstants.UI.hoverScale)
+                    .cornerRadius(4)
                     .shadow(color: .black, radius: 4)
                     .position(
                         x: min(max(hoverPosition.x, HBConstants.UI.hoverPadding), HBConstants.UI.hoverMaxX),

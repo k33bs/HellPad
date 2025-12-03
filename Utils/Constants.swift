@@ -46,8 +46,8 @@ enum HBConstants {
         static let pickerHeight: CGFloat = 475
 
         // Hover Preview
-        static let hoverScale: CGFloat = 2.5
-        static let hoverPadding: CGFloat = 45    // Half of scaled icon size for edge clamping
+        static let hoverPreviewSize: CGFloat = 60  // Rendered at full size for sharpness
+        static let hoverPadding: CGFloat = 36      // Half of preview size for edge clamping
         static var hoverMaxX: CGFloat { pickerWidth - hoverPadding }
         static var hoverMaxY: CGFloat { pickerHeight - hoverPadding }
     }
