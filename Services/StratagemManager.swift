@@ -716,4 +716,90 @@ class StratagemManager: ObservableObject {
         saveUserData()
         logger.info("Deleted loadout: \(id)")
     }
+
+    // MARK: - Loadout Export/Import
+
+    /// Export loadouts to JSON data
+    func exportLoadouts(_ loadoutsToExport: [Loadout]) -> Data? {
+        let export = LoadoutExport(loadouts: loadoutsToExport)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        do {
+            let data = try encoder.encode(export)
+            logger.info("Exported \(loadoutsToExport.count) loadout(s)")
+            return data
+        } catch {
+            logger.error("Failed to encode loadouts for export: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// Import loadouts from JSON data
+    /// Returns the number of loadouts imported, or nil on failure
+    func importLoadouts(from data: Data) -> Int? {
+        let decoder = JSONDecoder()
+
+        do {
+            let imported = try decoder.decode(LoadoutExport.self, from: data)
+            var importCount = 0
+
+            for loadout in imported.loadouts {
+                // VALIDATION: Ensure arrays are exactly size 8 to prevent crashes
+                var safeStratagems = loadout.equippedStratagems
+                var safeKeybinds = loadout.keybinds
+
+                // Pad or trim stratagems to exactly 8
+                if safeStratagems.count < 8 {
+                    safeStratagems.append(contentsOf: Array(repeating: "", count: 8 - safeStratagems.count))
+                } else if safeStratagems.count > 8 {
+                    safeStratagems = Array(safeStratagems.prefix(8))
+                }
+
+                // Pad or trim keybinds to exactly 8
+                if safeKeybinds.count < 8 {
+                    safeKeybinds.append(contentsOf: Array(repeating: Keybind(keyCode: "", letter: ""), count: 8 - safeKeybinds.count))
+                } else if safeKeybinds.count > 8 {
+                    safeKeybinds = Array(safeKeybinds.prefix(8))
+                }
+
+                // Generate new UUID to avoid conflicts
+                let newLoadout = Loadout(
+                    id: UUID(),
+                    name: generateUniqueImportName(baseName: loadout.name),
+                    equippedStratagems: safeStratagems,
+                    keybinds: safeKeybinds
+                )
+                loadouts.append(newLoadout)
+                importCount += 1
+            }
+
+            if importCount > 0 {
+                saveUserData()
+                logger.info("Imported \(importCount) loadout(s)")
+            }
+
+            return importCount
+        } catch {
+            logger.error("Failed to decode loadouts for import: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// Generate a unique name for imported loadout, avoiding duplicates
+    private func generateUniqueImportName(baseName: String) -> String {
+        // Check if name already exists
+        if !loadouts.contains(where: { $0.name == baseName }) {
+            return baseName
+        }
+
+        // Find a unique name by appending "(imported)" or number
+        var counter = 1
+        var name = "\(baseName) (imported)"
+        while loadouts.contains(where: { $0.name == name }) {
+            counter += 1
+            name = "\(baseName) (imported \(counter))"
+        }
+        return name
+    }
 }
