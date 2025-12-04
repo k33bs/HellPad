@@ -10,7 +10,7 @@ class EventTapManager {
     private var runLoopSource: CFRunLoopSource?
     private let comboKeyStateLock = NSLock()
     private var wasComboKeyPressed: Bool = false  // Track previous combo key state
-    private var _comboKeyCode: CGKeyCode = 0x38   // Default: Left Shift
+    private var _comboKeyCode: CGKeyCode = 0x37   // Default: Left Command
 
     var comboKeyCode: CGKeyCode {
         get {

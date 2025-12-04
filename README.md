@@ -16,6 +16,8 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 - **8 Customizable Stratagem Slots** - Assign any stratagem to any slot
 - **Loadouts** - Save and load different stratagem configurations from the menu bar
+- **Loadout Keyboard Shortcuts** - Hold modifier key (default: Option) + 1-9 to switch loadouts instantly
+- **Right-Click to Clear** - Right-click any stratagem or keybind to clear it
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
 - **Combo Mode** - Hold a configurable combo key and press multiple hotkeys to queue stratagems, release to execute sequentially
 - **Smart Detection** - Only works when your configured apps are active (prevents accidental triggers)
@@ -36,7 +38,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.6.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.8.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -69,7 +71,7 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 
 ### Combo Mode
 
-1. Hold the **Combo Queue Key** (default: Shift, configurable in Controls tab)
+1. Hold the **Combo Queue Key** (default: Command, configurable in Controls tab)
 2. Press keys to queue stratagems (icons glow cyan)
 3. Release the combo key to execute sequence
 4. Click mouse when each stratagem appears to throw it (3 second timeout)
@@ -93,6 +95,19 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 - Press a new key
 - Duplicate keys will flash red on the conflicting slot
 - Press ESC to cancel
+- Auto-cancels after 6 seconds if no key pressed
+
+### Clear Stratagems/Keybinds
+
+- Right-click any stratagem icon to clear it from the slot
+- Right-click any keybind button to reset it to empty
+- Useful for freeing up keys without swapping
+
+### Loadout Keyboard Shortcuts
+
+- Hold the **Loadout Switch Key** (default: Option, configurable in Controls)
+- Press a number key **1-9** to instantly switch to that loadout
+- Loadouts are numbered in the menu bar dropdown for reference
 
 ### Configure Active Apps
 
@@ -106,7 +121,8 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 2. Select the **Controls** tab
 3. Customize:
    - **Stratagem Menu Key** - The key that opens the stratagem menu in-game (default: Control)
-   - **Combo Queue Key** - The key to hold for queuing multiple stratagems (default: Shift)
+   - **Combo Queue Key** - The key to hold for queuing multiple stratagems (default: Command)
+   - **Loadout Switch Key** - The key to hold + 1-9 for quick loadout switching (default: Option)
    - **Activation Mode** - Hold (default) or Toggle
      - *Hold*: Hold the menu key while pressing directions
      - *Toggle*: Press menu key once, then press directions
@@ -166,6 +182,22 @@ Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
 
+### v1.0.8
+- **Default Combo Key Changed** - Now uses Command instead of Shift (avoids blocking sprint in-game)
+- **UI Improvements** - Empty stratagem slots blend with background, keybind buttons fully clickable
+
+### v1.0.7
+- **Loadout Keyboard Shortcuts** - Switch loadouts with a key + number (1-9)
+  - Hold the Loadout Switch Key (default: Option) and press 1-9
+  - Instantly switches to the corresponding loadout
+  - Loadouts numbered in menu bar for quick reference
+  - Configurable in Settings → Controls tab
+- **Right-Click to Clear** - Context menus for stratagems and keybinds
+  - Right-click any stratagem icon to clear it
+  - Right-click any keybind button to reset it to empty
+  - Useful for freeing up keys without three-way swaps
+- **Keybind Timeout** - Auto-cancels keybind listening after 6 seconds
+
 ### v1.0.6
 - **Hover Preview** - Magnified icon preview when hovering in the picker
   - Toggle on/off in Settings
@@ -198,7 +230,7 @@ Developed for the HELLDIVERS™ 2 community.
   - Duplicate names prevented, unique default names generated
 
 ### v1.0.3
-- **Configurable Combo Queue Key** - Rebind the key used to queue multiple stratagems (default: Shift)
+- **Configurable Combo Queue Key** - Rebind the key used to queue multiple stratagems (default: Command)
 - **Fixed modifier key handling** - Super keys like Control now work correctly in HELLDIVERS
 - **Improved combo execution** - Click buffering fixed to prevent accidental throws
 - Removed Done button from settings (closes via window controls)

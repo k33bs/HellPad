@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var selectedKeybindIndex: Int? = nil
     @State private var localEventMonitor: Any?
     @State private var duplicateKeys: Set<Int> = []
+    @State private var keybindTimeoutTask: DispatchWorkItem?
 
     var body: some View {
         ZStack {
@@ -49,7 +50,14 @@ struct ContentView: View {
                                         listeningForKeybind = true
                                         stratagemManager.startListeningForKeybind(at: index)
                                         setupKeyMonitor()
+                                        startKeybindTimeout()
                                         logger.debug("Key monitor setup, event tap disabled")
+                                    },
+                                    onStratagemClear: {
+                                        stratagemManager.clearStratagem(at: index)
+                                    },
+                                    onKeybindClear: {
+                                        stratagemManager.clearKeybind(at: index)
                                     }
                                 )
                             }
@@ -106,7 +114,8 @@ struct ContentView: View {
             }
         }
         .onDisappear {
-            // Clean up event monitor when view disappears
+            // Clean up event monitor and timeout when view disappears
+            cancelKeybindTimeout()
             if let monitor = localEventMonitor {
                 NSEvent.removeMonitor(monitor)
                 localEventMonitor = nil
@@ -140,6 +149,7 @@ struct ContentView: View {
 
             // Handle Escape to cancel
             if event.keyCode == HBConstants.KeyCode.escape {
+                cancelKeybindTimeout()
                 stratagemManager.cancelKeybindListening()
                 listeningForKeybind = false
                 selectedKeybindIndex = nil
@@ -194,6 +204,7 @@ struct ContentView: View {
                     return nil
                 }
 
+                cancelKeybindTimeout()
                 stratagemManager.updateKeybind(at: index, keyCode: keyCodeHex, letter: keyString)
                 listeningForKeybind = false
                 selectedKeybindIndex = nil
@@ -208,6 +219,35 @@ struct ContentView: View {
             return nil
         }
     }
+
+    private func startKeybindTimeout() {
+        // Cancel any existing timeout
+        keybindTimeoutTask?.cancel()
+
+        // Create new timeout task
+        let task = DispatchWorkItem { [self] in
+            guard listeningForKeybind else { return }
+
+            logger.debug("Keybind timeout - cancelling")
+            stratagemManager.cancelKeybindListening()
+            listeningForKeybind = false
+            selectedKeybindIndex = nil
+
+            // Remove the event monitor
+            if let monitor = localEventMonitor {
+                NSEvent.removeMonitor(monitor)
+                localEventMonitor = nil
+            }
+        }
+
+        keybindTimeoutTask = task
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6.0, execute: task)
+    }
+
+    private func cancelKeybindTimeout() {
+        keybindTimeoutTask?.cancel()
+        keybindTimeoutTask = nil
+    }
 }
 
 struct StratagemSlotView: View {
@@ -218,12 +258,14 @@ struct StratagemSlotView: View {
     let isInCombo: Bool
     let onStratagemTapped: () -> Void
     let onKeybindTapped: () -> Void
+    var onStratagemClear: (() -> Void)? = nil
+    var onKeybindClear: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 0) {
             // Stratagem Icon Button - 63px icon + 10px frame = 83px total
             Button(action: onStratagemTapped) {
-                if let image = NSImage.stratagemIcon(named: stratagemName) {
+                if !stratagemName.isEmpty, let image = NSImage.stratagemIcon(named: stratagemName) {
                     Image(nsImage: image)
                         .resizable()
                         .interpolation(.high)
@@ -231,7 +273,7 @@ struct StratagemSlotView: View {
                         .frame(width: 63, height: 63)
                 } else {
                     Rectangle()
-                        .fill(Color.gray)
+                        .fill(Color(red: 0.06, green: 0.06, blue: 0.06))
                         .frame(width: 63, height: 63)
                 }
             }
@@ -253,24 +295,35 @@ struct StratagemSlotView: View {
                         lineWidth: isInCombo ? HBConstants.UI.borderWidth : 0
                     )
             )
+            .contextMenu {
+                Button("Clear") {
+                    onStratagemClear?()
+                }
+                .disabled(stratagemName.isEmpty)
+            }
 
             // Keybind Button - slightly lighter color, rounded bottom corners
             Button(action: onKeybindTapped) {
-                Text(keybind)
-                    .foregroundColor(.white)
-                    .font(.system(size: 14, weight: .bold))
-                    .frame(width: 83, height: 28)
+                ZStack {
+                    // Tappable background fill
+                    (isError ? HBConstants.Visual.errorRed.opacity(0.7) :
+                     isFlashing ? HBConstants.Visual.flashYellow :
+                     isInCombo ? HBConstants.Visual.comboCyan.opacity(HBConstants.Visual.comboBorderOpacity) :
+                     Color(red: 0.12, green: 0.12, blue: 0.12))
+                    Text(keybind)
+                        .foregroundColor(.white)
+                        .font(.system(size: 14, weight: .bold))
+                }
+                .frame(width: 83, height: 28)
+                .clipShape(RoundedCorner(radius: HBConstants.UI.cornerRadius, corners: [.bottomLeft, .bottomRight]))
             }
             .buttonStyle(PlainButtonStyle())
-            .background(
-                RoundedCorner(radius: HBConstants.UI.cornerRadius, corners: [.bottomLeft, .bottomRight])
-                    .fill(
-                        isError ? HBConstants.Visual.errorRed.opacity(0.7) :
-                        isFlashing ? HBConstants.Visual.flashYellow :  // Full brightness
-                        isInCombo ? HBConstants.Visual.comboCyan.opacity(HBConstants.Visual.comboBorderOpacity) :
-                        Color(red: 0.12, green: 0.12, blue: 0.12)
-                    )
-            )
+            .contextMenu {
+                Button("Clear") {
+                    onKeybindClear?()
+                }
+                .disabled(keybind.isEmpty)
+            }
         }
         .padding(.horizontal, 3)
         .padding(.vertical, 3)

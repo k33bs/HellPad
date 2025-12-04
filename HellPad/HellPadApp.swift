@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "HellPad v1.0.4"
+        alert.messageText = "HellPad v1.0.8"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 
@@ -233,10 +233,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         separatorBefore.isHidden = manager.loadouts.isEmpty
         separatorAfter.isHidden = manager.loadouts.isEmpty
 
-        // Add loadout items
+        // Add loadout items with numbers (1-9 for keyboard shortcuts)
         var insertIndex = beforeIndex + 1
-        for loadout in manager.loadouts {
-            let item = NSMenuItem(title: loadout.name, action: #selector(loadoutMenuItemClicked(_:)), keyEquivalent: "")
+        for (index, loadout) in manager.loadouts.enumerated() {
+            // Show number prefix for first 9 loadouts (keyboard shortcuts)
+            let numberPrefix = index < 9 ? "\(index + 1)  " : ""
+            let item = NSMenuItem(title: "\(numberPrefix)\(loadout.name)", action: #selector(loadoutMenuItemClicked(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = loadout.id
             item.state = (manager.activeLoadoutId == loadout.id) ? .on : .off

@@ -7,6 +7,24 @@ enum HBConstants {
     enum KeyCode {
         static let pause = kVK_ANSI_P  // 0x23
         static let escape = kVK_Escape  // 0x35
+
+        // Number keys 1-9 for loadout switching
+        static let numberKeys: [CGKeyCode] = [
+            CGKeyCode(kVK_ANSI_1),  // 0x12
+            CGKeyCode(kVK_ANSI_2),  // 0x13
+            CGKeyCode(kVK_ANSI_3),  // 0x14
+            CGKeyCode(kVK_ANSI_4),  // 0x15
+            CGKeyCode(kVK_ANSI_5),  // 0x17
+            CGKeyCode(kVK_ANSI_6),  // 0x16
+            CGKeyCode(kVK_ANSI_7),  // 0x1A
+            CGKeyCode(kVK_ANSI_8),  // 0x1C
+            CGKeyCode(kVK_ANSI_9)   // 0x19
+        ]
+
+        // Returns 0-8 for keys 1-9, or nil if not a number key
+        static func loadoutIndex(for keyCode: CGKeyCode) -> Int? {
+            return numberKeys.firstIndex(of: keyCode)
+        }
     }
 
     // MARK: - Timing Delays

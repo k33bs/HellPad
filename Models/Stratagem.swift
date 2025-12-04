@@ -91,7 +91,8 @@ struct UserData: Codable {
     var superKey: Keybind?      // Optional for backwards compatibility (default: Control)
     var activationMode: ActivationMode?  // Optional for backwards compatibility (default: hold)
     var directionalKeys: DirectionalKeybinds?  // Optional for backwards compatibility (default: WASD)
-    var comboKey: Keybind?      // Optional for backwards compatibility (default: Shift)
+    var comboKey: Keybind?      // Optional for backwards compatibility (default: Command)
+    var loadoutKey: Keybind?    // Optional for backwards compatibility (default: Option)
     var loadouts: [Loadout]?    // Optional for backwards compatibility
     var activeLoadoutId: String? // UUID as string, nil when no loadout active or dirty
     var hoverPreviewEnabled: Bool?  // Optional for backwards compatibility (default: true)
@@ -104,6 +105,7 @@ struct UserData: Codable {
         case activationMode = "activation_mode"
         case directionalKeys = "directional_keys"
         case comboKey = "combo_key"
+        case loadoutKey = "loadout_key"
         case loadouts
         case activeLoadoutId = "active_loadout_id"
         case hoverPreviewEnabled = "hover_preview_enabled"
