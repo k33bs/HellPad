@@ -747,6 +747,15 @@ class StratagemManager: ObservableObject {
         logger.info("Deleted loadout: \(id)")
     }
 
+    func renameLoadout(id: UUID, to newName: String) {
+        guard let index = loadouts.firstIndex(where: { $0.id == id }) else { return }
+        let trimmed = newName.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        loadouts[index].name = trimmed
+        saveUserData()
+        logger.info("Renamed loadout to: \(trimmed)")
+    }
+
     // MARK: - Loadout Export/Import
 
     /// Export loadouts to JSON data

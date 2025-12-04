@@ -584,6 +584,9 @@ struct LoadoutsTabView: View {
     @State private var showDeleteConfirmation = false
     @State private var importMessage: String? = nil
     @State private var showImportMessage = false
+    @State private var editingLoadoutId: UUID? = nil
+    @State private var editingName: String = ""
+    @FocusState private var focusedLoadoutId: UUID?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -621,8 +624,29 @@ struct LoadoutsTabView: View {
                             }
 
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(loadout.name)
-                                    .fontWeight(.medium)
+                                if editingLoadoutId == loadout.id {
+                                    TextField("Name", text: $editingName)
+                                        .focused($focusedLoadoutId, equals: loadout.id)
+                                        .textFieldStyle(.roundedBorder)
+                                        .frame(maxWidth: 150)
+                                        .onSubmit {
+                                            stratagemManager.renameLoadout(id: loadout.id, to: editingName)
+                                            editingLoadoutId = nil
+                                        }
+                                        .onExitCommand {
+                                            editingLoadoutId = nil
+                                        }
+                                        .onAppear {
+                                            focusedLoadoutId = loadout.id
+                                        }
+                                } else {
+                                    Text(loadout.name)
+                                        .fontWeight(.medium)
+                                        .onTapGesture {
+                                            editingName = loadout.name
+                                            editingLoadoutId = loadout.id
+                                        }
+                                }
                                 Text(loadout.equippedStratagems.prefix(4).joined(separator: ", "))
                                     .font(.caption)
                                     .foregroundColor(.secondary)

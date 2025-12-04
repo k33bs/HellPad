@@ -39,7 +39,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.0.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.1.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -182,6 +182,11 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.1
+- **Loadout Rename** - Click loadout name in Settings → Loadouts to rename inline
+  - Auto-focuses for immediate typing
+  - Press Enter to save, ESC to cancel
 
 ### v1.1.0
 - **Voice Feedback on Loadout Switch** - Hear loadout names spoken when switching
