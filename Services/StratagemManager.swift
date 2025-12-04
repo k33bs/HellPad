@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import Carbon
 import SwiftUI
+import AppKit
 import os.log
 
 private let logger = Logger(subsystem: "com.hellpad.app", category: "stratagem")
@@ -26,6 +27,19 @@ class StratagemManager: ObservableObject {
     @Published var loadouts: [Loadout] = []
     @Published var activeLoadoutId: UUID? = nil  // nil = dirty/no loadout active
     @Published var hoverPreviewEnabled: Bool = true
+    @Published var voiceFeedbackEnabled: Bool = false
+    @Published var selectedVoice: String? = nil  // nil = system default
+    @Published var voiceVolume: Float = 0.5  // 0.0 to 1.0
+    private let speechSynthesizer = NSSpeechSynthesizer()
+
+    // Available voices for TTS (computed once to avoid repeated I/O)
+    lazy var availableVoices: [(identifier: String, name: String)] = {
+        NSSpeechSynthesizer.availableVoices.compactMap { voiceId in
+            let attrs = NSSpeechSynthesizer.attributes(forVoice: voiceId)
+            guard let name = attrs[.name] as? String else { return nil }
+            return (identifier: voiceId.rawValue, name: name)
+        }.sorted { $0.name < $1.name }
+    }()
     private var comboExecutionSemaphore: DispatchSemaphore?
     private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
@@ -144,6 +158,9 @@ class StratagemManager: ObservableObject {
         loadouts = userData.loadouts ?? []
         activeLoadoutId = userData.activeLoadoutId.flatMap { UUID(uuidString: $0) }
         hoverPreviewEnabled = userData.hoverPreviewEnabled ?? true
+        voiceFeedbackEnabled = userData.voiceFeedbackEnabled ?? false
+        selectedVoice = userData.selectedVoice
+        voiceVolume = userData.voiceVolume ?? 0.5
     }
 
     private func showFatalError(message: String) {
@@ -603,7 +620,10 @@ class StratagemManager: ObservableObject {
             loadoutKey: loadoutKey,
             loadouts: loadouts,
             activeLoadoutId: activeLoadoutId?.uuidString,
-            hoverPreviewEnabled: hoverPreviewEnabled
+            hoverPreviewEnabled: hoverPreviewEnabled,
+            voiceFeedbackEnabled: voiceFeedbackEnabled,
+            selectedVoice: selectedVoice,
+            voiceVolume: voiceVolume
         )
         guard let data = try? JSONEncoder().encode(userData),
               let url = userDataURL else {
@@ -703,6 +723,16 @@ class StratagemManager: ObservableObject {
         setupHotkeys()
         saveUserData()
         logger.info("Loaded loadout: \(loadout.name)")
+
+        if voiceFeedbackEnabled {
+            if let voice = selectedVoice {
+                speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
+            } else {
+                speechSynthesizer.setVoice(nil)  // Reset to system default
+            }
+            speechSynthesizer.volume = voiceVolume
+            speechSynthesizer.startSpeaking("\(loadout.name) loaded")
+        }
     }
 
     func deleteLoadout(id: UUID) {

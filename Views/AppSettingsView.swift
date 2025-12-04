@@ -355,6 +355,64 @@ struct ControlsTabView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+
+            Divider()
+
+            // Voice Feedback
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle(isOn: Binding(
+                    get: { stratagemManager.voiceFeedbackEnabled },
+                    set: {
+                        stratagemManager.voiceFeedbackEnabled = $0
+                        stratagemManager.saveAllSettings()
+                    }
+                )) {
+                    Text("Voice Feedback")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                .toggleStyle(.switch)
+
+                Text("Speak loadout name when switching loadouts")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("Tip: Download better voices in System Settings → Accessibility → Spoken Content → System Voice → ⓘ → Voice")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .italic()
+
+                if stratagemManager.voiceFeedbackEnabled {
+                    Picker("Voice", selection: Binding(
+                        get: { stratagemManager.selectedVoice ?? "" },
+                        set: {
+                            stratagemManager.selectedVoice = $0.isEmpty ? nil : $0
+                            stratagemManager.saveAllSettings()
+                        }
+                    )) {
+                        Text("System Default").tag("")
+                        ForEach(stratagemManager.availableVoices, id: \.identifier) { voice in
+                            Text(voice.name).tag(voice.identifier)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .frame(maxWidth: 200)
+
+                    HStack {
+                        Text("Volume")
+                            .font(.caption)
+                        Slider(value: Binding(
+                            get: { Double(stratagemManager.voiceVolume) },
+                            set: { stratagemManager.voiceVolume = Float($0) }
+                        ), in: 0...1) { isEditing in
+                            if !isEditing {
+                                stratagemManager.saveAllSettings()
+                            }
+                        }
+                        .frame(maxWidth: 150)
+                    }
+                }
+            }
         }
         .padding()
         }

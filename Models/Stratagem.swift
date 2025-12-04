@@ -107,6 +107,9 @@ struct UserData: Codable {
     var loadouts: [Loadout]?    // Optional for backwards compatibility
     var activeLoadoutId: String? // UUID as string, nil when no loadout active or dirty
     var hoverPreviewEnabled: Bool?  // Optional for backwards compatibility (default: true)
+    var voiceFeedbackEnabled: Bool?  // Optional for backwards compatibility (default: false)
+    var selectedVoice: String?  // Voice identifier for TTS (nil = system default)
+    var voiceVolume: Float?  // 0.0 to 1.0 (default: 0.5)
 
     enum CodingKeys: String, CodingKey {
         case equippedStratagems = "equipped_stratagems"
@@ -120,5 +123,8 @@ struct UserData: Codable {
         case loadouts
         case activeLoadoutId = "active_loadout_id"
         case hoverPreviewEnabled = "hover_preview_enabled"
+        case voiceFeedbackEnabled = "voice_feedback_enabled"
+        case selectedVoice = "selected_voice"
+        case voiceVolume = "voice_volume"
     }
 }
