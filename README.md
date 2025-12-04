@@ -16,6 +16,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 - **8 Customizable Stratagem Slots** - Assign any stratagem to any slot
 - **Loadouts** - Save and load different stratagem configurations from the menu bar
+- **Loadout Export/Import** - Share loadouts with friends via `.hellpad` files
 - **Loadout Keyboard Shortcuts** - Hold modifier key (default: Option) + 1-9 to switch loadouts instantly
 - **Right-Click to Clear** - Right-click any stratagem or keybind to clear it
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
@@ -38,7 +39,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.0.8.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.0.9.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -181,6 +182,12 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.0.9
+- **Loadout Export/Import** - Share loadout configurations with friends
+  - Export single loadout or all loadouts to `.hellpad` files
+  - Import loadouts from files (duplicate names handled automatically)
+  - Settings → Loadouts tab: Import/Export buttons
 
 ### v1.0.8
 - **Default Combo Key Changed** - Now uses Command instead of Shift (avoids blocking sprint in-game)

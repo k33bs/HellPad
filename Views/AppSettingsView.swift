@@ -1,5 +1,11 @@
 import SwiftUI
 import AppKit
+import UniformTypeIdentifiers
+
+// Custom UTType for .hellpad loadout files
+extension UTType {
+    static let hellpadLoadout = UTType(exportedAs: "com.hellpad.loadout", conformingTo: .json)
+}
 
 struct AppSettingsView: View {
     @ObservedObject var stratagemManager: StratagemManager
@@ -518,6 +524,8 @@ struct LoadoutsTabView: View {
     @ObservedObject var stratagemManager: StratagemManager
     @State private var loadoutToDelete: Loadout? = nil
     @State private var showDeleteConfirmation = false
+    @State private var importMessage: String? = nil
+    @State private var showImportMessage = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -571,6 +579,16 @@ struct LoadoutsTabView: View {
                             }
                             .disabled(stratagemManager.activeLoadoutId == loadout.id)
 
+                            // Export single loadout button
+                            Button(action: {
+                                exportLoadouts([loadout])
+                            }) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.accentColor)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .help("Export this loadout")
+
                             // Delete button
                             Button(action: {
                                 loadoutToDelete = loadout
@@ -585,6 +603,21 @@ struct LoadoutsTabView: View {
                     }
                 }
             }
+
+            // Export/Import buttons at bottom
+            HStack {
+                Button("Import...") {
+                    importLoadouts()
+                }
+
+                if !stratagemManager.loadouts.isEmpty {
+                    Button("Export All...") {
+                        exportLoadouts(stratagemManager.loadouts)
+                    }
+                }
+
+                Spacer()
+            }
         }
         .padding()
         .alert("Delete Loadout?", isPresented: $showDeleteConfirmation, presenting: loadoutToDelete) { loadout in
@@ -594,6 +627,77 @@ struct LoadoutsTabView: View {
             }
         } message: { loadout in
             Text("Are you sure you want to delete \"\(loadout.name)\"? This cannot be undone.")
+        }
+        .alert("Import Complete", isPresented: $showImportMessage) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(importMessage ?? "")
+        }
+    }
+
+    private func exportLoadouts(_ loadouts: [Loadout]) {
+        guard let data = stratagemManager.exportLoadouts(loadouts) else {
+            return
+        }
+
+        let savePanel = NSSavePanel()
+        savePanel.allowedContentTypes = [.hellpadLoadout]
+        savePanel.canCreateDirectories = true
+        savePanel.isExtensionHidden = false
+        savePanel.nameFieldStringValue = loadouts.count == 1
+            ? "\(loadouts[0].name).hellpad"
+            : "HellPad_Loadouts.hellpad"
+        savePanel.title = "Export Loadouts"
+        savePanel.message = "Choose where to save your loadout(s)"
+
+        if savePanel.runModal() == .OK, let url = savePanel.url {
+            do {
+                try data.write(to: url)
+            } catch {
+                let alert = NSAlert()
+                alert.messageText = "Export Failed"
+                alert.informativeText = error.localizedDescription
+                alert.alertStyle = .warning
+                alert.runModal()
+            }
+        }
+    }
+
+    private func importLoadouts() {
+        let openPanel = NSOpenPanel()
+        openPanel.allowedContentTypes = [.hellpadLoadout]
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.title = "Import Loadouts"
+        openPanel.message = "Select a .hellpad file to import"
+
+        if openPanel.runModal() == .OK, let url = openPanel.url {
+            do {
+                // Safety check: reject files larger than 10MB
+                let resources = try url.resourceValues(forKeys: [.fileSizeKey])
+                if let fileSize = resources.fileSize, fileSize > 10_000_000 {
+                    throw NSError(domain: "com.hellpad", code: 1, userInfo: [NSLocalizedDescriptionKey: "File is too large to import."])
+                }
+
+                let data = try Data(contentsOf: url)
+                if let count = stratagemManager.importLoadouts(from: data) {
+                    importMessage = "Successfully imported \(count) loadout\(count == 1 ? "" : "s")."
+                    showImportMessage = true
+                } else {
+                    let alert = NSAlert()
+                    alert.messageText = "Import Failed"
+                    alert.informativeText = "The file could not be read. Make sure it's a valid HellPad loadout file."
+                    alert.alertStyle = .warning
+                    alert.runModal()
+                }
+            } catch {
+                let alert = NSAlert()
+                alert.messageText = "Import Failed"
+                alert.informativeText = error.localizedDescription
+                alert.alertStyle = .warning
+                alert.runModal()
+            }
         }
     }
 }

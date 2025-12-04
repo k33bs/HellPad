@@ -84,6 +84,17 @@ struct Loadout: Codable, Identifiable {
     }
 }
 
+/// Wrapper for loadout export files (.hellpad)
+struct LoadoutExport: Codable {
+    let version: String
+    let loadouts: [Loadout]
+
+    init(loadouts: [Loadout], version: String = "1.0") {
+        self.version = version
+        self.loadouts = loadouts
+    }
+}
+
 struct UserData: Codable {
     var equippedStratagems: [String]
     var keybinds: [Keybind]
