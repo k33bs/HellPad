@@ -21,7 +21,8 @@ class StratagemManager: ObservableObject {
     @Published var superKey: Keybind = Keybind(keyCode: "0x3B", letter: "⌃")  // Default: Control
     @Published var activationMode: ActivationMode = .hold
     @Published var directionalKeys: DirectionalKeybinds = .defaultWASD
-    @Published var comboKey: Keybind = Keybind(keyCode: "0x38", letter: "⇧")  // Default: Left Shift
+    @Published var comboKey: Keybind = Keybind(keyCode: "0x37", letter: "⌘")  // Default: Left Command
+    @Published var loadoutKey: Keybind = Keybind(keyCode: "0x3A", letter: "⌥")  // Default: Left Option
     @Published var loadouts: [Loadout] = []
     @Published var activeLoadoutId: UUID? = nil  // nil = dirty/no loadout active
     @Published var hoverPreviewEnabled: Bool = true
@@ -136,7 +137,8 @@ class StratagemManager: ObservableObject {
         superKey = userData.superKey ?? Keybind(keyCode: "0x3B", letter: "⌃")
         activationMode = userData.activationMode ?? .hold
         directionalKeys = userData.directionalKeys ?? .defaultWASD
-        comboKey = userData.comboKey ?? Keybind(keyCode: "0x38", letter: "⇧")
+        comboKey = userData.comboKey ?? Keybind(keyCode: "0x37", letter: "⌘")
+        loadoutKey = userData.loadoutKey ?? Keybind(keyCode: "0x3A", letter: "⌥")
 
         // Load loadouts (optional for backwards compatibility)
         loadouts = userData.loadouts ?? []
@@ -230,6 +232,26 @@ class StratagemManager: ObservableObject {
                         let newState = self.isPaused
                         self.pauseStateLock.unlock()
                         logger.info("HellPad \(newState ? "PAUSED" : "ACTIVE")")
+                    }
+                    return true
+                }
+            }
+
+            // Loadout key + number (1-9) switches loadouts
+            if let loadoutKeyCode = self.keySimulator.hexStringToKeyCode(self.loadoutKey.keyCode),
+               CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode),
+               let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
+                // Only switch loadouts in allowed apps
+                if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
+                    DispatchQueue.main.async {
+                        // Check if loadout exists at this index
+                        if loadoutIndex < self.loadouts.count {
+                            let loadout = self.loadouts[loadoutIndex]
+                            self.loadLoadout(id: loadout.id)
+                            logger.info("Switched to loadout \(loadoutIndex + 1): \(loadout.name)")
+                        } else {
+                            logger.debug("No loadout at index \(loadoutIndex + 1)")
+                        }
                     }
                     return true
                 }
@@ -532,6 +554,31 @@ class StratagemManager: ObservableObject {
         saveUserData()
     }
 
+    func clearKeybind(at index: Int) {
+        guard index < keybinds.count else { return }
+
+        // Set to empty keybind (won't trigger on any key)
+        keybinds[index] = Keybind(keyCode: "", letter: "")
+        activeLoadoutId = nil  // Mark as dirty - config modified
+
+        // Re-setup event tap with new keybinds
+        setupHotkeys()
+        logger.info("Slot \(index) keybind cleared")
+
+        saveUserData()
+    }
+
+    func clearStratagem(at index: Int) {
+        guard index < equippedStratagems.count else { return }
+
+        // Set to empty stratagem name (slot will be empty)
+        equippedStratagems[index] = ""
+        activeLoadoutId = nil  // Mark as dirty - config modified
+
+        logger.info("Slot \(index) stratagem cleared")
+        saveUserData()
+    }
+
     func cancelKeybindListening() {
         // Re-enable event tap after cancel
         setupHotkeys()
@@ -553,6 +600,7 @@ class StratagemManager: ObservableObject {
             activationMode: activationMode,
             directionalKeys: directionalKeys,
             comboKey: comboKey,
+            loadoutKey: loadoutKey,
             loadouts: loadouts,
             activeLoadoutId: activeLoadoutId?.uuidString,
             hoverPreviewEnabled: hoverPreviewEnabled
@@ -608,6 +656,12 @@ class StratagemManager: ObservableObject {
         saveUserData()
         setupHotkeys()  // Re-setup to use new combo key
         logger.info("Combo key updated to '\(letter)'")
+    }
+
+    func updateLoadoutKey(keyCode: String, letter: String) {
+        loadoutKey = Keybind(keyCode: keyCode, letter: letter)
+        saveUserData()
+        logger.info("Loadout key updated to '\(letter)'")
     }
 
     // MARK: - Loadout Management

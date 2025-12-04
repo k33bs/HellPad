@@ -179,6 +179,7 @@ struct ControlsTabView: View {
     enum KeybindTarget: Equatable {
         case superKey
         case comboKey
+        case loadoutKey
         case directional(String)  // "up", "down", "left", "right"
     }
 
@@ -222,6 +223,28 @@ struct ControlsTabView: View {
                     }
 
                     Text("Hold this key + hotkeys to queue multiple stratagems")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            Divider()
+
+            // Loadout Switch Key
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Loadout Switch Key")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                HStack {
+                    KeybindButton(
+                        label: getKeyLabel(for: .loadoutKey),
+                        isListening: listeningFor == .loadoutKey
+                    ) {
+                        startListening(for: .loadoutKey)
+                    }
+
+                    Text("Hold this key + 1-9 to switch loadouts")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -344,6 +367,8 @@ struct ControlsTabView: View {
             return stratagemManager.superKey.letter
         case .comboKey:
             return stratagemManager.comboKey.letter
+        case .loadoutKey:
+            return stratagemManager.loadoutKey.letter
         case .directional(let direction):
             switch direction {
             case "up": return stratagemManager.directionalKeys.up.letter
@@ -458,6 +483,8 @@ struct ControlsTabView: View {
             stratagemManager.updateSuperKey(keyCode: keyCode, letter: letter)
         case .comboKey:
             stratagemManager.updateComboKey(keyCode: keyCode, letter: letter)
+        case .loadoutKey:
+            stratagemManager.updateLoadoutKey(keyCode: keyCode, letter: letter)
         case .directional(let direction):
             stratagemManager.updateDirectionalKey(direction, keyCode: keyCode, letter: letter)
         }
