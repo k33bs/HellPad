@@ -377,7 +377,7 @@ struct StratagemSlotView: View {
                         .frame(width: HBConstants.UI.iconSize, height: HBConstants.UI.iconSize)
                 } else {
                     Rectangle()
-                        .fill(Color(red: 0.06, green: 0.06, blue: 0.06))
+                        .fill(HBConstants.Visual.slotBackground)
                         .frame(width: HBConstants.UI.iconSize, height: HBConstants.UI.iconSize)
                 }
             }
@@ -388,7 +388,7 @@ struct StratagemSlotView: View {
                     .fill(
                         isFlashing ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
                         isInCombo ? HBConstants.Visual.comboCyan.opacity(HBConstants.Visual.comboBackgroundOpacity) :
-                        Color(red: 0.06, green: 0.06, blue: 0.06)
+                        HBConstants.Visual.slotBackground
                     )
             )
             .overlay(
@@ -422,7 +422,7 @@ struct StratagemSlotView: View {
                     (isError ? HBConstants.Visual.errorRed.opacity(0.7) :
                      isFlashing ? HBConstants.Visual.flashYellow :
                      isInCombo ? HBConstants.Visual.comboCyan.opacity(HBConstants.Visual.comboBorderOpacity) :
-                     Color(red: 0.12, green: 0.12, blue: 0.12))
+                     HBConstants.Visual.keybindBackground)
                     Text(keybind)
                         .foregroundColor(.white)
                         .font(.system(size: HBConstants.UI.keybindFontSize, weight: .bold))

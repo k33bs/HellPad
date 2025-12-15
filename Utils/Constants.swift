@@ -66,6 +66,19 @@ enum HBConstants {
         static let pickerWidth: CGFloat = 186
         static let pickerHeight: CGFloat = 475
 
+        static let pickerContentPadding: CGFloat = 5
+        static let pickerIconCornerRadius: CGFloat = 3
+        static let pickerKeyboardBorderWidth: CGFloat = 2
+
+        static let hoverPreviewPadding: CGFloat = 3
+        static let hoverPreviewCornerRadius: CGFloat = 4
+        static let hoverPreviewShadowRadius: CGFloat = 4
+
+        static let pickerSearchPaddingHorizontal: CGFloat = 8
+        static let pickerSearchPaddingVertical: CGFloat = 6
+        static let pickerSearchCornerRadius: CGFloat = 6
+        static let pickerSearchOuterPadding: CGFloat = 5
+
         // Hover Preview
         static let hoverPreviewSize: CGFloat = 60  // Rendered at full size for sharpness
         static let hoverPadding: CGFloat = 36      // Half of preview size for edge clamping
@@ -84,5 +97,11 @@ enum HBConstants {
         static let flashYellow = Color(red: 1.0, green: 0.906, blue: 0.063)  // #FFE710
         static let comboCyan = Color.cyan
         static let errorRed = Color.red
+
+        static let slotBackground = Color(red: 0.06, green: 0.06, blue: 0.06)
+        static let keybindBackground = Color(red: 0.12, green: 0.12, blue: 0.12)
+        static let pickerItemBackground = Color(red: 0.1, green: 0.1, blue: 0.1)
+        static let pickerItemHoverBackground = Color(red: 0.2, green: 0.2, blue: 0.2)
+        static let pickerSearchBackground = Color(red: 0.15, green: 0.15, blue: 0.15)
     }
 }
