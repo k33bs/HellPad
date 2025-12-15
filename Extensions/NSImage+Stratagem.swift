@@ -29,10 +29,6 @@ extension NSImage {
         stratagemIconCache[slug] = image
         return image
     }
-
-    static func clearIconCache() {
-        stratagemIconCache.removeAll()
-    }
 }
 
 extension String {

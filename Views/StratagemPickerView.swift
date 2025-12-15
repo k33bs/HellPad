@@ -140,7 +140,7 @@ struct StratagemPickerView: View {
                         }
                     }
                 }
-                .padding(5)
+                .padding(HBConstants.UI.pickerContentPadding)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
@@ -153,10 +153,10 @@ struct StratagemPickerView: View {
                     .interpolation(.high)
                     .scaledToFit()
                     .frame(width: HBConstants.UI.hoverPreviewSize, height: HBConstants.UI.hoverPreviewSize)
-                    .padding(3)
-                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
-                    .cornerRadius(4)
-                    .shadow(color: .black, radius: 4)
+                    .padding(HBConstants.UI.hoverPreviewPadding)
+                    .background(HBConstants.Visual.pickerItemBackground)
+                    .cornerRadius(HBConstants.UI.hoverPreviewCornerRadius)
+                    .shadow(color: .black, radius: HBConstants.UI.hoverPreviewShadowRadius)
                     .position(
                         x: min(max(hoverPosition.x, HBConstants.UI.hoverPadding), HBConstants.UI.hoverMaxX),
                         y: min(max(hoverPosition.y, HBConstants.UI.hoverPadding), HBConstants.UI.hoverMaxY)
@@ -178,11 +178,11 @@ struct StratagemPickerView: View {
                             .foregroundColor(.gray)
                             .font(.caption)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
-                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
-                    .cornerRadius(6)
-                    .padding(5)
+                    .padding(.horizontal, HBConstants.UI.pickerSearchPaddingHorizontal)
+                    .padding(.vertical, HBConstants.UI.pickerSearchPaddingVertical)
+                    .background(HBConstants.Visual.pickerSearchBackground)
+                    .cornerRadius(HBConstants.UI.pickerSearchCornerRadius)
+                    .padding(HBConstants.UI.pickerSearchOuterPadding)
                 }
                 .allowsHitTesting(false)
             }
@@ -326,14 +326,14 @@ struct PickerIconButton: View {
             .buttonStyle(PlainButtonStyle())
             .background(
                 isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
-                isHovered ? Color(red: 0.2, green: 0.2, blue: 0.2) :
-                Color(red: 0.1, green: 0.1, blue: 0.1)
+                isHovered ? HBConstants.Visual.pickerItemHoverBackground :
+                HBConstants.Visual.pickerItemBackground
             )
-            .cornerRadius(3)
+            .cornerRadius(HBConstants.UI.pickerIconCornerRadius)
             .overlay(
                 // White inner border for keyboard selection
-                RoundedRectangle(cornerRadius: 3)
-                    .strokeBorder(Color.white, lineWidth: isKeyboardSelected ? 2 : 0)
+                RoundedRectangle(cornerRadius: HBConstants.UI.pickerIconCornerRadius)
+                    .strokeBorder(Color.white, lineWidth: isKeyboardSelected ? HBConstants.UI.pickerKeyboardBorderWidth : 0)
             )
             .onHover { hovering in
                 isHovered = hovering
