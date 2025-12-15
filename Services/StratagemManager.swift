@@ -18,6 +18,8 @@ class StratagemManager: ObservableObject {
     @Published var isExecutingCombo: Bool = false
     @Published var isExecutingStratagem: Bool = false  // Block input during single stratagem execution
 
+    @Published var recentStratagemNames: [String] = []
+
     // Configurable game keybinds
     @Published var superKey: Keybind = Keybind(keyCode: "0x3B", letter: "⌃")  // Default: Control
     @Published var activationMode: ActivationMode = .hold
@@ -62,6 +64,25 @@ class StratagemManager: ObservableObject {
         loadUserData()
         setupAppObserver()
         setupHotkeys()
+    }
+
+    func recordRecentStratagem(name: String) {
+        if recentStratagemNames.first == name {
+            return
+        }
+        recentStratagemNames.removeAll { $0 == name }
+        recentStratagemNames.insert(name, at: 0)
+        if recentStratagemNames.count > 6 {
+            recentStratagemNames = Array(recentStratagemNames.prefix(6))
+        }
+    }
+
+    private func isHellPadFrontmost() -> Bool {
+        let frontmost = NSWorkspace.shared.frontmostApplication
+        if let bundleId = Bundle.main.bundleIdentifier, !bundleId.isEmpty {
+            return frontmost?.bundleIdentifier == bundleId
+        }
+        return frontmost?.localizedName == "HellPad"
     }
 
     private func setupAppObserver() {
@@ -161,6 +182,7 @@ class StratagemManager: ObservableObject {
         voiceFeedbackEnabled = userData.voiceFeedbackEnabled ?? false
         selectedVoice = userData.selectedVoice
         voiceVolume = userData.voiceVolume ?? 0.5
+        recentStratagemNames = Array((userData.recentStratagemNames ?? []).prefix(6))
     }
 
     private func showFatalError(message: String) {
@@ -192,6 +214,8 @@ class StratagemManager: ObservableObject {
             Keybind(keyCode: "0x2E", letter: "M"),
             Keybind(keyCode: "0x28", letter: "K")
         ]
+
+        recentStratagemNames = []
     }
 
     func setupHotkeys() {
@@ -258,8 +282,8 @@ class StratagemManager: ObservableObject {
             if let loadoutKeyCode = self.keySimulator.hexStringToKeyCode(self.loadoutKey.keyCode),
                CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode),
                let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
-                // Only switch loadouts in allowed apps
-                if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
+                // Switch loadouts in allowed apps OR when HellPad itself is active
+                if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) || self.isHellPadFrontmost() {
                     DispatchQueue.main.async {
                         // Check if loadout exists at this index
                         if loadoutIndex < self.loadouts.count {
@@ -623,7 +647,8 @@ class StratagemManager: ObservableObject {
             hoverPreviewEnabled: hoverPreviewEnabled,
             voiceFeedbackEnabled: voiceFeedbackEnabled,
             selectedVoice: selectedVoice,
-            voiceVolume: voiceVolume
+            voiceVolume: voiceVolume,
+            recentStratagemNames: recentStratagemNames
         )
         guard let data = try? JSONEncoder().encode(userData),
               let url = userDataURL else {

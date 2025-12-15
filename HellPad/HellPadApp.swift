@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "HellPad v1.0.9"
+        alert.messageText = "HellPad v1.1.2"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 
@@ -221,7 +221,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         // Find indices
         guard let beforeIndex = menu.items.firstIndex(of: separatorBefore),
-              let afterIndex = menu.items.firstIndex(of: separatorAfter) else { return }
+              let _ = menu.items.firstIndex(of: separatorAfter) else { return }
 
         // Remove existing loadout items (between the separators)
         for item in loadoutMenuItems {

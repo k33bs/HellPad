@@ -31,3 +31,5 @@ Packages/
 # Don't track user preferences in the repository
 *.xccheckout
 *.moved-aside
+
+.periphery.yml

@@ -110,6 +110,7 @@ struct UserData: Codable {
     var voiceFeedbackEnabled: Bool?  // Optional for backwards compatibility (default: false)
     var selectedVoice: String?  // Voice identifier for TTS (nil = system default)
     var voiceVolume: Float?  // 0.0 to 1.0 (default: 0.5)
+    var recentStratagemNames: [String]?  // Optional for backwards compatibility
 
     enum CodingKeys: String, CodingKey {
         case equippedStratagems = "equipped_stratagems"
@@ -126,5 +127,6 @@ struct UserData: Codable {
         case voiceFeedbackEnabled = "voice_feedback_enabled"
         case selectedVoice = "selected_voice"
         case voiceVolume = "voice_volume"
+        case recentStratagemNames = "recent_stratagem_names"
     }
 }

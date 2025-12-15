@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import os.log
 
 private let logger = Logger(subsystem: "com.hellpad.app", category: "ui")
@@ -7,6 +8,10 @@ struct ContentView: View {
     @ObservedObject var stratagemManager: StratagemManager
     @State private var showingStratagemPicker = false
     @State private var selectedSlotIndex = 0
+    @State private var pickerOpenedFromKeyboard = false
+    @State private var keyboardSelectedSlotIndex: Int? = nil
+    @State private var slotNavigationEventMonitor: Any?
+    @State private var slotNavigationTimeoutTask: DispatchWorkItem?
     @State private var listeningForKeybind = false
     @State private var selectedKeybindIndex: Int? = nil
     @State private var localEventMonitor: Any?
@@ -28,8 +33,10 @@ struct ContentView: View {
                                     isError: duplicateKeys.contains(index),
                                     isFlashing: stratagemManager.flashingSlotIndex == index,
                                     isInCombo: stratagemManager.comboQueue.contains(index),
+                                    isKeyboardSelected: keyboardSelectedSlotIndex == index,
                                     onStratagemTapped: {
                                         selectedSlotIndex = index
+                                        pickerOpenedFromKeyboard = false
                                         showingStratagemPicker = true
                                     },
                                     onKeybindTapped: {
@@ -97,28 +104,47 @@ struct ContentView: View {
                     .ignoresSafeArea()
                     .onTapGesture {
                         showingStratagemPicker = false
+                        pickerOpenedFromKeyboard = false
+                        keyboardSelectedSlotIndex = nil
+                        cancelSlotNavigationTimeout()
                     }
 
                 StratagemPickerView(
                     stratagems: stratagemManager.allStratagems,
+                    recentStratagemNames: stratagemManager.recentStratagemNames,
                     currentlySelected: stratagemManager.equippedStratagems[selectedSlotIndex],
                     hoverPreviewEnabled: stratagemManager.hoverPreviewEnabled,
+                    keyboardNavigationEnabled: pickerOpenedFromKeyboard,
                     onSelect: { stratagem in
+                        stratagemManager.recordRecentStratagem(name: stratagem.name)
                         stratagemManager.updateEquippedStratagem(at: selectedSlotIndex, with: stratagem.name)
                         showingStratagemPicker = false
+                        pickerOpenedFromKeyboard = false
+                        keyboardSelectedSlotIndex = nil
+                        cancelSlotNavigationTimeout()
                     },
                     onCancel: {
                         showingStratagemPicker = false
+                        pickerOpenedFromKeyboard = false
+                        keyboardSelectedSlotIndex = nil
+                        cancelSlotNavigationTimeout()
                     }
                 )
             }
         }
+        .onAppear {
+            setupSlotNavigationMonitor()
+        }
         .onDisappear {
-            // Clean up event monitor and timeout when view disappears
             cancelKeybindTimeout()
             if let monitor = localEventMonitor {
                 NSEvent.removeMonitor(monitor)
                 localEventMonitor = nil
+            }
+            cancelSlotNavigationTimeout()
+            if let monitor = slotNavigationEventMonitor {
+                NSEvent.removeMonitor(monitor)
+                slotNavigationEventMonitor = nil
             }
         }
     }
@@ -248,6 +274,83 @@ struct ContentView: View {
         keybindTimeoutTask?.cancel()
         keybindTimeoutTask = nil
     }
+
+    private func setupSlotNavigationMonitor() {
+        if let monitor = slotNavigationEventMonitor {
+            NSEvent.removeMonitor(monitor)
+            slotNavigationEventMonitor = nil
+        }
+
+        slotNavigationEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [self] event in
+            guard NSApp.keyWindow?.title == "HellPad" else { return event }
+            guard !listeningForKeybind, !showingStratagemPicker else { return event }
+
+            switch event.keyCode {
+            case HBConstants.KeyCode.escape:
+                if keyboardSelectedSlotIndex != nil {
+                    keyboardSelectedSlotIndex = nil
+                    cancelSlotNavigationTimeout()
+                    return nil
+                }
+                return event
+
+            case 0x7B, 0x7C, 0x7D, 0x7E:
+                if keyboardSelectedSlotIndex == nil {
+                    keyboardSelectedSlotIndex = 0
+                    resetSlotNavigationTimeout()
+                    return nil
+                }
+
+                let currentIndex = keyboardSelectedSlotIndex ?? 0
+                let row = currentIndex / 2
+                let col = currentIndex % 2
+
+                var newRow = row
+                var newCol = col
+
+                switch event.keyCode {
+                case 0x7B:
+                    newCol = max(0, col - 1)
+                case 0x7C:
+                    newCol = min(1, col + 1)
+                case 0x7E:
+                    newRow = max(0, row - 1)
+                case 0x7D:
+                    newRow = min(3, row + 1)
+                default:
+                    break
+                }
+
+                keyboardSelectedSlotIndex = (newRow * 2) + newCol
+                resetSlotNavigationTimeout()
+                return nil
+
+            case 0x24:
+                guard let slotIndex = keyboardSelectedSlotIndex else { return event }
+                selectedSlotIndex = slotIndex
+                pickerOpenedFromKeyboard = true
+                showingStratagemPicker = true
+                return nil
+
+            default:
+                return event
+            }
+        }
+    }
+
+    private func resetSlotNavigationTimeout() {
+        cancelSlotNavigationTimeout()
+        let task = DispatchWorkItem { [self] in
+            keyboardSelectedSlotIndex = nil
+        }
+        slotNavigationTimeoutTask = task
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8.0, execute: task)
+    }
+
+    private func cancelSlotNavigationTimeout() {
+        slotNavigationTimeoutTask?.cancel()
+        slotNavigationTimeoutTask = nil
+    }
 }
 
 struct StratagemSlotView: View {
@@ -256,6 +359,7 @@ struct StratagemSlotView: View {
     let isError: Bool
     let isFlashing: Bool
     let isInCombo: Bool
+    let isKeyboardSelected: Bool
     let onStratagemTapped: () -> Void
     let onKeybindTapped: () -> Void
     var onStratagemClear: (() -> Void)? = nil
@@ -294,6 +398,15 @@ struct StratagemSlotView: View {
                         isInCombo ? HBConstants.Visual.comboCyan.opacity(HBConstants.Visual.comboBorderOpacity) : Color.clear,
                         lineWidth: isInCombo ? HBConstants.UI.borderWidth : 0
                     )
+            )
+            .overlay(
+                RoundedCorner(radius: HBConstants.UI.cornerRadius - HBConstants.UI.borderInset, corners: [.topLeft, .topRight])
+                    .stroke(Color.white, lineWidth: HBConstants.UI.borderWidth)
+                    .frame(
+                        width: HBConstants.UI.iconFrameSize - HBConstants.UI.borderWidth,
+                        height: HBConstants.UI.iconFrameSize - HBConstants.UI.borderWidth
+                    )
+                    .opacity(isKeyboardSelected ? 1 : 0)
             )
             .contextMenu {
                 Button("Clear") {

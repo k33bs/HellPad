@@ -5,8 +5,8 @@ import SwiftUI
 enum HBConstants {
     // MARK: - Key Codes
     enum KeyCode {
-        static let pause = kVK_ANSI_P  // 0x23
-        static let escape = kVK_Escape  // 0x35
+        static let pause: CGKeyCode = CGKeyCode(kVK_ANSI_P)  // 0x23
+        static let escape: CGKeyCode = CGKeyCode(kVK_Escape)  // 0x35
 
         // Number keys 1-9 for loadout switching
         static let numberKeys: [CGKeyCode] = [

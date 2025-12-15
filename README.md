@@ -15,6 +15,8 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 ## Features
 
 - **8 Customizable Stratagem Slots** - Assign any stratagem to any slot
+- **Keyboard Navigation** - Use arrow keys to select slots and picker items, Enter to open/select, ESC to cancel selection
+- **Recently Used Stratagems** - Last 6 selected stratagems are moved to the front of the picker (saved across sessions)
 - **Loadouts** - Save and load different stratagem configurations from the menu bar
 - **Loadout Export/Import** - Share loadouts with friends via `.hellpad` files
 - **Loadout Keyboard Shortcuts** - Hold modifier key (default: Option) + 1-9 to switch loadouts instantly
@@ -39,7 +41,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.1.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.2.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -85,9 +87,15 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
 ### Customize Stratagems
 
 - Click any stratagem icon to open the picker
+- **Keyboard Slot Selection** - Use arrow keys to highlight a stratagem slot (starts at top-left)
+  - Arrow keys move the selection within the 4x2 grid
+  - Selection clears after 8 seconds of no navigation
+  - Press Enter to open the picker for the selected slot
+  - Press ESC to cancel/clear the selection
 - **Type-to-Search** - Type letters to filter stratagems
 - **Keyboard Navigation** - Use arrow keys to navigate, Enter to select
-- Press ESC to clear search or close picker
+  - Available immediately if the picker was opened via Enter (no typing required)
+- Press ESC to cancel slot selection, clear search, or close picker
 - Click outside to cancel
 
 ### Rebind Keys
@@ -125,8 +133,8 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
    - **Combo Queue Key** - The key to hold for queuing multiple stratagems (default: Command)
    - **Loadout Switch Key** - The key to hold + 1-9 for quick loadout switching (default: Option)
    - **Activation Mode** - Hold (default) or Toggle
-     - *Hold*: Hold the menu key while pressing directions
-     - *Toggle*: Press menu key once, then press directions
+     - _Hold_: Hold the menu key while pressing directions
+     - _Toggle_: Press menu key once, then press directions
    - **Directional Keys** - Map Up/Down/Left/Right to any keys (default: WASD, can use arrow keys)
 
 ## Permissions
@@ -183,12 +191,19 @@ Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
 
+### v1.1.2
+
+- **Keyboard Navigation** - Arrow keys move selection in main stratagem grid with timeout, Enter opens picker, and picker supports immediate arrow/enter selection
+- **Recently Used Sorting** - Last 6 picked stratagems are moved to the front of the picker grid and persist across sessions
+
 ### v1.1.1
+
 - **Loadout Rename** - Click loadout name in Settings → Loadouts to rename inline
   - Auto-focuses for immediate typing
   - Press Enter to save, ESC to cancel
 
 ### v1.1.0
+
 - **Voice Feedback on Loadout Switch** - Hear loadout names spoken when switching
   - Enable in Settings → Controls tab → Voice Feedback toggle
   - Speaks "{loadout name} loaded" when switching loadouts via hotkey or menu
@@ -197,16 +212,19 @@ Developed for the HELLDIVERS™ 2 community.
   - Tip: Download enhanced voices in System Settings → Accessibility → Spoken Content → System Voice → ⓘ → Voice
 
 ### v1.0.9
+
 - **Loadout Export/Import** - Share loadout configurations with friends
   - Export single loadout or all loadouts to `.hellpad` files
   - Import loadouts from files (duplicate names handled automatically)
   - Settings → Loadouts tab: Import/Export buttons
 
 ### v1.0.8
+
 - **Default Combo Key Changed** - Now uses Command instead of Shift (avoids blocking sprint in-game)
 - **UI Improvements** - Empty stratagem slots blend with background, keybind buttons fully clickable
 
 ### v1.0.7
+
 - **Loadout Keyboard Shortcuts** - Switch loadouts with a key + number (1-9)
   - Hold the Loadout Switch Key (default: Option) and press 1-9
   - Instantly switches to the corresponding loadout
@@ -219,6 +237,7 @@ Developed for the HELLDIVERS™ 2 community.
 - **Keybind Timeout** - Auto-cancels keybind listening after 6 seconds
 
 ### v1.0.6
+
 - **Hover Preview** - Magnified icon preview when hovering in the picker
   - Toggle on/off in Settings
   - Crisp Retina rendering with debounced appearance
@@ -233,6 +252,7 @@ Developed for the HELLDIVERS™ 2 community.
   - Down arrow jumps to last icon when no icon directly below
 
 ### v1.0.5
+
 - **Python Commandos Warbond** - Added 3 new stratagems:
   - M-1000 Maxigun
   - AX/FLAM-75 Guard Dog Hot Dog
@@ -242,6 +262,7 @@ Developed for the HELLDIVERS™ 2 community.
 - Updated all 93 stratagem icons (zopflipng optimized)
 
 ### v1.0.4
+
 - **Loadouts** - Save and load different stratagem/keybind configurations
   - Save current setup via "Save Loadout..." in menu bar
   - Switch loadouts instantly from the menu bar dropdown
@@ -250,12 +271,14 @@ Developed for the HELLDIVERS™ 2 community.
   - Duplicate names prevented, unique default names generated
 
 ### v1.0.3
+
 - **Configurable Combo Queue Key** - Rebind the key used to queue multiple stratagems (default: Command)
 - **Fixed modifier key handling** - Super keys like Control now work correctly in HELLDIVERS
 - **Improved combo execution** - Click buffering fixed to prevent accidental throws
 - Removed Done button from settings (closes via window controls)
 
 ### v1.0.2
+
 - **Configurable Game Controls** - New Controls tab in settings
   - Customize the stratagem menu key (default: Control)
   - Choose between Hold or Toggle activation modes
@@ -263,6 +286,7 @@ Developed for the HELLDIVERS™ 2 community.
 - Settings window now has tabbed interface (Apps / Controls)
 
 ### v1.0.1
+
 - Initial public release
 - 8 customizable stratagem slots with global hotkeys
 - Combo mode for queueing multiple stratagems

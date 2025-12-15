@@ -2,8 +2,10 @@ import SwiftUI
 
 struct StratagemPickerView: View {
     let stratagems: [Stratagem]
+    let recentStratagemNames: [String]
     let currentlySelected: String
     let hoverPreviewEnabled: Bool
+    let keyboardNavigationEnabled: Bool
     let onSelect: (Stratagem) -> Void
     let onCancel: () -> Void
     @State private var keyMonitor: Any?
@@ -13,11 +15,77 @@ struct StratagemPickerView: View {
     @State private var searchQuery: String = ""
     @State private var selectedIndex: Int = 0
 
-    private var filteredStratagems: [Stratagem] {
+    private var searchFilteredStratagems: [Stratagem] {
         if searchQuery.isEmpty {
             return stratagems
         }
         return stratagems.filter { $0.name.localizedCaseInsensitiveContains(searchQuery) }
+    }
+
+    private struct PickerGridItem {
+        let stratagem: Stratagem?
+    }
+
+    private var gridItems: [PickerGridItem] {
+        if !searchQuery.isEmpty {
+            return searchFilteredStratagems.map { PickerGridItem(stratagem: $0) }
+        }
+
+        let columns = HBConstants.UI.pickerColumns
+        let recent = Array(recentStratagemNames.prefix(columns)).compactMap { recentName in
+            stratagems.first { $0.name == recentName }
+        }
+
+        if recent.isEmpty {
+            return stratagems.map { PickerGridItem(stratagem: $0) }
+        }
+
+        let recentNames = Set(recent.map { $0.name })
+        let remaining = stratagems.filter { !recentNames.contains($0.name) }
+
+        return recent.map { PickerGridItem(stratagem: $0) } + remaining.map { PickerGridItem(stratagem: $0) }
+    }
+
+    private func isSelectable(_ index: Int) -> Bool {
+        guard index >= 0 && index < gridItems.count else { return false }
+        return gridItems[index].stratagem != nil
+    }
+
+    private func nextSelectableIndex(from index: Int, step: Int) -> Int {
+        if step == 0 {
+            return index
+        }
+
+        var candidate = index
+        while candidate >= 0 && candidate < gridItems.count {
+            if isSelectable(candidate) {
+                return candidate
+            }
+            candidate += step
+        }
+
+        return index
+    }
+
+    private func nextSelectableIndexUp(from index: Int) -> Int {
+        let columns = HBConstants.UI.pickerColumns
+        let candidate = index - columns
+        guard candidate >= 0 else { return index }
+        if isSelectable(candidate) {
+            return candidate
+        }
+
+        // If the target cell is a placeholder (e.g. recent row partially filled), slide left within that row.
+        let rowStart = (candidate / columns) * columns
+        var cursor = candidate
+        while cursor >= rowStart {
+            if isSelectable(cursor) {
+                return cursor
+            }
+            cursor -= 1
+        }
+
+        return index
     }
 
     private static let columns = Array(
@@ -25,41 +93,51 @@ struct StratagemPickerView: View {
         count: HBConstants.UI.pickerColumns
     )
 
+    private var isKeyboardNavigationActive: Bool {
+        keyboardNavigationEnabled || !searchQuery.isEmpty
+    }
+
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVGrid(columns: Self.columns, alignment: .leading, spacing: HBConstants.UI.pickerSpacing) {
-                    ForEach(Array(filteredStratagems.enumerated()), id: \.element.id) { index, stratagem in
-                        PickerIconButton(
-                            stratagem: stratagem,
-                            isCurrentlySelected: stratagem.name == currentlySelected,
-                            isKeyboardSelected: index == selectedIndex && !searchQuery.isEmpty,
-                            onSelect: onSelect,
-                            onHover: { isHovered, position in
-                                if isHovered {
-                                    // Cancel any pending hover
-                                    hoverDebounceTask?.cancel()
+                    ForEach(Array(gridItems.enumerated()), id: \.offset) { index, item in
+                        if let stratagem = item.stratagem {
+                            PickerIconButton(
+                                stratagem: stratagem,
+                                isCurrentlySelected: stratagem.name == currentlySelected,
+                                isKeyboardSelected: index == selectedIndex && isKeyboardNavigationActive,
+                                onSelect: onSelect,
+                                onHover: { isHovered, position in
+                                    if isHovered {
+                                        // Cancel any pending hover
+                                        hoverDebounceTask?.cancel()
 
-                                    // Lock position when entering
-                                    hoverPosition = position
+                                        // Lock position when entering
+                                        hoverPosition = position
 
-                                    // Debounce: wait 220ms before showing preview
-                                    let task = DispatchWorkItem {
+                                        // Debounce: wait 220ms before showing preview
+                                        let task = DispatchWorkItem {
+                                            withAnimation(.easeOut(duration: 0.12)) {
+                                                hoveredStratagem = stratagem
+                                            }
+                                        }
+                                        hoverDebounceTask = task
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.22, execute: task)
+                                    } else if hoveredStratagem?.id == stratagem.id {
+                                        // Cancel pending and hide immediately
+                                        hoverDebounceTask?.cancel()
                                         withAnimation(.easeOut(duration: 0.12)) {
-                                            hoveredStratagem = stratagem
+                                            hoveredStratagem = nil
                                         }
                                     }
-                                    hoverDebounceTask = task
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.22, execute: task)
-                                } else if hoveredStratagem?.id == stratagem.id {
-                                    // Cancel pending and hide immediately
-                                    hoverDebounceTask?.cancel()
-                                    withAnimation(.easeOut(duration: 0.12)) {
-                                        hoveredStratagem = nil
-                                    }
                                 }
-                            }
-                        )
+                            )
+                        } else {
+                            Color.clear
+                                .frame(width: HBConstants.UI.pickerIconSize, height: HBConstants.UI.pickerIconSize)
+                                .allowsHitTesting(false)
+                        }
                     }
                 }
                 .padding(5)
@@ -96,7 +174,7 @@ struct StratagemPickerView: View {
                         Text(searchQuery)
                             .foregroundColor(.white)
                         Spacer()
-                        Text("\(filteredStratagems.count) results")
+                        Text("\(searchFilteredStratagems.count) results")
                             .foregroundColor(.gray)
                             .font(.caption)
                     }
@@ -133,41 +211,52 @@ struct StratagemPickerView: View {
 
                 // Enter: select current item
                 if event.keyCode == 0x24 {  // Return key
-                    if !searchQuery.isEmpty && selectedIndex < filteredStratagems.count {
-                        onSelect(filteredStratagems[selectedIndex])
+                    if isKeyboardNavigationActive,
+                       selectedIndex < gridItems.count,
+                       let stratagem = gridItems[selectedIndex].stratagem {
+                        onSelect(stratagem)
                         return nil
                     }
                     return event
                 }
 
                 // Arrow keys: navigate grid (6 columns)
-                let columns = HBConstants.UI.pickerColumns
-                switch event.keyCode {
-                case 0x7B:  // Left arrow
-                    if selectedIndex > 0 {
-                        selectedIndex -= 1
+                if isKeyboardNavigationActive {
+                    let columns = HBConstants.UI.pickerColumns
+                    switch event.keyCode {
+                    case 0x7B:  // Left arrow
+                        if selectedIndex > 0 {
+                            let target = selectedIndex - 1
+                            selectedIndex = nextSelectableIndex(from: target, step: -1)
+                        }
+                        return nil
+                    case 0x7C:  // Right arrow
+                        if selectedIndex < gridItems.count - 1 {
+                            let target = selectedIndex + 1
+                            selectedIndex = nextSelectableIndex(from: target, step: 1)
+                        }
+                        return nil
+                    case 0x7E:  // Up arrow
+                        if selectedIndex >= columns {
+                            selectedIndex = nextSelectableIndexUp(from: selectedIndex)
+                        }
+                        return nil
+                    case 0x7D:  // Down arrow
+                        if selectedIndex + columns < gridItems.count {
+                            let target = selectedIndex + columns
+                            if isSelectable(target) {
+                                selectedIndex = target
+                            } else {
+                                selectedIndex = nextSelectableIndex(from: target, step: 1)
+                            }
+                        } else if selectedIndex < gridItems.count - 1 {
+                            // No icon directly below - jump to last icon
+                            selectedIndex = nextSelectableIndex(from: gridItems.count - 1, step: -1)
+                        }
+                        return nil
+                    default:
+                        break
                     }
-                    return nil
-                case 0x7C:  // Right arrow
-                    if selectedIndex < filteredStratagems.count - 1 {
-                        selectedIndex += 1
-                    }
-                    return nil
-                case 0x7E:  // Up arrow
-                    if selectedIndex >= columns {
-                        selectedIndex -= columns
-                    }
-                    return nil
-                case 0x7D:  // Down arrow
-                    if selectedIndex + columns < filteredStratagems.count {
-                        selectedIndex += columns
-                    } else if selectedIndex < filteredStratagems.count - 1 {
-                        // No icon directly below - jump to last icon
-                        selectedIndex = filteredStratagems.count - 1
-                    }
-                    return nil
-                default:
-                    break
                 }
 
                 // Backspace: remove last character
