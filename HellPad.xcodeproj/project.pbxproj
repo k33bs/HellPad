@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		267E641E2EC77D86001EDD15 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B92EC77D86001EDD15 /* HotkeyManager.swift */; };
 		267E641F2EC77D86001EDD15 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E64182EC77D86001EDD15 /* Constants.swift */; };
 		267E64202EC77D86001EDD15 /* EventTapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B82EC77D86001EDD15 /* EventTapManager.swift */; };
 		267E64212EC77D86001EDD15 /* KeyPressSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */; };
@@ -123,7 +122,6 @@
 		267E63B52EC77D86001EDD15 /* Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stratagem.swift; sourceTree = "<group>"; };
 		267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityManager.swift; sourceTree = "<group>"; };
 		267E63B82EC77D86001EDD15 /* EventTapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapManager.swift; sourceTree = "<group>"; };
-		267E63B92EC77D86001EDD15 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressSimulator.swift; sourceTree = "<group>"; };
 		267E63BB2EC77D86001EDD15 /* StratagemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemManager.swift; sourceTree = "<group>"; };
 		267E63BD2EC77D86001EDD15 /* aac-8-autocannon-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aac-8-autocannon-sentry.png"; sourceTree = "<group>"; };
@@ -310,7 +308,6 @@
 			children = (
 				267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */,
 				267E63B82EC77D86001EDD15 /* EventTapManager.swift */,
-				267E63B92EC77D86001EDD15 /* HotkeyManager.swift */,
 				267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */,
 				267E63BB2EC77D86001EDD15 /* StratagemManager.swift */,
 			);
@@ -605,7 +602,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				267E641E2EC77D86001EDD15 /* HotkeyManager.swift in Sources */,
 				267E641F2EC77D86001EDD15 /* Constants.swift in Sources */,
 				267E64202EC77D86001EDD15 /* EventTapManager.swift in Sources */,
 				267E64212EC77D86001EDD15 /* KeyPressSimulator.swift in Sources */,

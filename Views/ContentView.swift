@@ -80,7 +80,7 @@ struct ContentView: View {
 
             // Pause overlay text
             if stratagemManager.isPaused {
-                VStack(spacing: 4) {
+                VStack(spacing: HBConstants.UI.pauseOverlaySpacing) {
                     Text("PAUSED")
                         .font(.title)
                         .fontWeight(.bold)
@@ -89,10 +89,10 @@ struct ContentView: View {
                         .font(.caption)
                         .foregroundColor(.black.opacity(0.8))
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .padding(.horizontal, HBConstants.UI.pauseOverlayPaddingHorizontal)
+                .padding(.vertical, HBConstants.UI.pauseOverlayPaddingVertical)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: HBConstants.UI.pauseOverlayCornerRadius)
                         .fill(Color.white.opacity(0.8))
                 )
                 .allowsHitTesting(false)
@@ -374,15 +374,15 @@ struct StratagemSlotView: View {
                         .resizable()
                         .interpolation(.high)
                         .scaledToFit()
-                        .frame(width: 63, height: 63)
+                        .frame(width: HBConstants.UI.iconSize, height: HBConstants.UI.iconSize)
                 } else {
                     Rectangle()
                         .fill(Color(red: 0.06, green: 0.06, blue: 0.06))
-                        .frame(width: 63, height: 63)
+                        .frame(width: HBConstants.UI.iconSize, height: HBConstants.UI.iconSize)
                 }
             }
             .buttonStyle(PlainButtonStyle())
-            .frame(width: 83, height: 83)
+            .frame(width: HBConstants.UI.iconFrameSize, height: HBConstants.UI.iconFrameSize)
             .background(
                 RoundedCorner(radius: HBConstants.UI.cornerRadius, corners: [.topLeft, .topRight])
                     .fill(
@@ -425,9 +425,9 @@ struct StratagemSlotView: View {
                      Color(red: 0.12, green: 0.12, blue: 0.12))
                     Text(keybind)
                         .foregroundColor(.white)
-                        .font(.system(size: 14, weight: .bold))
+                        .font(.system(size: HBConstants.UI.keybindFontSize, weight: .bold))
                 }
-                .frame(width: 83, height: 28)
+                .frame(width: HBConstants.UI.iconFrameSize, height: HBConstants.UI.keybindHeight)
                 .clipShape(RoundedCorner(radius: HBConstants.UI.cornerRadius, corners: [.bottomLeft, .bottomRight]))
             }
             .buttonStyle(PlainButtonStyle())
@@ -438,8 +438,8 @@ struct StratagemSlotView: View {
                 .disabled(keybind.isEmpty)
             }
         }
-        .padding(.horizontal, 3)
-        .padding(.vertical, 3)
+        .padding(.horizontal, HBConstants.UI.slotPadding)
+        .padding(.vertical, HBConstants.UI.slotPadding)
     }
 }
 

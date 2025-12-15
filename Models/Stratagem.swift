@@ -59,15 +59,6 @@ struct DirectionalKeybinds: Codable {
             right: Keybind(keyCode: "0x02", letter: "D")
         )
     }
-
-    static var defaultArrows: DirectionalKeybinds {
-        DirectionalKeybinds(
-            up: Keybind(keyCode: "0x7E", letter: "↑"),
-            down: Keybind(keyCode: "0x7D", letter: "↓"),
-            left: Keybind(keyCode: "0x7B", letter: "←"),
-            right: Keybind(keyCode: "0x7C", letter: "→")
-        )
-    }
 }
 
 struct Loadout: Codable, Identifiable {

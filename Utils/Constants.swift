@@ -31,30 +31,33 @@ enum HBConstants {
     enum Timing {
         // Flash effects (TimeInterval for DispatchQueue, microseconds for usleep)
         static let flashDuration: TimeInterval = 0.15  // 150ms
-        static let flashDurationMicros: UInt32 = 150_000  // 150ms
 
         // Key simulation
         static let keyPressDuration: UInt32 = 50_000  // 50ms
         static let betweenKeyDelay: UInt32 = 50_000   // 50ms
 
         // Combo execution
-        static let beforeMouseClick: UInt32 = 500_000   // 500ms
         static let afterMouseClick: UInt32 = 1_000_000  // 1000ms (1 second)
         static let ctrlReleaseDelay: TimeInterval = 0.25  // 250ms - longer to ensure Ctrl fully released
         static let comboWaitTimeout: TimeInterval = 3.0  // 3 seconds to wait for mouse click
-
-        // Mouse click
-        static let mouseClickDuration: UInt32 = 50_000  // 50ms
     }
 
     // MARK: - UI Dimensions
     enum UI {
         static let iconSize: CGFloat = 63
         static let iconFrameSize: CGFloat = 83  // icon + 10px border
+        static let keybindHeight: CGFloat = 28
         static let slotHeight: CGFloat = 111  // icon frame + keybind button
+        static let slotPadding: CGFloat = 3
+        static let keybindFontSize: CGFloat = 14
         static let cornerRadius: CGFloat = 6
         static let borderWidth: CGFloat = 4
         static let borderInset: CGFloat = 2
+
+        static let pauseOverlaySpacing: CGFloat = 4
+        static let pauseOverlayPaddingHorizontal: CGFloat = 20
+        static let pauseOverlayPaddingVertical: CGFloat = 12
+        static let pauseOverlayCornerRadius: CGFloat = 8
 
         // Stratagem Picker
         static let pickerIconSize: CGFloat = 27  // Adjustable icon size

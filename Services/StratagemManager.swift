@@ -16,7 +16,6 @@ class StratagemManager: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var comboQueue: [Int] = []
     @Published var isExecutingCombo: Bool = false
-    @Published var isExecutingStratagem: Bool = false  // Block input during single stratagem execution
 
     @Published var recentStratagemNames: [String] = []
 
@@ -64,6 +63,12 @@ class StratagemManager: ObservableObject {
         loadUserData()
         setupAppObserver()
         setupHotkeys()
+    }
+
+    deinit {
+        if let appObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(appObserver)
+        }
     }
 
     func recordRecentStratagem(name: String) {
@@ -419,10 +424,6 @@ class StratagemManager: ObservableObject {
         executingLock.unlock()
 
         // Update UI
-        DispatchQueue.main.async {
-            self.isExecutingStratagem = true
-        }
-
         // Execute all stratagems in sequence on serial queue
         stratagemExecutionQueue.async {
             for (index, slotIndex) in slots.enumerated() {
@@ -483,7 +484,6 @@ class StratagemManager: ObservableObject {
                 self.comboStateLock.lock()
                 self.isExecutingCombo = false
                 self.comboStateLock.unlock()
-                self.isExecutingStratagem = false
             }
             self.comboExecutionSemaphore = nil
         }
@@ -524,9 +524,6 @@ class StratagemManager: ObservableObject {
         executingLock.lock()
         _isExecutingFlag = true
         executingLock.unlock()
-
-        // Update UI on main thread
-        isExecutingStratagem = true
         flashingSlotIndex = slotIndex
 
         DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.flashDuration) {
@@ -543,9 +540,6 @@ class StratagemManager: ObservableObject {
             self.executingLock.unlock()
 
             // Update UI on main thread
-            DispatchQueue.main.async {
-                self.isExecutingStratagem = false
-            }
         }
     }
 
@@ -791,7 +785,7 @@ class StratagemManager: ObservableObject {
 
         do {
             let data = try encoder.encode(export)
-            logger.info("Exported \(loadoutsToExport.count) loadout(s)")
+            logger.info("Exported \(loadoutsToExport.count) loadout(s) (format v\(export.version))")
             return data
         } catch {
             logger.error("Failed to encode loadouts for export: \(error.localizedDescription)")
@@ -806,6 +800,7 @@ class StratagemManager: ObservableObject {
 
         do {
             let imported = try decoder.decode(LoadoutExport.self, from: data)
+            logger.info("Importing loadouts export (format v\(imported.version))")
             var importCount = 0
 
             for loadout in imported.loadouts {
