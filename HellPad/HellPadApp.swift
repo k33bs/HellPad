@@ -16,10 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var statusItem: NSStatusItem?
     var mainWindow: NSWindow?
     var settingsWindow: NSWindow?
-    var companionDebugWindow: NSWindow?
-#if DEBUG
-    var liveOcrDebugWindow: NSWindow?
-#endif
     var alwaysOnTopMenuItem: NSMenuItem?
     var stratagemManager: StratagemManager?
 
@@ -28,10 +24,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var loadoutSeparatorBefore: NSMenuItem?
     private var loadoutSeparatorAfter: NSMenuItem?
     private var loadoutCancellables = Set<AnyCancellable>()
-    private var companionDebugWindowCancellables = Set<AnyCancellable>()
-#if DEBUG
-    private var liveOcrDebugWindowCancellables = Set<AnyCancellable>()
-#endif
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hide from dock
@@ -79,10 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         AccessibilityManager.shared.ensureAccessibilityPermission {
             self.createFloatingWindow()
             self.setupLoadoutMenuObservers()
-            self.setupCompanionDebugWindowObservers()
-#if DEBUG
-            self.setupLiveOcrDebugWindowObservers()
-#endif
         }
     }
 
@@ -203,119 +191,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     // Handle window close button - quit the app
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if sender == mainWindow {
-            NSApplication.shared.terminate(nil)
-            return false
-        }
-        return true
+        NSApplication.shared.terminate(nil)
+        return false
     }
-
-    func windowWillClose(_ notification: Notification) {
-        guard let window = notification.object as? NSWindow else { return }
-        if window == companionDebugWindow {
-            companionDebugWindow = nil
-            if let manager = stratagemManager, manager.stratagemCompanionDebugWindowEnabled {
-                manager.stratagemCompanionDebugWindowEnabled = false
-                manager.saveAllSettings()
-            }
-        }
-#if DEBUG
-        if window == liveOcrDebugWindow {
-            liveOcrDebugWindow = nil
-            if let manager = stratagemManager, manager.stratagemCompanionLiveOcrWindowEnabled {
-                manager.stratagemCompanionLiveOcrWindowEnabled = false
-            }
-        }
-#endif
-    }
-
-    private func setupCompanionDebugWindowObservers() {
-        guard let manager = stratagemManager else { return }
-
-        manager.$stratagemCompanionDebugWindowEnabled
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] enabled in
-                if enabled {
-                    self?.showCompanionDebugWindow()
-                } else {
-                    self?.hideCompanionDebugWindow()
-                }
-            }
-            .store(in: &companionDebugWindowCancellables)
-    }
-
-    private func showCompanionDebugWindow() {
-        guard let manager = stratagemManager else { return }
-
-        if companionDebugWindow == nil {
-            let debugView = StratagemCompanionDebugView(stratagemManager: manager)
-            let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 360, height: 420),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable],
-                backing: .buffered,
-                defer: false
-            )
-            window.title = "Stratagem Companion"
-            window.contentView = NSHostingView(rootView: debugView)
-            window.isReleasedWhenClosed = false
-            window.level = .floating
-            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-            window.center()
-            window.delegate = self
-            companionDebugWindow = window
-        }
-
-        companionDebugWindow?.orderFrontRegardless()
-    }
-
-    private func hideCompanionDebugWindow() {
-        companionDebugWindow?.orderOut(nil)
-    }
-
-#if DEBUG
-    private func setupLiveOcrDebugWindowObservers() {
-        guard let manager = stratagemManager else { return }
-
-        manager.$stratagemCompanionLiveOcrWindowEnabled
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] enabled in
-                if enabled {
-                    self?.showLiveOcrDebugWindow()
-                } else {
-                    self?.hideLiveOcrDebugWindow()
-                }
-            }
-            .store(in: &liveOcrDebugWindowCancellables)
-    }
-
-    private func showLiveOcrDebugWindow() {
-        guard let manager = stratagemManager else { return }
-
-        if liveOcrDebugWindow == nil {
-            let debugView = StratagemCompanionLiveOcrDebugView(stratagemManager: manager)
-            let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 520, height: 420),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable],
-                backing: .buffered,
-                defer: false
-            )
-            window.title = "Live OCR"
-            window.contentView = NSHostingView(rootView: debugView)
-            window.isReleasedWhenClosed = false
-            window.level = .floating
-            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-            window.center()
-            window.delegate = self
-            liveOcrDebugWindow = window
-        }
-
-        liveOcrDebugWindow?.orderFrontRegardless()
-    }
-
-    private func hideLiveOcrDebugWindow() {
-        liveOcrDebugWindow?.orderOut(nil)
-    }
-#endif
 
     // MARK: - Loadout Menu Management
 
@@ -476,109 +354,3 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         return name
     }
 }
-
-struct StratagemCompanionDebugView: View {
-    @ObservedObject var stratagemManager: StratagemManager
-
-    var body: some View {
-        TimelineView(.periodic(from: Date(), by: 1.0)) { context in
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Detected Stratagems")
-                    .font(.headline)
-
-                if stratagemManager.stratagemCompanionDetectedStratagems.isEmpty {
-                    Text("No detections yet")
-                        .foregroundColor(.secondary)
-                } else {
-                    List {
-                        ForEach(stratagemManager.stratagemCompanionDetectedStratagems, id: \.canonicalName) { item in
-                            HStack {
-                                Text(item.canonicalName)
-                                Spacer()
-                                Text(statusText(for: item, now: context.date))
-                                    .foregroundColor(isReadyForDisplay(item, now: context.date) ? .green : .secondary)
-                                    .monospacedDigit()
-                            }
-                        }
-                    }
-                }
-            }
-            .padding()
-            .frame(minWidth: 320, minHeight: 260)
-        }
-    }
-
-    private func isReadyForDisplay(_ item: StratagemCompanion.DetectedStratagem, now: Date) -> Bool {
-        if item.isUnavailable {
-            return false
-        }
-        if item.isInbound {
-            return false
-        }
-        if item.isReady {
-            return true
-        }
-        guard let remaining = remainingSeconds(for: item, now: now) else {
-            return false
-        }
-        return remaining <= 0
-    }
-
-    private func remainingSeconds(for item: StratagemCompanion.DetectedStratagem, now: Date) -> Int? {
-        guard let seconds = item.cooldownRemainingSeconds else { return nil }
-        let updatedAt = stratagemManager.stratagemCompanionDetectionsUpdatedAt ?? now
-        let elapsed = Int(now.timeIntervalSince(updatedAt))
-        return max(0, seconds - max(0, elapsed))
-    }
-
-    private func statusText(for item: StratagemCompanion.DetectedStratagem, now: Date) -> String {
-        if item.isUnavailable {
-            return "Unavailable"
-        }
-        if item.isInbound {
-            if let seconds = remainingSeconds(for: item, now: now) {
-                let minutes = seconds / 60
-                let remainder = seconds % 60
-                return String(format: "Inbound %d:%02d", minutes, remainder)
-            }
-            return "Inbound"
-        }
-        if isReadyForDisplay(item, now: now) {
-            return "Ready"
-        }
-        if let seconds = remainingSeconds(for: item, now: now) {
-            let minutes = seconds / 60
-            let remainder = seconds % 60
-            return String(format: "%d:%02d", minutes, remainder)
-        }
-        return "Cooldown"
-    }
-}
-
-#if DEBUG
-struct StratagemCompanionLiveOcrDebugView: View {
-    @ObservedObject var stratagemManager: StratagemManager
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Live OCR Output")
-                .font(.headline)
-
-            if stratagemManager.stratagemCompanionLastRawOcrStrings.isEmpty {
-                Text("No OCR output yet")
-                    .foregroundColor(.secondary)
-            } else {
-                List {
-                    ForEach(Array(stratagemManager.stratagemCompanionLastRawOcrStrings.enumerated()), id: \.offset) { _, value in
-                        Text(value)
-                            .textSelection(.enabled)
-                            .font(.system(size: 12, design: .monospaced))
-                    }
-                }
-            }
-        }
-        .padding()
-        .frame(minWidth: 420, minHeight: 260)
-    }
-}
-#endif

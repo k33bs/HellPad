@@ -28,20 +28,6 @@ class StratagemManager: ObservableObject {
     @Published var loadouts: [Loadout] = []
     @Published var activeLoadoutId: UUID? = nil  // nil = dirty/no loadout active
     @Published var hoverPreviewEnabled: Bool = true
-    @Published var stratagemCompanionEnabled: Bool = false
-    @Published var stratagemCompanionDebugWindowEnabled: Bool = false
-    @Published var stratagemCompanionDetectedStratagems: [StratagemCompanion.DetectedStratagem] = []
-    @Published var stratagemCompanionDetectionsUpdatedAt: Date? = nil
-    @Published var stratagemCompanionHasScreenCapturePermission: Bool = true
-#if DEBUG
-    @Published var reloadMonitorLastDetection: ReloadMonitor.Detection? = nil
-#endif
-    @Published var reloadMonitorEnabled: Bool = false
-    @Published var reloadMonitorHasScreenCapturePermission: Bool = true
-#if DEBUG
-    @Published var stratagemCompanionLiveOcrWindowEnabled: Bool = false
-    @Published var stratagemCompanionLastRawOcrStrings: [String] = []
-#endif
     @Published var voiceFeedbackEnabled: Bool = false
     @Published var selectedVoice: String? = nil  // nil = system default
     @Published var voiceVolume: Float = 0.5  // 0.0 to 1.0
@@ -67,21 +53,6 @@ class StratagemManager: ObservableObject {
     private var appObserver: NSObjectProtocol?
     private let eventTapManager = EventTapManager()
     private let keySimulator = KeyPressSimulator()
-    private var stratagemCompanion: StratagemCompanion?
-    private var reloadMonitor: ReloadMonitor?
-    private var lastScreenCapturePermissionPromptAt: Date?
-    private static let modifierKeyCodes: Set<CGKeyCode> = [
-        CGKeyCode(0x3B),
-        CGKeyCode(0x3E),
-        CGKeyCode(0x3A),
-        CGKeyCode(0x3D),
-        CGKeyCode(0x37),
-        CGKeyCode(0x36),
-        CGKeyCode(0x38),
-        CGKeyCode(0x3C)
-    ]
-    private var isSuperKeyHeldForCompanion: Bool = false
-    private var superKeyHoldWorkItem: DispatchWorkItem?
     private var stratagemLookup: [String: Stratagem] = [:]
     private var userDataURL: URL?
     private var keyCodeToSlotIndex: [CGKeyCode: Int] = [:]
@@ -90,8 +61,6 @@ class StratagemManager: ObservableObject {
         setupUserDataDirectory()
         loadStratagems()
         loadUserData()
-        refreshStratagemCompanionScreenCapturePermissionState()
-        refreshReloadMonitorScreenCapturePermissionState()
         setupAppObserver()
         setupHotkeys()
     }
@@ -215,146 +184,10 @@ class StratagemManager: ObservableObject {
         loadouts = userData.loadouts ?? []
         activeLoadoutId = userData.activeLoadoutId.flatMap { UUID(uuidString: $0) }
         hoverPreviewEnabled = userData.hoverPreviewEnabled ?? true
-        stratagemCompanionEnabled = userData.stratagemCompanionEnabled ?? false
-        stratagemCompanionDebugWindowEnabled = userData.stratagemCompanionDebugWindowEnabled ?? false
-        reloadMonitorEnabled = userData.reloadMonitorEnabled ?? false
         voiceFeedbackEnabled = userData.voiceFeedbackEnabled ?? false
         selectedVoice = userData.selectedVoice
         voiceVolume = userData.voiceVolume ?? 0.5
         recentStratagemNames = Array((userData.recentStratagemNames ?? []).prefix(6))
-
-        updateStratagemCompanionState()
-        updateReloadMonitorState()
-    }
-
-    private func updateReloadMonitorState() {
-        if reloadMonitorEnabled {
-            if reloadMonitor == nil {
-                let monitor = ReloadMonitor()
-                monitor.onReloadNeeded = { [weak self] in
-                    guard let self else { return }
-                    if let voice = self.selectedVoice {
-                        self.speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
-                    } else {
-                        self.speechSynthesizer.setVoice(nil)
-                    }
-                    self.speechSynthesizer.volume = self.voiceVolume
-                    self.speechSynthesizer.startSpeaking("Reload")
-                }
-#if DEBUG
-                monitor.onDetection = { [weak self] detection in
-                    self?.reloadMonitorLastDetection = detection
-                }
-#endif
-                monitor.start()
-                reloadMonitor = monitor
-            }
-        } else {
-            reloadMonitor?.stop()
-            reloadMonitor = nil
-#if DEBUG
-            reloadMonitorLastDetection = nil
-#endif
-        }
-    }
-
-    private func updateStratagemCompanionState() {
-        if stratagemCompanionEnabled {
-            if stratagemCompanion == nil {
-                let companion = StratagemCompanion(canonicalStratagemNames: allStratagems.map { $0.name })
-
-                companion.onDetectedStratagems = { [weak self] detected in
-                    guard let self else { return }
-                    self.stratagemCompanionDetectedStratagems = detected
-                    self.stratagemCompanionDetectionsUpdatedAt = Date()
-                }
-
-#if DEBUG
-                companion.onRawOcrStrings = { [weak self] strings in
-                    guard let self else { return }
-                    self.stratagemCompanionLastRawOcrStrings = strings
-                }
-#endif
-
-                companion.onStratagemBecameAvailable = { [weak self] name in
-                    guard let self else { return }
-                    if self.voiceFeedbackEnabled {
-                        if let voice = self.selectedVoice {
-                            self.speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
-                        } else {
-                            self.speechSynthesizer.setVoice(nil)
-                        }
-                        self.speechSynthesizer.volume = self.voiceVolume
-                        self.speechSynthesizer.startSpeaking("\(name) ready")
-                    }
-                }
-
-                stratagemCompanion = companion
-            }
-        } else {
-            stratagemCompanion = nil
-            stratagemCompanionDetectedStratagems = []
-            stratagemCompanionDetectionsUpdatedAt = nil
-#if DEBUG
-            stratagemCompanionLastRawOcrStrings = []
-#endif
-            cancelSuperKeyHoldTracking()
-        }
-    }
-
-    private func cancelSuperKeyHoldTracking() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.superKeyHoldWorkItem?.cancel()
-            self.superKeyHoldWorkItem = nil
-            self.isSuperKeyHeldForCompanion = false
-        }
-    }
-
-    private func isAllowedAppActiveCached() -> Bool {
-        appActiveLock.lock()
-        let active = _isAllowedAppActive
-        appActiveLock.unlock()
-        return active
-    }
-
-    private func handleSuperKeyPressedForCompanion() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            guard self.stratagemCompanionEnabled, self.stratagemCompanion != nil else { return }
-            guard self.isAllowedAppActiveCached() else { return }
-
-            if self.isSuperKeyHeldForCompanion {
-                return
-            }
-            self.isSuperKeyHeldForCompanion = true
-
-            self.superKeyHoldWorkItem?.cancel()
-
-            let workItem = DispatchWorkItem { [weak self] in
-                guard let self else { return }
-                guard self.stratagemCompanionEnabled, self.stratagemCompanion != nil else { return }
-                guard self.isAllowedAppActiveCached() else { return }
-                guard let superKeyCode = self.keySimulator.hexStringToKeyCode(self.superKey.keyCode) else { return }
-
-                let isStillHeld = self.isSuperKeyHeldForCompanion && CGEventSource.keyState(.hidSystemState, key: superKeyCode)
-                guard isStillHeld else { return }
-
-                self.stratagemCompanion?.scanAfter(delay: 0.05)
-            }
-            self.superKeyHoldWorkItem = workItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
-        }
-    }
-
-    private func handleSuperKeyReleasedForCompanion() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-
-            self.superKeyHoldWorkItem?.cancel()
-            self.superKeyHoldWorkItem = nil
-            self.isSuperKeyHeldForCompanion = false
-        }
     }
 
     private func showFatalError(message: String) {
@@ -388,9 +221,6 @@ class StratagemManager: ObservableObject {
         ]
 
         recentStratagemNames = []
-        stratagemCompanionEnabled = false
-        stratagemCompanionDebugWindowEnabled = false
-        reloadMonitorEnabled = false
     }
 
     func setupHotkeys() {
@@ -412,14 +242,6 @@ class StratagemManager: ObservableObject {
         // Listen for keypresses globally
         eventTapManager.onKeyPressed = { [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
             guard let self = self else { return false }
-
-            if self.stratagemCompanionEnabled,
-               let superKeyCode = self.keySimulator.hexStringToKeyCode(self.superKey.keyCode),
-               keyCode == superKeyCode,
-               !Self.modifierKeyCodes.contains(superKeyCode) {
-                self.handleSuperKeyPressedForCompanion()
-                return false
-            }
 
             // ComboKey+ESC cancels any active combo
             if keyCode == HBConstants.KeyCode.escape && isComboKeyHeld {
@@ -542,30 +364,6 @@ class StratagemManager: ObservableObject {
                 return true
             } else {
                 return false
-            }
-        }
-
-        eventTapManager.onKeyReleased = { [weak self] keyCode in
-            guard let self else { return }
-            guard self.stratagemCompanionEnabled else { return }
-            guard let superKeyCode = self.keySimulator.hexStringToKeyCode(self.superKey.keyCode) else { return }
-            guard !Self.modifierKeyCodes.contains(superKeyCode) else { return }
-            guard keyCode == superKeyCode else { return }
-            self.handleSuperKeyReleasedForCompanion()
-        }
-
-        eventTapManager.onFlagsChanged = { [weak self] keyCode, _ in
-            guard let self else { return }
-            guard self.stratagemCompanionEnabled else { return }
-            guard let superKeyCode = self.keySimulator.hexStringToKeyCode(self.superKey.keyCode) else { return }
-            guard Self.modifierKeyCodes.contains(superKeyCode) else { return }
-            guard keyCode == superKeyCode else { return }
-
-            let isDown = CGEventSource.keyState(.hidSystemState, key: superKeyCode)
-            if isDown {
-                self.handleSuperKeyPressedForCompanion()
-            } else {
-                self.handleSuperKeyReleasedForCompanion()
             }
         }
 
@@ -825,94 +623,6 @@ class StratagemManager: ObservableObject {
     func saveAllSettings() {
         saveUserData()
         updateCachedAppState()  // Refresh cache in case allowed apps changed
-        updateStratagemCompanionState()
-        updateReloadMonitorState()
-    }
-
-    func refreshStratagemCompanionScreenCapturePermissionState() {
-        stratagemCompanionHasScreenCapturePermission = StratagemCompanion.hasScreenCapturePermission()
-    }
-
-    func refreshReloadMonitorScreenCapturePermissionState() {
-        reloadMonitorHasScreenCapturePermission = StratagemCompanion.hasScreenCapturePermission()
-    }
-
-    func requestReloadMonitorScreenCapturePermissionIfNeeded() {
-        refreshReloadMonitorScreenCapturePermissionState()
-
-        if reloadMonitorHasScreenCapturePermission {
-            return
-        }
-
-        StratagemCompanion.requestScreenCapturePermission()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-            guard let self else { return }
-            self.refreshReloadMonitorScreenCapturePermissionState()
-            guard !self.reloadMonitorHasScreenCapturePermission else { return }
-
-            let now = Date()
-            if let last = self.lastScreenCapturePermissionPromptAt,
-               now.timeIntervalSince(last) < 2 {
-                return
-            }
-            self.lastScreenCapturePermissionPromptAt = now
-
-            let alert = NSAlert()
-            alert.messageText = "Screen Recording Permission Required"
-            alert.informativeText = "HellPad needs Screen Recording permission to detect the in-game reload indicator.\n\nIf you clicked ‘Don’t Allow’, macOS won’t show the permission popup again — you must enable it in:\nSystem Settings > Privacy & Security > Screen Recording"
-            alert.alertStyle = .warning
-            alert.addButton(withTitle: "Open System Settings")
-            alert.addButton(withTitle: "OK")
-
-            let response = alert.runModal()
-            if response == .alertFirstButtonReturn {
-                self.openReloadMonitorScreenCaptureSystemSettings()
-            }
-        }
-    }
-
-    func openReloadMonitorScreenCaptureSystemSettings() {
-        StratagemCompanion.openScreenCaptureSystemSettings()
-    }
-
-    func requestStratagemCompanionScreenCapturePermissionIfNeeded() {
-        refreshStratagemCompanionScreenCapturePermissionState()
-
-        if stratagemCompanionHasScreenCapturePermission {
-            return
-        }
-
-        StratagemCompanion.requestScreenCapturePermission()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-            guard let self else { return }
-            self.refreshStratagemCompanionScreenCapturePermissionState()
-            guard !self.stratagemCompanionHasScreenCapturePermission else { return }
-
-            let now = Date()
-            if let last = self.lastScreenCapturePermissionPromptAt,
-               now.timeIntervalSince(last) < 2 {
-                return
-            }
-            self.lastScreenCapturePermissionPromptAt = now
-
-            let alert = NSAlert()
-            alert.messageText = "Screen Recording Permission Required"
-            alert.informativeText = "HellPad needs Screen Recording permission to read stratagem availability from the game UI.\n\nIf you clicked ‘Don’t Allow’, macOS won’t show the permission popup again — you must enable it in:\nSystem Settings > Privacy & Security > Screen Recording"
-            alert.alertStyle = .warning
-            alert.addButton(withTitle: "Open System Settings")
-            alert.addButton(withTitle: "OK")
-
-            let response = alert.runModal()
-            if response == .alertFirstButtonReturn {
-                self.openStratagemCompanionScreenCaptureSystemSettings()
-            }
-        }
-    }
-
-    func openStratagemCompanionScreenCaptureSystemSettings() {
-        StratagemCompanion.openScreenCaptureSystemSettings()
     }
 
     private func saveUserData() {
@@ -929,9 +639,6 @@ class StratagemManager: ObservableObject {
             loadouts: loadouts,
             activeLoadoutId: activeLoadoutId?.uuidString,
             hoverPreviewEnabled: hoverPreviewEnabled,
-            stratagemCompanionEnabled: stratagemCompanionEnabled,
-            stratagemCompanionDebugWindowEnabled: stratagemCompanionDebugWindowEnabled,
-            reloadMonitorEnabled: reloadMonitorEnabled,
             voiceFeedbackEnabled: voiceFeedbackEnabled,
             selectedVoice: selectedVoice,
             voiceVolume: voiceVolume,
