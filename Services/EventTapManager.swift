@@ -26,6 +26,8 @@ class EventTapManager {
     }
 
     var onKeyPressed: ((CGKeyCode, Bool, Bool) -> Bool)?  // (keyCode, isComboKeyHeld, isCtrlHeld) -> shouldConsume
+    var onKeyReleased: ((CGKeyCode) -> Void)?  // Called on key up
+    var onFlagsChanged: ((CGKeyCode, CGEventFlags) -> Void)?  // Called when modifier flags change
     var onComboKeyReleased: (() -> Void)?  // Called when combo key is released
     var onMouseClicked: (() -> Void)?  // Called when left mouse button is clicked
 
@@ -88,8 +90,11 @@ class EventTapManager {
                             manager.onComboKeyReleased?()
                         }
                     }
+
+                    manager.onKeyReleased?(keyCode)
                 } else if type == .flagsChanged {
                     // For modifier combo keys, detect when they are released
+                    let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
                     let isComboKeyPressed = CGEventSource.keyState(.hidSystemState, key: comboKey)
 
                     // Thread-safe state check and update
@@ -102,6 +107,8 @@ class EventTapManager {
                     if wasPressed && !isComboKeyPressed {
                         manager.onComboKeyReleased?()
                     }
+
+                    manager.onFlagsChanged?(keyCode, event.flags)
                 } else if type == .leftMouseDown {
                     // Notify about mouse click
                     manager.onMouseClicked?()

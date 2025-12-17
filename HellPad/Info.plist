@@ -4,5 +4,7 @@
 <dict>
 	<key>NSAccessibilityUsageDescription</key>
 	<string>HellPad requires accessibility access to register global hotkeys and control keyboard input.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>HellPad requires Screen Recording access to capture the game UI for stratagem recognition.</string>
 </dict>
 </plist>
