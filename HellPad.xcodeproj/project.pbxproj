@@ -17,6 +17,7 @@
 		267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */; };
 		267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */; };
 		267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */; };
+		DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91505007F29F4789AA69109A /* ScreenCapture.swift */; };
 		267E64292EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CC2EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png */; };
 		267E642A2EC77D86001EDD15 /* stratagems.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B22EC77D86001EDD15 /* stratagems.json */; };
 		267E642B2EC77D86001EDD15 /* illumination-flare.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E82EC77D86001EDD15 /* illumination-flare.png */; };
@@ -124,6 +125,7 @@
 		267E63B82EC77D86001EDD15 /* EventTapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapManager.swift; sourceTree = "<group>"; };
 		267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressSimulator.swift; sourceTree = "<group>"; };
 		267E63BB2EC77D86001EDD15 /* StratagemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemManager.swift; sourceTree = "<group>"; };
+		91505007F29F4789AA69109A /* ScreenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCapture.swift; sourceTree = "<group>"; };
 		267E63BD2EC77D86001EDD15 /* aac-8-autocannon-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aac-8-autocannon-sentry.png"; sourceTree = "<group>"; };
 		267E63BE2EC77D86001EDD15 /* aarc-3-tesla-tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aarc-3-tesla-tower.png"; sourceTree = "<group>"; };
 		267E63BF2EC77D86001EDD15 /* aflam-40-flame-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aflam-40-flame-sentry.png"; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				267E63B82EC77D86001EDD15 /* EventTapManager.swift */,
 				267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */,
 				267E63BB2EC77D86001EDD15 /* StratagemManager.swift */,
+				91505007F29F4789AA69109A /* ScreenCapture.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */,
 				267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */,
 				267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */,
+				DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
