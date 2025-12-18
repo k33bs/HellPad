@@ -16,6 +16,22 @@ enum ScreenCapture {
         hasPermission() ? .granted : .denied
     }
 
+    static func ensurePermission(requestIfNeeded: Bool = true, openSystemSettingsIfDenied: Bool = false) -> Bool {
+        if hasPermission() {
+            return true
+        }
+
+        if requestIfNeeded {
+            _ = requestPermission()
+        }
+
+        let granted = hasPermission()
+        if !granted, openSystemSettingsIfDenied {
+            openSystemSettings()
+        }
+        return granted
+    }
+
     @discardableResult
     static func requestPermission() -> Bool {
         CGRequestScreenCaptureAccess()
