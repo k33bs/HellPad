@@ -20,6 +20,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 - **Loadouts** - Save and load different stratagem configurations from the menu bar
 - **Loadout Export/Import** - Share loadouts with friends via `.hellpad` files
 - **Loadout Keyboard Shortcuts** - Hold modifier key (default: Option) + 1-9 to switch loadouts instantly
+- **Auto-Detect Loadout** - Press Option+0 at the mission "READY UP" screen to automatically detect and assign your equipped stratagems (uses Vision framework for icon recognition)
 - **Right-Click to Clear** - Right-click any stratagem or keybind to clear it
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
 - **Combo Mode** - Hold a configurable combo key and press multiple hotkeys to queue stratagems, release to execute sequentially
