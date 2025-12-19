@@ -7,6 +7,7 @@ enum HBConstants {
     enum KeyCode {
         static let pause: CGKeyCode = CGKeyCode(kVK_ANSI_P)  // 0x23
         static let escape: CGKeyCode = CGKeyCode(kVK_Escape)  // 0x35
+        static let zero: CGKeyCode = CGKeyCode(kVK_ANSI_0)
 
         // Number keys 1-9 for loadout switching
         static let numberKeys: [CGKeyCode] = [

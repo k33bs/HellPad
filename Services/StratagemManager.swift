@@ -1,8 +1,8 @@
-import Foundation
-import Combine
-import Carbon
-import SwiftUI
 import AppKit
+import Carbon
+import Combine
+import Foundation
+import SwiftUI
 import os.log
 
 private let logger = Logger(subsystem: "com.hellpad.app", category: "stratagem")
@@ -42,7 +42,8 @@ class StratagemManager: ObservableObject {
         }.sorted { $0.name < $1.name }
     }()
     private var comboExecutionSemaphore: DispatchSemaphore?
-    private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
+    private let stratagemExecutionQueue = DispatchQueue(
+        label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
     private let pauseStateLock = NSLock()
     private let comboStateLock = NSLock()
@@ -56,6 +57,18 @@ class StratagemManager: ObservableObject {
     private var stratagemLookup: [String: Stratagem] = [:]
     private var userDataURL: URL?
     private var keyCodeToSlotIndex: [CGKeyCode: Int] = [:]
+
+    private lazy var loadoutGridReader: LoadoutGridReader = {
+        LoadoutGridReader(canonicalStratagemNames: self.allStratagems.map { $0.name })
+    }()
+    private let loadoutGridReaderQueue = DispatchQueue(
+        label: "com.hellpad.loadout-grid-reader", qos: .userInitiated)
+    private let loadoutGridReaderLock = NSLock()
+    private var isLoadoutGridReaderRunning = false
+
+    #if DEBUG
+        private let loadoutGridDebugWindowController = LoadoutGridDebugWindowController()
+    #endif
 
     init() {
         setupUserDataDirectory()
@@ -119,7 +132,11 @@ class StratagemManager: ObservableObject {
     }
 
     private func setupUserDataDirectory() {
-        guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+        guard
+            let appSupport = FileManager.default.urls(
+                for: .applicationSupportDirectory, in: .userDomainMask
+            ).first
+        else {
             logger.error("Failed to get Application Support directory")
             return
         }
@@ -128,15 +145,17 @@ class StratagemManager: ObservableObject {
 
         // Create directory if it doesn't exist
         if !FileManager.default.fileExists(atPath: hellPadDir.path) {
-            try? FileManager.default.createDirectory(at: hellPadDir, withIntermediateDirectories: true)
+            try? FileManager.default.createDirectory(
+                at: hellPadDir, withIntermediateDirectories: true)
         }
 
         userDataURL = hellPadDir.appendingPathComponent("user_data.json")
 
         // Copy default user_data.json from bundle if it doesn't exist in Application Support
         if let bundleURL = Bundle.main.url(forResource: "user_data", withExtension: "json"),
-           let userURL = userDataURL,
-           !FileManager.default.fileExists(atPath: userURL.path) {
+            let userURL = userDataURL,
+            !FileManager.default.fileExists(atPath: userURL.path)
+        {
             logger.debug("Copying default user_data.json from bundle to: \(userURL.path)")
             try? FileManager.default.copyItem(at: bundleURL, to: userURL)
         }
@@ -144,10 +163,14 @@ class StratagemManager: ObservableObject {
 
     private func loadStratagems() {
         guard let url = Bundle.main.url(forResource: "stratagems", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let stratagems = try? JSONDecoder().decode([Stratagem].self, from: data) else {
+            let data = try? Data(contentsOf: url),
+            let stratagems = try? JSONDecoder().decode([Stratagem].self, from: data)
+        else {
             logger.error("Failed to load stratagems.json - FATAL")
-            showFatalError(message: "Critical Error: stratagems.json is missing or corrupt.\n\nPlease reinstall the application.")
+            showFatalError(
+                message:
+                    "Critical Error: stratagems.json is missing or corrupt.\n\nPlease reinstall the application."
+            )
             return
         }
 
@@ -161,9 +184,10 @@ class StratagemManager: ObservableObject {
     private func loadUserData() {
         // Load from Application Support, not bundle
         guard let url = userDataURL,
-              FileManager.default.fileExists(atPath: url.path),
-              let data = try? Data(contentsOf: url),
-              let userData = try? JSONDecoder().decode(UserData.self, from: data) else {
+            FileManager.default.fileExists(atPath: url.path),
+            let data = try? Data(contentsOf: url),
+            let userData = try? JSONDecoder().decode(UserData.self, from: data)
+        else {
             logger.error("Failed to load user_data.json from Application Support")
             setDefaultUserData()
             return
@@ -206,7 +230,7 @@ class StratagemManager: ObservableObject {
         equippedStratagems = [
             "Resupply", "Reinforce", "Eagle Airstrike", "Eagle 500kg Bomb",
             "Orbital Precision Strike", "Orbital Railcannon Strike",
-            "Hellbomb", "SEAF Artillery"
+            "Hellbomb", "SEAF Artillery",
         ]
 
         keybinds = [
@@ -217,7 +241,7 @@ class StratagemManager: ObservableObject {
             Keybind(keyCode: "0x20", letter: "U"),
             Keybind(keyCode: "0x26", letter: "J"),
             Keybind(keyCode: "0x2E", letter: "M"),
-            Keybind(keyCode: "0x28", letter: "K")
+            Keybind(keyCode: "0x28", letter: "K"),
         ]
 
         recentStratagemNames = []
@@ -240,7 +264,8 @@ class StratagemManager: ObservableObject {
         }
 
         // Listen for keypresses globally
-        eventTapManager.onKeyPressed = { [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
+        eventTapManager.onKeyPressed = {
+            [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
             guard let self = self else { return false }
 
             // ComboKey+ESC cancels any active combo
@@ -285,21 +310,33 @@ class StratagemManager: ObservableObject {
 
             // Loadout key + number (1-9) switches loadouts
             if let loadoutKeyCode = self.keySimulator.hexStringToKeyCode(self.loadoutKey.keyCode),
-               CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode),
-               let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
-                // Switch loadouts in allowed apps OR when HellPad itself is active
-                if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) || self.isHellPadFrontmost() {
-                    DispatchQueue.main.async {
-                        // Check if loadout exists at this index
-                        if loadoutIndex < self.loadouts.count {
-                            let loadout = self.loadouts[loadoutIndex]
-                            self.loadLoadout(id: loadout.id)
-                            logger.info("Switched to loadout \(loadoutIndex + 1): \(loadout.name)")
-                        } else {
-                            logger.debug("No loadout at index \(loadoutIndex + 1)")
-                        }
+                CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode)
+            {
+                if keyCode == HBConstants.KeyCode.zero {
+                    if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                        || self.isHellPadFrontmost()
+                    {
+                        self.triggerLoadoutGridRead()
+                        return true
                     }
-                    return true
+                }
+
+                if let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
+                    if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                        || self.isHellPadFrontmost()
+                    {
+                        DispatchQueue.main.async {
+                            if loadoutIndex < self.loadouts.count {
+                                let loadout = self.loadouts[loadoutIndex]
+                                self.loadLoadout(id: loadout.id)
+                                logger.info(
+                                    "Switched to loadout \(loadoutIndex + 1): \(loadout.name)")
+                            } else {
+                                logger.debug("No loadout at index \(loadoutIndex + 1)")
+                            }
+                        }
+                        return true
+                    }
                 }
             }
 
@@ -322,7 +359,8 @@ class StratagemManager: ObservableObject {
 
             guard let slotIndex = slotIndex else {
                 // Not our hotkey - but if it's the combo key in an allowed app, consume it
-                if isComboKey && self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
+                if isComboKey && self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                {
                     return true  // Consume combo key press to prevent typing
                 }
                 return false  // Not our key, pass it through
@@ -389,7 +427,9 @@ class StratagemManager: ObservableObject {
                     self.comboStateLock.unlock()
 
                     // Short delay lets Ctrl key fully release before we start
-                    DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.ctrlReleaseDelay) {
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + HBConstants.Timing.ctrlReleaseDelay
+                    ) {
                         self.executeCombo(slots: queuedSlots)
                     }
                 }
@@ -404,6 +444,71 @@ class StratagemManager: ObservableObject {
         }
 
         eventTapManager.setupEventTap()
+    }
+
+    private func triggerLoadoutGridRead() {
+        loadoutGridReaderQueue.async {
+            self.loadoutGridReaderLock.lock()
+            if self.isLoadoutGridReaderRunning {
+                self.loadoutGridReaderLock.unlock()
+                return
+            }
+            self.isLoadoutGridReaderRunning = true
+            self.loadoutGridReaderLock.unlock()
+
+            defer {
+                self.loadoutGridReaderLock.lock()
+                self.isLoadoutGridReaderRunning = false
+                self.loadoutGridReaderLock.unlock()
+            }
+
+            #if DEBUG
+                DispatchQueue.main.async {
+                    self.loadoutGridDebugWindowController.loadoutGridReader = self.loadoutGridReader
+                    self.loadoutGridDebugWindowController.show()
+                }
+                let debugSnapshot = self.loadoutGridReader.readMissionStratagemDebug()
+                if let debugSnapshot {
+                    DispatchQueue.main.async {
+                        self.loadoutGridDebugWindowController.setSnapshot(debugSnapshot)
+                    }
+                }
+                let names = debugSnapshot?.names
+            #else
+                let names = self.loadoutGridReader.readMissionStratagemNames()
+            #endif
+
+            guard let names, names.count >= 4 else { return }
+
+            DispatchQueue.main.async {
+                var detectedNames: [String] = []
+                for i in 0..<4 {
+                    let name = names[i]
+                    if !name.isEmpty {
+                        self.updateEquippedStratagem(at: 2 + i, with: name)
+                        detectedNames.append(name)
+                    }
+                }
+                logger.info("Loadout grid read applied to slots 2-5")
+
+                // Voice feedback for detected stratagems
+                if self.voiceFeedbackEnabled && !detectedNames.isEmpty {
+                    let voiceTexts = detectedNames.compactMap { name -> String? in
+                        self.stratagemLookup[name]?.voiceText
+                    }
+                    if !voiceTexts.isEmpty {
+                        let announcement = "loadout: " + voiceTexts.joined(separator: ", ")
+                        if let voice = self.selectedVoice {
+                            self.speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
+                        } else {
+                            self.speechSynthesizer.setVoice(nil)
+                        }
+                        self.speechSynthesizer.volume = self.voiceVolume
+                        self.speechSynthesizer.startSpeaking(announcement)
+                    }
+                }
+            }
+        }
     }
 
     private func executeCombo(slots: [Int]) {
@@ -453,7 +558,8 @@ class StratagemManager: ObservableObject {
 
                     logger.debug("Waiting for click to throw...")
                     // Give player 3 seconds to click
-                    let result = self.comboExecutionSemaphore?.wait(timeout: .now() + HBConstants.Timing.comboWaitTimeout)
+                    let result = self.comboExecutionSemaphore?.wait(
+                        timeout: .now() + HBConstants.Timing.comboWaitTimeout)
 
                     // Check again if cancelled during wait (thread-safe read)
                     self.comboStateLock.lock()
@@ -502,7 +608,8 @@ class StratagemManager: ObservableObject {
 
         let stratagemName = equippedStratagems[slotIndex]
         guard let stratagem = stratagemLookup[stratagemName],
-              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
+            let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode)
+        else {
             return
         }
 
@@ -548,7 +655,8 @@ class StratagemManager: ObservableObject {
 
         let stratagemName = equippedStratagems[slotIndex]
         guard let stratagem = stratagemLookup[stratagemName],
-              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
+            let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode)
+        else {
             return
         }
 
@@ -645,7 +753,8 @@ class StratagemManager: ObservableObject {
             recentStratagemNames: recentStratagemNames
         )
         guard let data = try? JSONEncoder().encode(userData),
-              let url = userDataURL else {
+            let url = userDataURL
+        else {
             logger.error("Failed to save user_data.json - no valid URL")
             return
         }
@@ -714,7 +823,8 @@ class StratagemManager: ObservableObject {
         )
 
         if let overwriteId = overwriteId,
-           let index = loadouts.firstIndex(where: { $0.id == overwriteId }) {
+            let index = loadouts.firstIndex(where: { $0.id == overwriteId })
+        {
             // Overwrite existing loadout
             loadouts[index] = loadout
             logger.info("Overwrote loadout: \(name)")
@@ -810,14 +920,18 @@ class StratagemManager: ObservableObject {
 
                 // Pad or trim stratagems to exactly 8
                 if safeStratagems.count < 8 {
-                    safeStratagems.append(contentsOf: Array(repeating: "", count: 8 - safeStratagems.count))
+                    safeStratagems.append(
+                        contentsOf: Array(repeating: "", count: 8 - safeStratagems.count))
                 } else if safeStratagems.count > 8 {
                     safeStratagems = Array(safeStratagems.prefix(8))
                 }
 
                 // Pad or trim keybinds to exactly 8
                 if safeKeybinds.count < 8 {
-                    safeKeybinds.append(contentsOf: Array(repeating: Keybind(keyCode: "", letter: ""), count: 8 - safeKeybinds.count))
+                    safeKeybinds.append(
+                        contentsOf: Array(
+                            repeating: Keybind(keyCode: "", letter: ""),
+                            count: 8 - safeKeybinds.count))
                 } else if safeKeybinds.count > 8 {
                     safeKeybinds = Array(safeKeybinds.prefix(8))
                 }
@@ -862,3 +976,335 @@ class StratagemManager: ObservableObject {
         return name
     }
 }
+
+#if DEBUG
+    final class LoadoutGridDebugWindowController: ObservableObject {
+        @Published var snapshot: LoadoutGridDebugSnapshot?
+        @Published var originalSnapshot: LoadoutGridDebugSnapshot?  // For re-evaluation
+        @Published var weights = MatchWeights.default
+        private var window: NSWindow?
+        var loadoutGridReader: LoadoutGridReader?
+
+        func show() {
+            if window == nil {
+                let w = NSWindow(
+                    contentRect: NSRect(x: 0, y: 0, width: 1100, height: 850),
+                    styleMask: [.titled, .closable, .resizable, .miniaturizable],
+                    backing: .buffered,
+                    defer: false
+                )
+                w.title = "Loadout Grid Debug"
+                w.isReleasedWhenClosed = false
+                w.contentView = NSHostingView(
+                    rootView: LoadoutGridDebugWindowView(controller: self))
+                window = w
+            }
+
+            window?.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+
+        func setSnapshot(_ newSnapshot: LoadoutGridDebugSnapshot) {
+            originalSnapshot = newSnapshot
+            snapshot = newSnapshot
+            weights = MatchWeights.default
+        }
+
+        func reEvaluate() {
+            guard let original = originalSnapshot, let reader = loadoutGridReader else { return }
+            snapshot = reader.reEvaluateWithWeights(original, weights: weights)
+        }
+    }
+
+    private struct LoadoutGridDebugWindowView: View {
+        @ObservedObject var controller: LoadoutGridDebugWindowController
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Loadout Grid Debug").font(.title2).bold()
+                    Spacer()
+                    if let snapshot = controller.snapshot {
+                        Text(snapshot.timestamp.formatted(date: .omitted, time: .standard))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                if let snapshot = controller.snapshot {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 14) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Detected")
+                                    .font(.headline)
+                                Text(
+                                    snapshot.names.enumerated().map {
+                                        "\($0.offset + 1): \($0.element.isEmpty ? "(no match)" : $0.element)"
+                                    }.joined(separator: "\n")
+                                )
+                                .font(.system(.body, design: .monospaced))
+                            }
+
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("READY UP")
+                                    .font(.headline)
+                                Text("method=\(snapshot.readyUpDetectionMethod)")
+                                    .font(.system(.caption, design: .monospaced))
+                                Text(
+                                    "analysisRectInFull=\(Int(snapshot.quadrantRectInFullCapture.minX)),\(Int(snapshot.quadrantRectInFullCapture.minY)) \(Int(snapshot.quadrantRectInFullCapture.width))x\(Int(snapshot.quadrantRectInFullCapture.height))"
+                                )
+                                .font(.system(.caption, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                                if !snapshot.readyUpOcrCandidates.isEmpty {
+                                    Text(
+                                        snapshot.readyUpOcrCandidates.map {
+                                            "dx=\($0.centerDxFromScreenCenter)\tconf=\($0.confidence)\t\($0.text)\trect=\(Int($0.rect.minX)),\(Int($0.rect.minY)) \(Int($0.rect.width))x\(Int($0.rect.height))"
+                                        }.joined(separator: "\n")
+                                    )
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(.secondary)
+                                }
+                            }
+
+                            HStack(alignment: .top, spacing: 12) {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text("Full capture").font(.headline)
+                                    LoadoutGridCGImageView(cgImage: snapshot.fullCapture)
+                                        .frame(height: 260)
+                                }
+
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text("Analysis + overlays").font(.headline)
+                                    LoadoutGridOverlayImage(
+                                        cgImage: snapshot.quadrant,
+                                        readyUpRect: snapshot.readyUpRect,
+                                        iconRects: snapshot.iconRects
+                                    )
+                                    .frame(height: 260)
+                                }
+                            }
+
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Icon tiles").font(.headline)
+                                HStack(alignment: .top, spacing: 10) {
+                                    ForEach(Array(snapshot.iconTiles.enumerated()), id: \.offset) {
+                                        idx, tile in
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            LoadoutGridCGImageView(cgImage: tile)
+                                                .frame(width: 150, height: 150)
+                                            let name =
+                                                idx < snapshot.names.count
+                                                ? snapshot.names[idx] : ""
+                                            Text(name.isEmpty ? "(no match)" : name)
+                                                .font(.caption)
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Weight sliders for tuning
+                            WeightSlidersView(controller: controller)
+
+                            LoadoutGridMatchesView(matches: snapshot.matches)
+                        }
+                        .padding(.vertical, 10)
+                    }
+                } else {
+                    Spacer()
+                    Text("Press Option+0 to capture and populate this window.")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+            }
+            .padding(14)
+            .frame(minWidth: 900, minHeight: 600)
+        }
+    }
+
+    private struct WeightSlidersView: View {
+        @ObservedObject var controller: LoadoutGridDebugWindowController
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Weight Tuning").font(.headline)
+                    Spacer()
+                    Button("Reset") {
+                        controller.weights = MatchWeights.default
+                        controller.reEvaluate()
+                    }
+                    .buttonStyle(.bordered)
+                }
+
+                HStack(spacing: 20) {
+                    WeightSlider(label: "IoU", value: $controller.weights.iou, onChanged: { controller.reEvaluate() })
+                    WeightSlider(label: "Color", value: $controller.weights.color, onChanged: { controller.reEvaluate() })
+                    WeightSlider(label: "Hash", value: $controller.weights.hash, onChanged: { controller.reEvaluate() })
+                    WeightSlider(label: "FP", value: $controller.weights.fp, onChanged: { controller.reEvaluate() })
+                }
+
+                Text("Total: \(String(format: "%.2f", controller.weights.iou + controller.weights.color + controller.weights.hash + controller.weights.fp))")
+                    .font(.caption)
+                    .foregroundColor(abs(controller.weights.iou + controller.weights.color + controller.weights.hash + controller.weights.fp - 1.0) < 0.01 ? .secondary : .orange)
+            }
+            .padding(10)
+            .background(Color.secondary.opacity(0.1))
+            .cornerRadius(8)
+        }
+    }
+
+    private struct WeightSlider: View {
+        let label: String
+        @Binding var value: Double
+        let onChanged: () -> Void
+
+        var body: some View {
+            VStack(spacing: 4) {
+                Text("\(label): \(String(format: "%.2f", value))")
+                    .font(.system(.caption, design: .monospaced))
+                Slider(value: $value, in: 0...1, step: 0.05)
+                    .frame(width: 150)
+                    .onChange(of: value) { _ in
+                        onChanged()
+                    }
+            }
+        }
+    }
+
+    private struct LoadoutGridMatchesView: View {
+        let matches: [LoadoutGridDebugMatch]
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Matches (Feature Print Distance)").font(.headline)
+                ForEach(Array(matches.enumerated()), id: \.offset) { _, match in
+                    LoadoutGridMatchRow(match: match)
+                    Divider()
+                }
+            }
+        }
+    }
+
+    private struct LoadoutGridMatchRow: View {
+        let match: LoadoutGridDebugMatch
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Slot \(match.slotIndex + 1)")
+                        .font(.system(.caption, design: .monospaced).bold())
+                    Text("rect=\(Int(match.rect.minX)),\(Int(match.rect.minY)) \(Int(match.rect.width))x\(Int(match.rect.height))")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+                Text("Best: \(match.bestName ?? "(no match)") (dist: \(String(format: "%.1f", match.bestDistance)))")
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundColor(match.bestDistance <= 18 ? .primary : .red)
+
+                // Show top 5 candidates with reference icons
+                Text("Top 5 matches:")
+                    .font(.system(.caption2, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                HStack(alignment: .top, spacing: 8) {
+                    ForEach(Array(match.topCandidates.enumerated()), id: \.offset) { _, candidate in
+                        LoadoutGridCandidateView(candidate: candidate)
+                    }
+                }
+            }
+            .padding(.vertical, 6)
+        }
+    }
+
+    private struct LoadoutGridCandidateView: View {
+        let candidate: LoadoutGridDebugCandidate
+
+        var body: some View {
+            VStack(spacing: 2) {
+                if let refIcon = candidate.referenceIcon {
+                    LoadoutGridCGImageView(cgImage: refIcon)
+                        .frame(width: 40, height: 40)
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(width: 40, height: 40)
+                }
+                Text(String(format: "%.1f", candidate.distance))
+                    .font(.system(.caption2, design: .monospaced))
+                    .foregroundColor(candidate.distance <= 18 ? .green : .red)
+
+                // Show individual scores if computed
+                if candidate.combinedScore > 0 {
+                    Text(String(format: "C:%.2f", candidate.combinedScore))
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundColor(.blue)
+                    Text(String(format: "I%.0f H%.0f", candidate.iouScore * 100, candidate.hashScore * 100))
+                        .font(.system(size: 7, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    private struct LoadoutGridCGImageView: View {
+        let cgImage: CGImage
+
+        var body: some View {
+            let nsImage = NSImage(
+                cgImage: cgImage, size: CGSize(width: cgImage.width, height: cgImage.height))
+            return Image(nsImage: nsImage)
+                .resizable()
+                .interpolation(.none)
+                .aspectRatio(contentMode: .fit)
+                .background(Color.black.opacity(0.15))
+                .cornerRadius(6)
+        }
+    }
+
+    private struct LoadoutGridOverlayImage: View {
+        let cgImage: CGImage
+        let readyUpRect: CGRect
+        let iconRects: [CGRect]
+
+        var body: some View {
+            GeometryReader { geo in
+                let iw = CGFloat(cgImage.width)
+                let ih = CGFloat(cgImage.height)
+                let scale = min(geo.size.width / iw, geo.size.height / ih)
+                let dw = iw * scale
+                let dh = ih * scale
+                let ox = (geo.size.width - dw) / 2
+                let oy = (geo.size.height - dh) / 2
+
+                ZStack(alignment: .topLeading) {
+                    LoadoutGridCGImageView(cgImage: cgImage)
+                        .frame(width: dw, height: dh)
+                        .clipped()
+
+                    Path { p in
+                        // Rects are in CGImage coordinates (origin top-left)
+                        // SwiftUI Path also uses origin top-left
+                        // Just scale to display size, no flip needed
+                        func scaleRect(_ rect: CGRect) -> CGRect {
+                            CGRect(
+                                x: rect.origin.x * scale,
+                                y: rect.origin.y * scale,
+                                width: rect.size.width * scale,
+                                height: rect.size.height * scale
+                            )
+                        }
+
+                        p.addRect(scaleRect(readyUpRect))
+                        for rect in iconRects {
+                            p.addRect(scaleRect(rect))
+                        }
+                    }
+                    .stroke(Color.red, lineWidth: 2)
+                    .frame(width: dw, height: dh)
+                }
+                .offset(x: ox, y: oy)
+            }
+            .background(Color.black.opacity(0.05))
+            .cornerRadius(6)
+        }
+    }
+#endif
