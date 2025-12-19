@@ -30,6 +30,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 - **Configurable Game Controls** - Customize the stratagem menu key, directional keys (WASD or arrows), and activation mode
 - **Hold or Toggle Mode** - Choose between holding the menu key or tapping once to open
 - **Visual Feedback** - Yellow flash on activation, cyan glow for queued combos
+- **Voice Feedback** - Optional spoken announcements for loadout switches and detected stratagems (configurable voice and volume)
 - **Menu Bar App** - Stays out of your way with floating window option
 
 ## System Requirements
@@ -160,7 +161,7 @@ Grant permissions in:
 
 ### Architecture
 
-- `Services/` - Core logic (StratagemManager, EventTapManager, KeyPressSimulator)
+- `Services/` - Core logic (StratagemManager, EventTapManager, KeyPressSimulator, LoadoutGridReader)
 - `Views/` - SwiftUI views (ContentView, StratagemPickerView, AppSettingsView)
 - `Models/` - Data structures (Stratagem, Keybind, UserData)
 - `Utils/` - Constants and helpers
@@ -194,10 +195,10 @@ Developed for the HELLDIVERS™ 2 community.
 
 ### v1.1.3
 
-- **Loadout Grid Reader** - Automatically detect equipped stratagems from the mission screen
+- **Auto-Detect Loadout** - Automatically detect equipped stratagems from the mission screen
   - Press Option+0 to capture and identify your current loadout from the game
   - Uses Vision framework for accurate icon matching with multi-signal scoring
-  - Debug mode (Option+0) shows detection details and weight tuning sliders
+  - Detected stratagems are assigned to slots 3-6 and announced via voice feedback
 - **Voice Announcement for Detected Loadout** - Hear your detected stratagems spoken aloud
   - Announces "loadout: [stratagem1], [stratagem2], ..." when detection succeeds
   - Uses customizable voice and volume settings from Controls tab
