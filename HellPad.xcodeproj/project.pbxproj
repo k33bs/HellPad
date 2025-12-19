@@ -17,6 +17,9 @@
 		267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */; };
 		267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */; };
 		267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */; };
+		B1A2C3D4E5F6A7B8C9D0E1F2 /* LoadoutGridDebugViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */; };
+		DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91505007F29F4789AA69109A /* ScreenCapture.swift */; };
+		A3B4C5D6E7F8A9B0C1D2E3F4 /* LoadoutGridReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */; };
 		267E64292EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CC2EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png */; };
 		267E642A2EC77D86001EDD15 /* stratagems.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B22EC77D86001EDD15 /* stratagems.json */; };
 		267E642B2EC77D86001EDD15 /* illumination-flare.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E82EC77D86001EDD15 /* illumination-flare.png */; };
@@ -124,6 +127,8 @@
 		267E63B82EC77D86001EDD15 /* EventTapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapManager.swift; sourceTree = "<group>"; };
 		267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressSimulator.swift; sourceTree = "<group>"; };
 		267E63BB2EC77D86001EDD15 /* StratagemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemManager.swift; sourceTree = "<group>"; };
+		91505007F29F4789AA69109A /* ScreenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCapture.swift; sourceTree = "<group>"; };
+		A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridReader.swift; sourceTree = "<group>"; };
 		267E63BD2EC77D86001EDD15 /* aac-8-autocannon-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aac-8-autocannon-sentry.png"; sourceTree = "<group>"; };
 		267E63BE2EC77D86001EDD15 /* aarc-3-tesla-tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aarc-3-tesla-tower.png"; sourceTree = "<group>"; };
 		267E63BF2EC77D86001EDD15 /* aflam-40-flame-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aflam-40-flame-sentry.png"; sourceTree = "<group>"; };
@@ -218,6 +223,7 @@
 		267E641A2EC77D86001EDD15 /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		267E641B2EC77D86001EDD15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemPickerView.swift; sourceTree = "<group>"; };
+		B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridDebugViews.swift; sourceTree = "<group>"; };
 		1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "axflam-75-guard-dog-hot-dog.png"; sourceTree = "<group>"; };
 		DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-9-defoliation-tool.png"; sourceTree = "<group>"; };
 		5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-1000-maxigun.png"; sourceTree = "<group>"; };
@@ -310,6 +316,8 @@
 				267E63B82EC77D86001EDD15 /* EventTapManager.swift */,
 				267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */,
 				267E63BB2EC77D86001EDD15 /* StratagemManager.swift */,
+				91505007F29F4789AA69109A /* ScreenCapture.swift */,
+				A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -427,6 +435,7 @@
 			children = (
 				267E641A2EC77D86001EDD15 /* AppSettingsView.swift */,
 				267E641B2EC77D86001EDD15 /* ContentView.swift */,
+				B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */,
 				267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */,
 			);
 			path = Views;
@@ -612,6 +621,9 @@
 				267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */,
 				267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */,
 				267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */,
+				B1A2C3D4E5F6A7B8C9D0E1F2 /* LoadoutGridDebugViews.swift in Sources */,
+				DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */,
+				A3B4C5D6E7F8A9B0C1D2E3F4 /* LoadoutGridReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,7 +780,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -820,7 +832,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

@@ -1,6 +1,7 @@
 [
   {
     "name": "Eagle Rearm",
+    "short": "Eagle Rearm",
     "sequence": ["W", "W", "A", "W", "D"],
     "category": "Common",
     "dept": "Common",
@@ -8,6 +9,7 @@
   },
   {
     "name": "Reinforce",
+    "short": "Reinforce",
     "sequence": ["W", "S", "D", "A", "W"],
     "category": "Common",
     "dept": "Common",
@@ -15,6 +17,7 @@
   },
   {
     "name": "Resupply",
+    "short": "Resupply",
     "sequence": ["S", "S", "W", "D"],
     "category": "Common",
     "dept": "Common",
@@ -22,6 +25,8 @@
   },
   {
     "name": "SOS Beacon",
+    "short": "SOS Beacon",
+    "speak": "s.o.s. beacon",
     "sequence": ["W", "S", "D", "W"],
     "category": "Common",
     "dept": "Common",
@@ -29,6 +34,7 @@
   },
   {
     "name": "Dark Fluid Vessel",
+    "short": "Dark Fluid Vessel",
     "sequence": ["W", "A", "D", "S", "W", "W"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -36,6 +42,7 @@
   },
   {
     "name": "Hellbomb",
+    "short": "Hellbomb",
     "sequence": ["S", "W", "A", "S", "W", "D", "S", "W"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -43,6 +50,7 @@
   },
   {
     "name": "Hive Breaker Drill",
+    "short": "Hive Breaker Drill",
     "sequence": ["A", "W", "S", "D", "S", "S"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -50,6 +58,7 @@
   },
   {
     "name": "Illumination Flare",
+    "short": "Illumination Flare",
     "sequence": ["D", "D", "D", "A", "A", "A"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -57,6 +66,7 @@
   },
   {
     "name": "Prospecting Drill",
+    "short": "Prospecting Drill",
     "sequence": ["S", "S", "A", "D", "S", "S"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -64,6 +74,7 @@
   },
   {
     "name": "SE-45 Seismic Probe",
+    "short": "Seismic Probe",
     "sequence": ["W", "W", "A", "D", "S", "S"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -71,6 +82,7 @@
   },
   {
     "name": "SEAF Artillery",
+    "short": "SEAF",
     "sequence": ["D", "W", "W", "S"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -78,6 +90,7 @@
   },
   {
     "name": "SSSD Delivery",
+    "short": "SSSD",
     "sequence": ["S", "S", "S", "W", "W"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -85,6 +98,7 @@
   },
   {
     "name": "Super Earth Flag",
+    "short": "Super Earth Flag",
     "sequence": ["S", "W", "S", "W"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -92,6 +106,7 @@
   },
   {
     "name": "Tectonic Drill",
+    "short": "Tectonic Drill",
     "sequence": ["W", "S", "W", "S", "W", "S"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -99,6 +114,7 @@
   },
   {
     "name": "Upload Data",
+    "short": "Upload Data",
     "sequence": ["A", "D", "W", "W", "W"],
     "category": "Objectives",
     "dept": "Objectives",
@@ -106,6 +122,7 @@
   },
   {
     "name": "Eagle 110mm Rocket Pods",
+    "short": "Rocket Pods",
     "sequence": ["W", "D", "W", "A"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -113,6 +130,8 @@
   },
   {
     "name": "Eagle 500kg Bomb",
+    "short": "500kg Bomb",
+    "speak": "five hundred kilo bomb",
     "sequence": ["W", "D", "S", "S", "S"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -120,6 +139,7 @@
   },
   {
     "name": "Eagle Airstrike",
+    "short": "Airstrike",
     "sequence": ["W", "D", "S", "D"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -127,6 +147,7 @@
   },
   {
     "name": "Eagle Cluster Bomb",
+    "short": "Cluster Bomb",
     "sequence": ["W", "D", "S", "S", "D"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -134,6 +155,7 @@
   },
   {
     "name": "Eagle Napalm Airstrike",
+    "short": "Napalm Airstrike",
     "sequence": ["W", "D", "S", "W"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -141,6 +163,7 @@
   },
   {
     "name": "Eagle Smoke Strike",
+    "short": "Smoke Strike",
     "sequence": ["W", "D", "W", "S"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -148,6 +171,7 @@
   },
   {
     "name": "Eagle Strafing Run",
+    "short": "Strafing Run",
     "sequence": ["W", "D", "D"],
     "category": "Offensive",
     "dept": "Hangar",
@@ -155,6 +179,8 @@
   },
   {
     "name": "Orbital 120mm HE Barrage",
+    "short": "120mm HE Barrage",
+    "speak": "one twenty barrage",
     "sequence": ["D", "D", "S", "A", "D", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -162,6 +188,8 @@
   },
   {
     "name": "Orbital 380mm HE Barrage",
+    "short": "380mm HE Barrage",
+    "speak": "three eighty barrage",
     "sequence": ["D", "S", "W", "W", "A", "S", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -169,6 +197,7 @@
   },
   {
     "name": "Orbital Airburst Strike",
+    "short": "Airburst Strike",
     "sequence": ["D", "D", "D"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -176,6 +205,8 @@
   },
   {
     "name": "Orbital EMS Strike",
+    "short": "EMS Strike",
+    "speak": "e.m.s. strike",
     "sequence": ["D", "D", "A", "S"],
     "category": "Offensive",
     "dept": "Bridge",
@@ -183,6 +214,7 @@
   },
   {
     "name": "Orbital Gas Strike",
+    "short": "Gas Strike",
     "sequence": ["D", "D", "S", "D"],
     "category": "Offensive",
     "dept": "Bridge",
@@ -190,6 +222,7 @@
   },
   {
     "name": "Orbital Gatling Barrage",
+    "short": "Gatling Barrage",
     "sequence": ["D", "S", "A", "W", "W"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -197,6 +230,7 @@
   },
   {
     "name": "Orbital Laser",
+    "short": "Orbital Laser",
     "sequence": ["D", "S", "W", "D", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -204,6 +238,7 @@
   },
   {
     "name": "Orbital Napalm Barrage",
+    "short": "Napalm Barrage",
     "sequence": ["D", "D", "S", "A", "D", "W"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -211,6 +246,7 @@
   },
   {
     "name": "Orbital Precision Strike",
+    "short": "Precision Strike",
     "sequence": ["D", "D", "W"],
     "category": "Offensive",
     "dept": "Bridge",
@@ -218,6 +254,7 @@
   },
   {
     "name": "Orbital Railcannon Strike",
+    "short": "Railcannon Strike",
     "sequence": ["D", "W", "S", "S", "D"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -225,6 +262,7 @@
   },
   {
     "name": "Orbital Smoke Strike",
+    "short": "Smoke Strike",
     "sequence": ["D", "D", "S", "W"],
     "category": "Offensive",
     "dept": "Bridge",
@@ -232,6 +270,7 @@
   },
   {
     "name": "Orbital Walking Barrage",
+    "short": "Walking Barrage",
     "sequence": ["D", "S", "D", "S", "D", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
@@ -239,6 +278,7 @@
   },
   {
     "name": "AC-8 Autocannon",
+    "short": "Autocannon",
     "sequence": ["S", "A", "S", "W", "W", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -246,6 +286,7 @@
   },
   {
     "name": "APW-1 Anti-Materiel Rifle",
+    "short": "Anti-Materiel Rifle",
     "sequence": ["S", "A", "D", "W", "S"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -253,6 +294,7 @@
   },
   {
     "name": "ARC-3 Arc Thrower",
+    "short": "Arc Thrower",
     "sequence": ["S", "D", "S", "W", "A", "A"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -260,6 +302,7 @@
   },
   {
     "name": "AX/AR-23 Guard Dog",
+    "short": "Guard Dog",
     "sequence": ["S", "W", "A", "W", "D", "S"],
     "category": "Supply",
     "dept": "Robotics Workshop",
@@ -267,6 +310,8 @@
   },
   {
     "name": "AX/ARC-3 Guard Dog K-9",
+    "short": "K-9",
+    "speak": "k. nine",
     "sequence": ["S", "W", "A", "W", "D", "A"],
     "category": "Supply",
     "dept": "Force of Law",
@@ -274,6 +319,7 @@
   },
   {
     "name": "AX/FLAM-75 Guard Dog Hot Dog",
+    "short": "Hot Dog",
     "sequence": ["S", "W", "A", "W", "A", "A"],
     "category": "Supply",
     "dept": "Python Commandos",
@@ -281,6 +327,7 @@
   },
   {
     "name": "AX/LAS-5 Guard Dog Rover",
+    "short": "Rover",
     "sequence": ["S", "W", "A", "W", "D", "D"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -288,6 +335,7 @@
   },
   {
     "name": "AX/TX-13 Guard Dog Dog Breath",
+    "short": "Dog Breath",
     "sequence": ["S", "W", "A", "W", "D", "W"],
     "category": "Supply",
     "dept": "Chemical Agents",
@@ -295,6 +343,7 @@
   },
   {
     "name": "B-1 Supply Pack",
+    "short": "Supply Pack",
     "sequence": ["S", "A", "S", "W", "W", "S"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -302,6 +351,7 @@
   },
   {
     "name": "B-100 Portable Hellbomb",
+    "short": "Portable Hellbomb",
     "sequence": ["S", "D", "W", "W", "W"],
     "category": "Supply",
     "dept": "Servants of Freedom",
@@ -309,6 +359,7 @@
   },
   {
     "name": "CQC-1 One True Flag",
+    "short": "One True Flag",
     "sequence": ["S", "A", "D", "D", "W"],
     "category": "Supply",
     "dept": "Masters of Ceremony",
@@ -316,6 +367,7 @@
   },
   {
     "name": "CQC-9 Defoliation Tool",
+    "short": "Defoliation Tool",
     "sequence": ["S", "A", "D", "D", "S"],
     "category": "Supply",
     "dept": "Python Commandos",
@@ -323,6 +375,7 @@
   },
   {
     "name": "EAT-17 Expendable Anti-Tank",
+    "short": "Expendable Anti-Tank",
     "sequence": ["S", "S", "A", "W", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -330,6 +383,7 @@
   },
   {
     "name": "EAT-700 Expendable Napalm",
+    "short": "Expendable Napalm",
     "sequence": ["S", "S", "A", "W", "A"],
     "category": "Supply",
     "dept": "Dust Devils",
@@ -337,6 +391,7 @@
   },
   {
     "name": "EXO-45 Patriot Exosuit",
+    "short": "Patriot Exosuit",
     "sequence": ["A", "S", "D", "W", "A", "S", "S"],
     "category": "Supply",
     "dept": "Robotics Workshop",
@@ -344,6 +399,7 @@
   },
   {
     "name": "EXO-49 Emancipator Exosuit",
+    "short": "Emancipator Exosuit",
     "sequence": ["A", "S", "D", "W", "A", "S", "W"],
     "category": "Supply",
     "dept": "Robotics Workshop",
@@ -351,6 +407,7 @@
   },
   {
     "name": "FAF-14 Spear",
+    "short": "Spear",
     "sequence": ["S", "S", "W", "S", "S"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -358,6 +415,7 @@
   },
   {
     "name": "FLAM-40 Flamethrower",
+    "short": "Flamethrower",
     "sequence": ["S", "A", "W", "S", "W"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -365,6 +423,7 @@
   },
   {
     "name": "GL-21 Grenade Launcher",
+    "short": "Grenade Launcher",
     "sequence": ["S", "A", "W", "A", "S"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -372,6 +431,7 @@
   },
   {
     "name": "GL-52 De-Escalator",
+    "short": "De-Escalator",
     "sequence": ["S", "D", "W", "A", "D"],
     "category": "Supply",
     "dept": "Force of Law",
@@ -379,6 +439,7 @@
   },
   {
     "name": "GR-8 Recoilless Rifle",
+    "short": "Recoilless Rifle",
     "sequence": ["S", "A", "D", "D", "A"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -386,6 +447,7 @@
   },
   {
     "name": "Jump Pack",
+    "short": "Jump Pack",
     "sequence": ["S", "W", "W", "S", "W"],
     "category": "Supply",
     "dept": "Hangar",
@@ -393,6 +455,7 @@
   },
   {
     "name": "LAS-98 Laser Cannon",
+    "short": "Laser Cannon",
     "sequence": ["S", "A", "S", "W", "A"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -400,6 +463,7 @@
   },
   {
     "name": "LAS-99 Quasar Cannon",
+    "short": "Quasar Cannon",
     "sequence": ["S", "S", "W", "A", "D"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -407,6 +471,7 @@
   },
   {
     "name": "LIFT-182 Warp Pack",
+    "short": "Warp Pack",
     "sequence": ["S", "A", "D", "S", "A", "D"],
     "category": "Supply",
     "dept": "Control Group",
@@ -414,6 +479,7 @@
   },
   {
     "name": "LIFT-860 Hover Pack",
+    "short": "Hover Pack",
     "sequence": ["S", "W", "W", "S", "A", "D"],
     "category": "Supply",
     "dept": "Borderline Justice",
@@ -421,6 +487,7 @@
   },
   {
     "name": "M-1000 Maxigun",
+    "short": "Maxigun",
     "sequence": ["S", "A", "D", "S", "W", "W"],
     "category": "Supply",
     "dept": "Python Commandos",
@@ -428,6 +495,7 @@
   },
   {
     "name": "M-102 Fast Recon Vehicle",
+    "short": "Fast Recon Vehicle",
     "sequence": ["A", "S", "D", "S", "D", "S", "W"],
     "category": "Supply",
     "dept": "Hangar",
@@ -435,6 +503,7 @@
   },
   {
     "name": "M-105 Stalwart",
+    "short": "Stalwart",
     "sequence": ["S", "A", "S", "W", "W", "A"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -442,6 +511,7 @@
   },
   {
     "name": "MG-206 Heavy Machine Gun",
+    "short": "Heavy Machine Gun",
     "sequence": ["S", "A", "W", "S", "S"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -449,6 +519,7 @@
   },
   {
     "name": "MG-43 Machine Gun",
+    "short": "Machine Gun",
     "sequence": ["S", "A", "S", "W", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -456,6 +527,7 @@
   },
   {
     "name": "MLS-4X Commando",
+    "short": "Commando",
     "sequence": ["S", "A", "W", "S", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -463,6 +535,7 @@
   },
   {
     "name": "MS-11 Solo Silo",
+    "short": "Solo Silo",
     "sequence": ["S", "W", "D", "S", "S"],
     "category": "Supply",
     "dept": "Dust Devils",
@@ -470,6 +543,7 @@
   },
   {
     "name": "PLAS-45 Epoch",
+    "short": "Epoch",
     "sequence": ["S", "A", "W", "A", "D"],
     "category": "Supply",
     "dept": "Control Group",
@@ -477,6 +551,7 @@
   },
   {
     "name": "RL-77 Airburst Rocket Launcher",
+    "short": "Airburst Rocket Launcher",
     "sequence": ["S", "W", "W", "A", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -484,6 +559,7 @@
   },
   {
     "name": "RS-422 Railgun",
+    "short": "Railgun",
     "sequence": ["S", "D", "S", "W", "A", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -491,6 +567,7 @@
   },
   {
     "name": "S-11 Speargun",
+    "short": "Speargun",
     "sequence": ["S", "D", "S", "A", "W", "D"],
     "category": "Supply",
     "dept": "Dust Devils",
@@ -498,6 +575,7 @@
   },
   {
     "name": "SH-20 Ballistic Shield Backpack",
+    "short": "Ballistic Shield",
     "sequence": ["S", "A", "S", "S", "W", "A"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -505,6 +583,7 @@
   },
   {
     "name": "SH-32 Shield Generator Pack",
+    "short": "Shield Generator",
     "sequence": ["S", "W", "A", "D", "A", "D"],
     "category": "Supply",
     "dept": "Engineering Bay",
@@ -512,6 +591,7 @@
   },
   {
     "name": "SH-51 Directional Shield",
+    "short": "Directional Shield",
     "sequence": ["S", "W", "A", "D", "W", "W"],
     "category": "Supply",
     "dept": "Urban Legends",
@@ -519,6 +599,8 @@
   },
   {
     "name": "StA-X3 W.A.S.P. Launcher",
+    "short": "W.A.S.P. Launcher",
+    "speak": "wasp launcher",
     "sequence": ["S", "S", "W", "S", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
@@ -526,6 +608,7 @@
   },
   {
     "name": "TX-41 Sterilizer",
+    "short": "Sterilizer",
     "sequence": ["S", "A", "W", "S", "A"],
     "category": "Supply",
     "dept": "Chemical Agents",
@@ -533,6 +616,7 @@
   },
   {
     "name": "A/AC-8 Autocannon Sentry",
+    "short": "Autocannon Sentry",
     "sequence": ["S", "W", "D", "W", "A", "W"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -540,6 +624,7 @@
   },
   {
     "name": "A/ARC-3 Tesla Tower",
+    "short": "Tesla Tower",
     "sequence": ["S", "W", "D", "W", "A", "D"],
     "category": "Defense",
     "dept": "Bridge",
@@ -547,6 +632,7 @@
   },
   {
     "name": "A/FLAM-40 Flame Sentry",
+    "short": "Flame Sentry",
     "sequence": ["S", "W", "D", "S", "W", "W"],
     "category": "Defense",
     "dept": "Urban Legends",
@@ -554,6 +640,7 @@
   },
   {
     "name": "A/G-16 Gatling Sentry",
+    "short": "Gatling Sentry",
     "sequence": ["S", "W", "D", "A"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -561,6 +648,7 @@
   },
   {
     "name": "A/LAS-98 Laser Sentry",
+    "short": "Laser Sentry",
     "sequence": ["S", "W", "D", "S", "W", "D"],
     "category": "Defense",
     "dept": "Control Group",
@@ -568,6 +656,7 @@
   },
   {
     "name": "A/M-12 Mortar Sentry",
+    "short": "Mortar Sentry",
     "sequence": ["S", "W", "D", "D", "S"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -575,6 +664,8 @@
   },
   {
     "name": "A/M-23 EMS Mortar Sentry",
+    "short": "EMS Mortar Sentry",
+    "speak": "e.m.s. mortar sentry",
     "sequence": ["S", "W", "D", "S", "D"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -582,6 +673,7 @@
   },
   {
     "name": "A/MG-43 Machine Gun Sentry",
+    "short": "Machine Gun Sentry",
     "sequence": ["S", "W", "D", "D", "W"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -589,6 +681,7 @@
   },
   {
     "name": "AX/MLS-4X Rocket Sentry",
+    "short": "Rocket Sentry",
     "sequence": ["S", "W", "D", "D", "A"],
     "category": "Defense",
     "dept": "Robotics Workshop",
@@ -596,6 +689,7 @@
   },
   {
     "name": "E/AT-12 Anti-Tank Emplacement",
+    "short": "Anti-Tank Emplacement",
     "sequence": ["S", "W", "A", "D", "D", "D"],
     "category": "Defense",
     "dept": "Urban Legends",
@@ -603,6 +697,7 @@
   },
   {
     "name": "E/GL-21 Grenadier Battlement",
+    "short": "Grenadier Battlement",
     "sequence": ["S", "D", "S", "A", "D"],
     "category": "Defense",
     "dept": "Bridge",
@@ -610,6 +705,8 @@
   },
   {
     "name": "E/MG-101 HMG Emplacement",
+    "short": "HMG Emplacement",
+    "speak": "h.m.g. emplacement",
     "sequence": ["S", "W", "A", "D", "D", "A"],
     "category": "Defense",
     "dept": "Bridge",
@@ -617,6 +714,8 @@
   },
   {
     "name": "FX-12 Shield Generator Relay",
+    "short": "Shield Generator Relay",
+    "speak": "shield generator",
     "sequence": ["S", "S", "A", "D", "A", "D"],
     "category": "Defense",
     "dept": "Bridge",
@@ -624,6 +723,7 @@
   },
   {
     "name": "MD-17 Anti-Tank Mines",
+    "short": "Anti-Tank Mines",
     "sequence": ["S", "A", "W", "W"],
     "category": "Defense",
     "dept": "Engineering Bay",
@@ -631,6 +731,7 @@
   },
   {
     "name": "MD-6 Anti-Personnel Minefield",
+    "short": "Anti-Personnel Minefield",
     "sequence": ["S", "A", "W", "D"],
     "category": "Defense",
     "dept": "Engineering Bay",
@@ -638,6 +739,7 @@
   },
   {
     "name": "MD-8 Gas Mines",
+    "short": "Gas Mines",
     "sequence": ["S", "A", "A", "D"],
     "category": "Defense",
     "dept": "Engineering Bay",
@@ -645,6 +747,7 @@
   },
   {
     "name": "MD-I4 Incendiary Mines",
+    "short": "Incendiary Mines",
     "sequence": ["S", "A", "A", "S"],
     "category": "Defense",
     "dept": "Engineering Bay",

@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "HellPad v1.1.2"
+        alert.messageText = "HellPad v1.1.3"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 

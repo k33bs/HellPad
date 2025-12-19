@@ -1,8 +1,8 @@
-import Foundation
-import Combine
-import Carbon
-import SwiftUI
 import AppKit
+import Carbon
+import Combine
+import Foundation
+import SwiftUI
 import os.log
 
 private let logger = Logger(subsystem: "com.hellpad.app", category: "stratagem")
@@ -34,7 +34,7 @@ class StratagemManager: ObservableObject {
     private let speechSynthesizer = NSSpeechSynthesizer()
 
     // Available voices for TTS (computed once to avoid repeated I/O)
-    lazy var availableVoices: [(identifier: String, name: String)] = {
+    let availableVoices: [(identifier: String, name: String)] = {
         NSSpeechSynthesizer.availableVoices.compactMap { voiceId in
             let attrs = NSSpeechSynthesizer.attributes(forVoice: voiceId)
             guard let name = attrs[.name] as? String else { return nil }
@@ -42,7 +42,8 @@ class StratagemManager: ObservableObject {
         }.sorted { $0.name < $1.name }
     }()
     private var comboExecutionSemaphore: DispatchSemaphore?
-    private let stratagemExecutionQueue = DispatchQueue(label: "com.hellpad.stratagem-execution", qos: .userInitiated)
+    private let stratagemExecutionQueue = DispatchQueue(
+        label: "com.hellpad.stratagem-execution", qos: .userInitiated)
     private let keyCodeLock = NSLock()
     private let pauseStateLock = NSLock()
     private let comboStateLock = NSLock()
@@ -56,6 +57,18 @@ class StratagemManager: ObservableObject {
     private var stratagemLookup: [String: Stratagem] = [:]
     private var userDataURL: URL?
     private var keyCodeToSlotIndex: [CGKeyCode: Int] = [:]
+
+    private lazy var loadoutGridReader: LoadoutGridReader = {
+        LoadoutGridReader(canonicalStratagemNames: self.allStratagems.map { $0.name })
+    }()
+    private let loadoutGridReaderQueue = DispatchQueue(
+        label: "com.hellpad.loadout-grid-reader", qos: .userInitiated)
+    private let loadoutGridReaderLock = NSLock()
+    private var isLoadoutGridReaderRunning = false
+
+    #if DEBUG
+        private let loadoutGridDebugWindowController = LoadoutGridDebugWindowController()
+    #endif
 
     init() {
         setupUserDataDirectory()
@@ -119,7 +132,11 @@ class StratagemManager: ObservableObject {
     }
 
     private func setupUserDataDirectory() {
-        guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+        guard
+            let appSupport = FileManager.default.urls(
+                for: .applicationSupportDirectory, in: .userDomainMask
+            ).first
+        else {
             logger.error("Failed to get Application Support directory")
             return
         }
@@ -128,15 +145,17 @@ class StratagemManager: ObservableObject {
 
         // Create directory if it doesn't exist
         if !FileManager.default.fileExists(atPath: hellPadDir.path) {
-            try? FileManager.default.createDirectory(at: hellPadDir, withIntermediateDirectories: true)
+            try? FileManager.default.createDirectory(
+                at: hellPadDir, withIntermediateDirectories: true)
         }
 
         userDataURL = hellPadDir.appendingPathComponent("user_data.json")
 
         // Copy default user_data.json from bundle if it doesn't exist in Application Support
         if let bundleURL = Bundle.main.url(forResource: "user_data", withExtension: "json"),
-           let userURL = userDataURL,
-           !FileManager.default.fileExists(atPath: userURL.path) {
+            let userURL = userDataURL,
+            !FileManager.default.fileExists(atPath: userURL.path)
+        {
             logger.debug("Copying default user_data.json from bundle to: \(userURL.path)")
             try? FileManager.default.copyItem(at: bundleURL, to: userURL)
         }
@@ -144,10 +163,14 @@ class StratagemManager: ObservableObject {
 
     private func loadStratagems() {
         guard let url = Bundle.main.url(forResource: "stratagems", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let stratagems = try? JSONDecoder().decode([Stratagem].self, from: data) else {
+            let data = try? Data(contentsOf: url),
+            let stratagems = try? JSONDecoder().decode([Stratagem].self, from: data)
+        else {
             logger.error("Failed to load stratagems.json - FATAL")
-            showFatalError(message: "Critical Error: stratagems.json is missing or corrupt.\n\nPlease reinstall the application.")
+            showFatalError(
+                message:
+                    "Critical Error: stratagems.json is missing or corrupt.\n\nPlease reinstall the application."
+            )
             return
         }
 
@@ -161,9 +184,10 @@ class StratagemManager: ObservableObject {
     private func loadUserData() {
         // Load from Application Support, not bundle
         guard let url = userDataURL,
-              FileManager.default.fileExists(atPath: url.path),
-              let data = try? Data(contentsOf: url),
-              let userData = try? JSONDecoder().decode(UserData.self, from: data) else {
+            FileManager.default.fileExists(atPath: url.path),
+            let data = try? Data(contentsOf: url),
+            let userData = try? JSONDecoder().decode(UserData.self, from: data)
+        else {
             logger.error("Failed to load user_data.json from Application Support")
             setDefaultUserData()
             return
@@ -206,7 +230,7 @@ class StratagemManager: ObservableObject {
         equippedStratagems = [
             "Resupply", "Reinforce", "Eagle Airstrike", "Eagle 500kg Bomb",
             "Orbital Precision Strike", "Orbital Railcannon Strike",
-            "Hellbomb", "SEAF Artillery"
+            "Hellbomb", "SEAF Artillery",
         ]
 
         keybinds = [
@@ -217,7 +241,7 @@ class StratagemManager: ObservableObject {
             Keybind(keyCode: "0x20", letter: "U"),
             Keybind(keyCode: "0x26", letter: "J"),
             Keybind(keyCode: "0x2E", letter: "M"),
-            Keybind(keyCode: "0x28", letter: "K")
+            Keybind(keyCode: "0x28", letter: "K"),
         ]
 
         recentStratagemNames = []
@@ -225,14 +249,16 @@ class StratagemManager: ObservableObject {
 
     func setupHotkeys() {
         // Map key codes to their slot positions
-        keyCodeLock.lock()
-        keyCodeToSlotIndex.removeAll()
-        for (index, keybind) in keybinds.enumerated() {
-            if let keyCode = keySimulator.hexStringToKeyCode(keybind.keyCode) {
-                keyCodeToSlotIndex[keyCode] = index
+        do {
+            keyCodeLock.lock()
+            defer { keyCodeLock.unlock() }
+            keyCodeToSlotIndex.removeAll()
+            for (index, keybind) in keybinds.enumerated() {
+                if let keyCode = keySimulator.hexStringToKeyCode(keybind.keyCode) {
+                    keyCodeToSlotIndex[keyCode] = index
+                }
             }
         }
-        keyCodeLock.unlock()
 
         // Set the configurable combo key code
         if let comboKeyCode = keySimulator.hexStringToKeyCode(comboKey.keyCode) {
@@ -240,7 +266,8 @@ class StratagemManager: ObservableObject {
         }
 
         // Listen for keypresses globally
-        eventTapManager.onKeyPressed = { [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
+        eventTapManager.onKeyPressed = {
+            [weak self] (keyCode: CGKeyCode, isComboKeyHeld: Bool, isCtrlHeld: Bool) -> Bool in
             guard let self = self else { return false }
 
             // ComboKey+ESC cancels any active combo
@@ -285,21 +312,33 @@ class StratagemManager: ObservableObject {
 
             // Loadout key + number (1-9) switches loadouts
             if let loadoutKeyCode = self.keySimulator.hexStringToKeyCode(self.loadoutKey.keyCode),
-               CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode),
-               let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
-                // Switch loadouts in allowed apps OR when HellPad itself is active
-                if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) || self.isHellPadFrontmost() {
-                    DispatchQueue.main.async {
-                        // Check if loadout exists at this index
-                        if loadoutIndex < self.loadouts.count {
-                            let loadout = self.loadouts[loadoutIndex]
-                            self.loadLoadout(id: loadout.id)
-                            logger.info("Switched to loadout \(loadoutIndex + 1): \(loadout.name)")
-                        } else {
-                            logger.debug("No loadout at index \(loadoutIndex + 1)")
-                        }
+                CGEventSource.keyState(.hidSystemState, key: loadoutKeyCode)
+            {
+                if keyCode == HBConstants.KeyCode.zero {
+                    if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                        || self.isHellPadFrontmost()
+                    {
+                        self.triggerLoadoutGridRead()
+                        return true
                     }
-                    return true
+                }
+
+                if let loadoutIndex = HBConstants.KeyCode.loadoutIndex(for: keyCode) {
+                    if self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                        || self.isHellPadFrontmost()
+                    {
+                        DispatchQueue.main.async {
+                            if loadoutIndex < self.loadouts.count {
+                                let loadout = self.loadouts[loadoutIndex]
+                                self.loadLoadout(id: loadout.id)
+                                logger.info(
+                                    "Switched to loadout \(loadoutIndex + 1): \(loadout.name)")
+                            } else {
+                                logger.debug("No loadout at index \(loadoutIndex + 1)")
+                            }
+                        }
+                        return true
+                    }
                 }
             }
 
@@ -322,7 +361,8 @@ class StratagemManager: ObservableObject {
 
             guard let slotIndex = slotIndex else {
                 // Not our hotkey - but if it's the combo key in an allowed app, consume it
-                if isComboKey && self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps) {
+                if isComboKey && self.keySimulator.isAllowedAppActive(allowedApps: self.allowedApps)
+                {
                     return true  // Consume combo key press to prevent typing
                 }
                 return false  // Not our key, pass it through
@@ -389,7 +429,9 @@ class StratagemManager: ObservableObject {
                     self.comboStateLock.unlock()
 
                     // Short delay lets Ctrl key fully release before we start
-                    DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.ctrlReleaseDelay) {
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + HBConstants.Timing.ctrlReleaseDelay
+                    ) {
                         self.executeCombo(slots: queuedSlots)
                     }
                 }
@@ -404,6 +446,71 @@ class StratagemManager: ObservableObject {
         }
 
         eventTapManager.setupEventTap()
+    }
+
+    private func triggerLoadoutGridRead() {
+        loadoutGridReaderQueue.async {
+            self.loadoutGridReaderLock.lock()
+            if self.isLoadoutGridReaderRunning {
+                self.loadoutGridReaderLock.unlock()
+                return
+            }
+            self.isLoadoutGridReaderRunning = true
+            self.loadoutGridReaderLock.unlock()
+
+            defer {
+                self.loadoutGridReaderLock.lock()
+                self.isLoadoutGridReaderRunning = false
+                self.loadoutGridReaderLock.unlock()
+            }
+
+            #if DEBUG
+                DispatchQueue.main.async {
+                    self.loadoutGridDebugWindowController.loadoutGridReader = self.loadoutGridReader
+                    self.loadoutGridDebugWindowController.show()
+                }
+                let debugSnapshot = self.loadoutGridReader.readMissionStratagemDebug()
+                if let debugSnapshot {
+                    DispatchQueue.main.async {
+                        self.loadoutGridDebugWindowController.setSnapshot(debugSnapshot)
+                    }
+                }
+                let names = debugSnapshot?.names
+            #else
+                let names = self.loadoutGridReader.readMissionStratagemNames()
+            #endif
+
+            guard let names, names.count >= 4 else { return }
+
+            DispatchQueue.main.async {
+                var detectedNames: [String] = []
+                for i in 0..<4 {
+                    let name = names[i]
+                    if !name.isEmpty {
+                        self.updateEquippedStratagem(at: 2 + i, with: name)
+                        detectedNames.append(name)
+                    }
+                }
+                logger.info("Loadout grid read applied to slots 2-5")
+
+                // Voice feedback for detected stratagems
+                if self.voiceFeedbackEnabled && !detectedNames.isEmpty {
+                    let voiceTexts = detectedNames.compactMap { name -> String? in
+                        self.stratagemLookup[name]?.voiceText
+                    }
+                    if !voiceTexts.isEmpty {
+                        let announcement = "loadout: " + voiceTexts.joined(separator: ", ")
+                        if let voice = self.selectedVoice {
+                            self.speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
+                        } else {
+                            self.speechSynthesizer.setVoice(nil)
+                        }
+                        self.speechSynthesizer.volume = self.voiceVolume
+                        self.speechSynthesizer.startSpeaking(announcement)
+                    }
+                }
+            }
+        }
     }
 
     private func executeCombo(slots: [Int]) {
@@ -453,7 +560,8 @@ class StratagemManager: ObservableObject {
 
                     logger.debug("Waiting for click to throw...")
                     // Give player 3 seconds to click
-                    let result = self.comboExecutionSemaphore?.wait(timeout: .now() + HBConstants.Timing.comboWaitTimeout)
+                    let result = self.comboExecutionSemaphore?.wait(
+                        timeout: .now() + HBConstants.Timing.comboWaitTimeout)
 
                     // Check again if cancelled during wait (thread-safe read)
                     self.comboStateLock.lock()
@@ -502,7 +610,8 @@ class StratagemManager: ObservableObject {
 
         let stratagemName = equippedStratagems[slotIndex]
         guard let stratagem = stratagemLookup[stratagemName],
-              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
+            let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode)
+        else {
             return
         }
 
@@ -548,7 +657,8 @@ class StratagemManager: ObservableObject {
 
         let stratagemName = equippedStratagems[slotIndex]
         guard let stratagem = stratagemLookup[stratagemName],
-              let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode) else {
+            let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode)
+        else {
             return
         }
 
@@ -645,7 +755,8 @@ class StratagemManager: ObservableObject {
             recentStratagemNames: recentStratagemNames
         )
         guard let data = try? JSONEncoder().encode(userData),
-              let url = userDataURL else {
+            let url = userDataURL
+        else {
             logger.error("Failed to save user_data.json - no valid URL")
             return
         }
@@ -714,7 +825,8 @@ class StratagemManager: ObservableObject {
         )
 
         if let overwriteId = overwriteId,
-           let index = loadouts.firstIndex(where: { $0.id == overwriteId }) {
+            let index = loadouts.firstIndex(where: { $0.id == overwriteId })
+        {
             // Overwrite existing loadout
             loadouts[index] = loadout
             logger.info("Overwrote loadout: \(name)")
@@ -810,14 +922,18 @@ class StratagemManager: ObservableObject {
 
                 // Pad or trim stratagems to exactly 8
                 if safeStratagems.count < 8 {
-                    safeStratagems.append(contentsOf: Array(repeating: "", count: 8 - safeStratagems.count))
+                    safeStratagems.append(
+                        contentsOf: Array(repeating: "", count: 8 - safeStratagems.count))
                 } else if safeStratagems.count > 8 {
                     safeStratagems = Array(safeStratagems.prefix(8))
                 }
 
                 // Pad or trim keybinds to exactly 8
                 if safeKeybinds.count < 8 {
-                    safeKeybinds.append(contentsOf: Array(repeating: Keybind(keyCode: "", letter: ""), count: 8 - safeKeybinds.count))
+                    safeKeybinds.append(
+                        contentsOf: Array(
+                            repeating: Keybind(keyCode: "", letter: ""),
+                            count: 8 - safeKeybinds.count))
                 } else if safeKeybinds.count > 8 {
                     safeKeybinds = Array(safeKeybinds.prefix(8))
                 }

@@ -7,6 +7,7 @@ enum HBConstants {
     enum KeyCode {
         static let pause: CGKeyCode = CGKeyCode(kVK_ANSI_P)  // 0x23
         static let escape: CGKeyCode = CGKeyCode(kVK_Escape)  // 0x35
+        static let zero: CGKeyCode = CGKeyCode(kVK_ANSI_0)
 
         // Number keys 1-9 for loadout switching
         static let numberKeys: [CGKeyCode] = [
@@ -84,6 +85,14 @@ enum HBConstants {
         static let hoverPadding: CGFloat = 36      // Half of preview size for edge clamping
         static var hoverMaxX: CGFloat { pickerWidth - hoverPadding }
         static var hoverMaxY: CGFloat { pickerHeight - hoverPadding }
+    }
+
+    // MARK: - Icon Matching Weights (Debug mode weight tuning)
+    enum MatchWeightDefaults {
+        static let iou: Double = 0.40
+        static let color: Double = 0.05
+        static let hash: Double = 0.15
+        static let fp: Double = 0.40
     }
 
     // MARK: - Visual Effects

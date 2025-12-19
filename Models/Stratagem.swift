@@ -3,11 +3,18 @@ import Foundation
 struct Stratagem: Codable, Identifiable, Hashable {
     let id = UUID()
     let name: String
+    let short: String?
+    let speak: String?
     let sequence: [String]
     let category: String
 
     enum CodingKeys: String, CodingKey {
-        case name, sequence, category
+        case name, short, speak, sequence, category
+    }
+
+    /// Text to use for voice feedback (speak > short > name)
+    var voiceText: String {
+        speak ?? short ?? name
     }
 
     // Category sort order matching in-game grouping
