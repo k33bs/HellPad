@@ -665,6 +665,7 @@
   {
     "name": "A/M-23 EMS Mortar Sentry",
     "short": "EMS Mortar Sentry",
+    "speak": "e.m.s. mortar sentry",
     "sequence": ["S", "W", "D", "S", "D"],
     "category": "Defense",
     "dept": "Robotics Workshop",

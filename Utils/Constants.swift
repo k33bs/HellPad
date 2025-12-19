@@ -87,6 +87,14 @@ enum HBConstants {
         static var hoverMaxY: CGFloat { pickerHeight - hoverPadding }
     }
 
+    // MARK: - Icon Matching Weights (Debug mode weight tuning)
+    enum MatchWeightDefaults {
+        static let iou: Double = 0.40
+        static let color: Double = 0.05
+        static let hash: Double = 0.15
+        static let fp: Double = 0.40
+    }
+
     // MARK: - Visual Effects
     enum Visual {
         // Opacities

@@ -51,10 +51,10 @@ private let logger = Logger(subsystem: "com.hellpad.app", category: "loadout-gri
     }
 
     struct MatchWeights {
-        var iou: Double = 0.40
-        var color: Double = 0.05
-        var hash: Double = 0.15
-        var fp: Double = 0.40
+        var iou: Double = HBConstants.MatchWeightDefaults.iou
+        var color: Double = HBConstants.MatchWeightDefaults.color
+        var hash: Double = HBConstants.MatchWeightDefaults.hash
+        var fp: Double = HBConstants.MatchWeightDefaults.fp
 
         static let `default` = MatchWeights()
     }
@@ -100,6 +100,8 @@ final class LoadoutGridReader {
     }
 
     /// Find the bounding box of non-background content and crop to it
+    /// Note: For performance optimization, consider using vImage (Accelerate framework)
+    /// instead of manual pixel iteration if this becomes a bottleneck.
     private func cropToContentBounds(_ image: CGImage, threshold: Int) -> CGImage? {
         let width = image.width
         let height = image.height
@@ -179,15 +181,10 @@ final class LoadoutGridReader {
             return errorSnapshot("Failed to capture screen")
         }
 
-        // Get bottom-left quarter
-        let quarterRect = CGRect(
-            x: 0,
-            y: fullCapture.height / 2,
-            width: fullCapture.width / 2,
-            height: fullCapture.height / 2
-        )
+        // Get bottom-left quarter (shared calculation with production path)
+        let quarterRect = bottomLeftQuarterRect(of: fullCapture)
 
-        guard let quarterCG = fullCapture.cropping(to: quarterRect) else {
+        guard let quarterCG = ScreenCapture.cropClamped(image: fullCapture, rect: quarterRect) else {
             return errorSnapshot("Failed to crop quarter")
         }
 
@@ -232,7 +229,7 @@ final class LoadoutGridReader {
         let features = ensureIconFeaturesLoaded()
 
         for (i, rect) in iconRects.enumerated() {
-            guard let tile = quarterCG.cropping(to: rect) else {
+            guard let tile = ScreenCapture.cropClamped(image: quarterCG, rect: rect) else {
                 names.append("")
                 matches.append(LoadoutGridDebugMatch(
                     slotIndex: i,
@@ -441,6 +438,17 @@ final class LoadoutGridReader {
         let names: [String]
     }
 
+    /// Compute the bottom-left quarter rect for icon grid analysis.
+    /// Shared between debug and production paths to prevent logic drift.
+    private func bottomLeftQuarterRect(of image: CGImage) -> CGRect {
+        CGRect(
+            x: 0,
+            y: image.height / 2,
+            width: image.width / 2,
+            height: image.height / 2
+        )
+    }
+
     private func performDetection() -> DetectionResult? {
         guard ScreenCapture.ensurePermission(requestIfNeeded: true, openSystemSettingsIfDenied: false) else {
             logger.debug("Screen capture permission denied")
@@ -453,16 +461,9 @@ final class LoadoutGridReader {
         }
 
         // Bottom-left quarter - where leftmost READY UP will be
-        // CGImage coordinates: origin at top-left, y increases downward
-        // So "bottom" means y = height/2 to y = height
-        let quarterRect = CGRect(
-            x: 0,
-            y: fullCapture.height / 2,
-            width: fullCapture.width / 2,
-            height: fullCapture.height / 2
-        )
+        let quarterRect = bottomLeftQuarterRect(of: fullCapture)
 
-        guard let quarterCG = fullCapture.cropping(to: quarterRect) else {
+        guard let quarterCG = ScreenCapture.cropClamped(image: fullCapture, rect: quarterRect) else {
             logger.debug("Failed to crop to quarter")
             return nil
         }
@@ -493,7 +494,7 @@ final class LoadoutGridReader {
 
         var names: [String] = []
         for (i, rect) in iconRects.enumerated() {
-            guard let tile = quarterCG.cropping(to: rect) else {
+            guard let tile = ScreenCapture.cropClamped(image: quarterCG, rect: rect) else {
                 logger.debug("Failed to crop icon \(i)")
                 names.append("")
                 continue
@@ -519,22 +520,16 @@ final class LoadoutGridReader {
     private func runOCRForReadyUp(in image: CGImage) -> [OCRResult] {
         guard #available(macOS 10.15, *) else { return [] }
 
-        let request = VNRecognizeTextRequest()
-        request.recognitionLevel = .accurate
-        request.usesLanguageCorrection = false
-        request.minimumTextHeight = 0.008
-        // No regionOfInterest - search entire image to avoid coordinate confusion
-
         let handler = VNImageRequestHandler(cgImage: image, orientation: .up, options: [:])
 
         do {
-            try handler.perform([request])
+            try handler.perform([textRecognitionRequest])
         } catch {
             logger.debug("OCR failed: \(error.localizedDescription)")
             return []
         }
 
-        guard let observations = request.results else { return [] }
+        guard let observations = textRecognitionRequest.results else { return [] }
 
         var results: [OCRResult] = []
         let imageWidth = CGFloat(image.width)
@@ -705,6 +700,20 @@ final class LoadoutGridReader {
 
     private var iconFeaturePrints: [(name: String, featurePrint: VNFeaturePrintObservation)]?
 
+    /// Reusable Vision request for feature print generation (avoid allocation per call)
+    private lazy var featurePrintRequest: VNGenerateImageFeaturePrintRequest = {
+        VNGenerateImageFeaturePrintRequest()
+    }()
+
+    /// Reusable Vision request for OCR (avoid allocation per call)
+    private lazy var textRecognitionRequest: VNRecognizeTextRequest = {
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = false
+        request.minimumTextHeight = 0.008
+        return request
+    }()
+
     private func ensureIconFeaturesLoaded() -> [(name: String, featurePrint: VNFeaturePrintObservation)] {
         if let existing = iconFeaturePrints {
             return existing
@@ -728,12 +737,11 @@ final class LoadoutGridReader {
     }
 
     private func computeFeaturePrint(from image: CGImage) -> VNFeaturePrintObservation? {
-        let request = VNGenerateImageFeaturePrintRequest()
         let handler = VNImageRequestHandler(cgImage: image, options: [:])
 
         do {
-            try handler.perform([request])
-            return request.results?.first
+            try handler.perform([featurePrintRequest])
+            return featurePrintRequest.results?.first
         } catch {
             logger.debug("Feature print failed: \(error.localizedDescription)")
             return nil
@@ -1075,7 +1083,7 @@ final class LoadoutGridReader {
             let fpScore = 1.0 - Double(candidate.distance)
 
             // Combined score: IoU 40%, Color 5%, Hash 15%, FP 40%
-            let combined = (iouScore * 0.40) + (colorScore * 0.05) + (hashScore * 0.15) + (fpScore * 0.40)
+            let combined = (iouScore * HBConstants.MatchWeightDefaults.iou) + (colorScore * HBConstants.MatchWeightDefaults.color) + (hashScore * HBConstants.MatchWeightDefaults.hash) + (fpScore * HBConstants.MatchWeightDefaults.fp)
 
             if combined > bestCombinedScore {
                 bestCombinedScore = combined
