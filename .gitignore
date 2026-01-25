@@ -33,3 +33,7 @@ Packages/
 *.moved-aside
 
 .periphery.yml
+
+# Editor/LSP
+.sourcekit-lsp/
+buildServer.json

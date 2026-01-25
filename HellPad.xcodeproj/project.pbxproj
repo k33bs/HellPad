@@ -115,6 +115,9 @@
 		EE326F6B9F214901970DE614 /* axflam-75-guard-dog-hot-dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */; };
 		B7B8DC96161B47E1B1AE5E63 /* cqc-9-defoliation-tool.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */; };
 		12F02E91CCED4B40932F16D6 /* m-1000-maxigun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */; };
+		8A3F19D2B4E7C6A5F0821D47 /* b-md-c4-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */; };
+		7B4E28F3A5D6F7E890B234A9 /* call-in-super-destroyer.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */; };
+		6D5E37B4A6E7F8D901C345BB /* cargo-container.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E37B4A6E7F8D901C345BA /* cargo-container.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -227,6 +230,9 @@
 		1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "axflam-75-guard-dog-hot-dog.png"; sourceTree = "<group>"; };
 		DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-9-defoliation-tool.png"; sourceTree = "<group>"; };
 		5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-1000-maxigun.png"; sourceTree = "<group>"; };
+		8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "b-md-c4-pack.png"; sourceTree = "<group>"; };
+		7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call-in-super-destroyer.png"; sourceTree = "<group>"; };
+		6D5E37B4A6E7F8D901C345BA /* cargo-container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargo-container.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -418,6 +424,9 @@
 				5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */,
 				DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */,
 				1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */,
+				8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */,
+				7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */,
+				6D5E37B4A6E7F8D901C345BA /* cargo-container.png */,
 			);
 			path = StratagemIcons;
 			sourceTree = "<group>";
@@ -601,6 +610,9 @@
 				267E64832EC77D86001EDD15 /* hive-breaker-drill.png in Resources */,
 				267E64842EC77D86001EDD15 /* md-8-gas-mines.png in Resources */,
 				267E64852EC77D86001EDD15 /* gr-8-recoilless-rifle.png in Resources */,
+				8A3F19D2B4E7C6A5F0821D47 /* b-md-c4-pack.png in Resources */,
+				7B4E28F3A5D6F7E890B234A9 /* call-in-super-destroyer.png in Resources */,
+				6D5E37B4A6E7F8D901C345BB /* cargo-container.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,7 +792,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -832,7 +844,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

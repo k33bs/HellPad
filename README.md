@@ -43,7 +43,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.3.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.4.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -173,6 +173,22 @@ Grant permissions in:
 2. **Hardened Runtime** should be enabled
 3. Code sign with your developer certificate
 
+### Updating the App
+
+When you install a new release or rebuild locally, macOS treats it as a new application and Accessibility permissions must be re-granted. This is normal behavior for unsigned apps.
+
+**To update:**
+
+1. Replace the app with the new version (download new release or rebuild)
+2. Launch the app - it will show an Accessibility permission alert
+3. Click "Open System Settings" (or go to System Settings → Privacy & Security → Accessibility)
+4. Find the **old** HellPad entry in the list and remove it (select and click the minus button)
+5. Quit HellPad completely (Cmd+Q or right-click menu bar icon → Quit)
+6. Relaunch HellPad - the permission prompt will appear again
+7. Click "Open System Settings" and enable the **new** HellPad entry
+
+> **Tip:** You can also toggle the existing entry off and back on instead of removing it, but removing ensures a clean state.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
@@ -192,6 +208,13 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.4
+
+- **New Stratagems** - Added 3 new stratagems:
+  - Call In Super Destroyer
+  - Cargo Container
+  - B-MD C4 Pack
 
 ### v1.1.3
 

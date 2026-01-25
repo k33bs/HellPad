@@ -1,5 +1,13 @@
 [
   {
+    "name": "Call In Super Destroyer",
+    "short": "Super Destroyer",
+    "sequence": ["W", "W", "S", "S", "A", "D", "A", "D"],
+    "category": "Common",
+    "dept": "Common",
+    "icon": "call-in-super-destroyer.png"
+  },
+  {
     "name": "Eagle Rearm",
     "short": "Eagle Rearm",
     "sequence": ["W", "W", "A", "W", "D"],
@@ -26,11 +34,19 @@
   {
     "name": "SOS Beacon",
     "short": "SOS Beacon",
-    "speak": "s.o.s. beacon",
     "sequence": ["W", "S", "D", "W"],
     "category": "Common",
     "dept": "Common",
-    "icon": "sos-beacon.png"
+    "icon": "sos-beacon.png",
+    "speak": "s.o.s. beacon"
+  },
+  {
+    "name": "Cargo Container",
+    "short": "Cargo Container",
+    "sequence": ["W", "W", "S", "S", "D", "S"],
+    "category": "Objectives",
+    "dept": "Objectives",
+    "icon": "cargo-container.png"
   },
   {
     "name": "Dark Fluid Vessel",
@@ -131,11 +147,11 @@
   {
     "name": "Eagle 500kg Bomb",
     "short": "500kg Bomb",
-    "speak": "five hundred kilo bomb",
     "sequence": ["W", "D", "S", "S", "S"],
     "category": "Offensive",
     "dept": "Hangar",
-    "icon": "eagle-500kg-bomb.png"
+    "icon": "eagle-500kg-bomb.png",
+    "speak": "five hundred kilo bomb"
   },
   {
     "name": "Eagle Airstrike",
@@ -180,20 +196,20 @@
   {
     "name": "Orbital 120mm HE Barrage",
     "short": "120mm HE Barrage",
-    "speak": "one twenty barrage",
     "sequence": ["D", "D", "S", "A", "D", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
-    "icon": "orbital-120mm-he-barrage.png"
+    "icon": "orbital-120mm-he-barrage.png",
+    "speak": "one twenty barrage"
   },
   {
     "name": "Orbital 380mm HE Barrage",
     "short": "380mm HE Barrage",
-    "speak": "three eighty barrage",
     "sequence": ["D", "S", "W", "W", "A", "S", "S"],
     "category": "Offensive",
     "dept": "Orbital Cannons",
-    "icon": "orbital-380mm-he-barrage.png"
+    "icon": "orbital-380mm-he-barrage.png",
+    "speak": "three eighty barrage"
   },
   {
     "name": "Orbital Airburst Strike",
@@ -206,11 +222,11 @@
   {
     "name": "Orbital EMS Strike",
     "short": "EMS Strike",
-    "speak": "e.m.s. strike",
     "sequence": ["D", "D", "A", "S"],
     "category": "Offensive",
     "dept": "Bridge",
-    "icon": "orbital-ems-strike.png"
+    "icon": "orbital-ems-strike.png",
+    "speak": "e.m.s. strike"
   },
   {
     "name": "Orbital Gas Strike",
@@ -311,11 +327,11 @@
   {
     "name": "AX/ARC-3 Guard Dog K-9",
     "short": "K-9",
-    "speak": "k. nine",
     "sequence": ["S", "W", "A", "W", "D", "A"],
     "category": "Supply",
     "dept": "Force of Law",
-    "icon": "axarc-3-guard-dog-k-9.png"
+    "icon": "axarc-3-guard-dog-k-9.png",
+    "speak": "k. nine"
   },
   {
     "name": "AX/FLAM-75 Guard Dog Hot Dog",
@@ -356,6 +372,15 @@
     "category": "Supply",
     "dept": "Servants of Freedom",
     "icon": "b-100-portable-hellbomb.png"
+  },
+  {
+    "name": "B-MD C4 Pack",
+    "short": "C4 Pack",
+    "sequence": ["S", "D", "W", "W", "D", "W"],
+    "category": "Supply",
+    "dept": "Redacted Regiment",
+    "icon": "b-md-c4-pack.png",
+    "speak": "c. four pack"
   },
   {
     "name": "CQC-1 One True Flag",
@@ -600,11 +625,11 @@
   {
     "name": "StA-X3 W.A.S.P. Launcher",
     "short": "W.A.S.P. Launcher",
-    "speak": "wasp launcher",
     "sequence": ["S", "S", "W", "S", "D"],
     "category": "Supply",
     "dept": "Patriotic Administration Center",
-    "icon": "sta-x3-wasp-launcher.png"
+    "icon": "sta-x3-wasp-launcher.png",
+    "speak": "wasp launcher"
   },
   {
     "name": "TX-41 Sterilizer",
@@ -665,11 +690,11 @@
   {
     "name": "A/M-23 EMS Mortar Sentry",
     "short": "EMS Mortar Sentry",
-    "speak": "e.m.s. mortar sentry",
     "sequence": ["S", "W", "D", "S", "D"],
     "category": "Defense",
     "dept": "Robotics Workshop",
-    "icon": "am-23-ems-mortar-sentry.png"
+    "icon": "am-23-ems-mortar-sentry.png",
+    "speak": "e.m.s. mortar sentry"
   },
   {
     "name": "A/MG-43 Machine Gun Sentry",
@@ -706,20 +731,20 @@
   {
     "name": "E/MG-101 HMG Emplacement",
     "short": "HMG Emplacement",
-    "speak": "h.m.g. emplacement",
     "sequence": ["S", "W", "A", "D", "D", "A"],
     "category": "Defense",
     "dept": "Bridge",
-    "icon": "emg-101-hmg-emplacement.png"
+    "icon": "emg-101-hmg-emplacement.png",
+    "speak": "h.m.g. emplacement"
   },
   {
     "name": "FX-12 Shield Generator Relay",
     "short": "Shield Generator Relay",
-    "speak": "shield generator",
     "sequence": ["S", "S", "A", "D", "A", "D"],
     "category": "Defense",
     "dept": "Bridge",
-    "icon": "fx-12-shield-generator-relay.png"
+    "icon": "fx-12-shield-generator-relay.png",
+    "speak": "shield generator"
   },
   {
     "name": "MD-17 Anti-Tank Mines",
