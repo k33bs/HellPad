@@ -43,7 +43,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.4.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.5.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -197,6 +197,48 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
+## Adding New Stratagems
+
+When new stratagems are added to HELLDIVERS 2, you can add them to HellPad:
+
+### 1. Add the Icon
+
+Place a PNG icon (ideally 128x128) in `StratagemIcons/` folder. Use lowercase kebab-case naming (e.g., `my-new-stratagem.png`).
+
+### 2. Add the Stratagem Entry
+
+Add an entry to `JsonData/stratagems.json`:
+
+```json
+{
+  "name": "Full Stratagem Name",
+  "short": "Short Name",
+  "sequence": ["W", "A", "S", "D", "W"],
+  "category": "Supply",
+  "dept": "Department Name",
+  "icon": "my-new-stratagem.png"
+}
+```
+
+- `sequence`: Array of directional keys (W/A/S/D for Up/Left/Down/Right)
+- `category`: One of "Supply", "Mission", "Defensive", "Offensive", "Eagle", or "Support"
+- `dept`: The in-game warbond/department name
+- `speak` (optional): Custom text for voice announcements
+
+### 3. Add Icon to Xcode Project
+
+Open `HellPad.xcodeproj` in Xcode, then drag the new icon from `StratagemIcons/` into the StratagemIcons group in the Project Navigator. Ensure "Copy items if needed" is unchecked and "Add to target: HellPad" is checked.
+
+Alternatively, manually edit `HellPad.xcodeproj/project.pbxproj` and add the icon reference to:
+- `PBXBuildFile` section
+- `PBXFileReference` section
+- `StratagemIcons` group children
+- `PBXResourcesBuildPhase` files
+
+### 4. Build and Test
+
+Build the project (Cmd+B) and verify the new stratagem appears in the picker with its icon.
+
 ## Credits
 
 **Inspired by:** [HellBuddy](https://github.com/chris-codes1/HellBuddy) by chris-codes1 - This is the original Windows application that inspired this port.
@@ -208,6 +250,14 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.5
+
+- **New Stratagems** - Added 4 new Siege Breakers stratagems:
+  - CQC-20 Breaching Hammer
+  - EAT-411 Leveller
+  - GL-28 Belt-Fed Grenade Launcher
+  - TD-220 Bastion MK XVI
 
 ### v1.1.4
 

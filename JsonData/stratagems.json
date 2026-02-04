@@ -391,6 +391,14 @@
     "icon": "cqc-1-one-true-flag.png"
   },
   {
+    "name": "CQC-20 Breaching Hammer",
+    "short": "Breaching Hammer",
+    "sequence": ["S", "A", "D", "A", "W"],
+    "category": "Supply",
+    "dept": "Siege Breakers",
+    "icon": "cqc-20-breaching-hammer.png"
+  },
+  {
     "name": "CQC-9 Defoliation Tool",
     "short": "Defoliation Tool",
     "sequence": ["S", "A", "D", "D", "S"],
@@ -405,6 +413,14 @@
     "category": "Supply",
     "dept": "Patriotic Administration Center",
     "icon": "eat-17-expendable-anti-tank.png"
+  },
+  {
+    "name": "EAT-411 Leveller",
+    "short": "Leveller",
+    "sequence": ["S", "S", "A", "W", "S"],
+    "category": "Supply",
+    "dept": "Siege Breakers",
+    "icon": "eat-411-leveller.png"
   },
   {
     "name": "EAT-700 Expendable Napalm",
@@ -453,6 +469,15 @@
     "category": "Supply",
     "dept": "Engineering Bay",
     "icon": "gl-21-grenade-launcher.png"
+  },
+  {
+    "name": "GL-28 Belt-Fed Grenade Launcher",
+    "short": "Belt-Fed Grenade Launcher",
+    "sequence": ["S", "A", "W", "A", "W", "W"],
+    "category": "Supply",
+    "dept": "Siege Breakers",
+    "icon": "gl-28-belt-fed-grenade-launcher.png",
+    "speak": "belt fed - grenade launcher"
   },
   {
     "name": "GL-52 De-Escalator",
@@ -630,6 +655,14 @@
     "dept": "Patriotic Administration Center",
     "icon": "sta-x3-wasp-launcher.png",
     "speak": "wasp launcher"
+  },
+  {
+    "name": "TD-220 Bastion MK XVI",
+    "short": "Bastion",
+    "sequence": ["A", "S", "D", "S", "A", "S", "W", "S", "W"],
+    "category": "Supply",
+    "dept": "Siege Breakers",
+    "icon": "td-220-bastion-mk-xvi.png"
   },
   {
     "name": "TX-41 Sterilizer",
