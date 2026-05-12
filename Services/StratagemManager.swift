@@ -7,7 +7,9 @@ import os.log
 private let logger = Logger(subsystem: "com.hellpad.app", category: "stratagem")
 
 class StratagemManager: ObservableObject {
-    @Published var allStratagems: [Stratagem] = []
+    // dropped @Published: allStratagems is filled once in loadStratagems() during init and never changes after,
+    // so the observable notification was wasted work
+    private(set) var allStratagems: [Stratagem] = []
     @Published var equippedStratagems: [String] = Array(repeating: "Resupply", count: 8)
     @Published var keybinds: [Keybind] = []
     @Published var flashingSlotIndex: Int? = nil
