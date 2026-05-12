@@ -70,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Show Window", action: #selector(showWindow), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "About HellPad", action: #selector(showAbout), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "About \(HBConstants.appName)", action: #selector(showAbout), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem?.menu = menu
@@ -113,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "HellPad v1.1.7"
+        alert.messageText = "\(HBConstants.appName) v1.1.7"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 
@@ -124,7 +124,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         Inspired by HellBuddy (Windows) by chris-codes1
         Stratagem icons by Nicolas Vigneux
 
-        © 2025 HellPad
+        © 2025 \(HBConstants.appName)
         Licensed under GPL v3
 
         Not affiliated with Arrowhead Game Studios or Sony Interactive Entertainment.
