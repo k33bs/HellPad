@@ -43,7 +43,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.5.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.6.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -250,6 +250,15 @@ Build the project (Cmd+B) and verify the new stratagem appears in the picker wit
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.6
+
+- **New Stratagems** - Added 5 new stratagems:
+  - EXO-55 Breakthrough Exosuit
+  - EXO-51 Lumberer Exosuit
+  - MGX-42 Bullet Storm
+  - B/FLAM-80 Cremator
+  - A/GM-17 Gas Mortar Sentry
 
 ### v1.1.5
 

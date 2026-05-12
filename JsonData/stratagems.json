@@ -383,6 +383,14 @@
     "speak": "c. four pack"
   },
   {
+    "name": "B/FLAM-80 Cremator",
+    "short": "Cremator",
+    "sequence": ["S", "S", "D", "S", "W", "W"],
+    "category": "Supply",
+    "dept": "Entrenched Division",
+    "icon": "bflam-80-cremator.png"
+  },
+  {
     "name": "CQC-1 One True Flag",
     "short": "One True Flag",
     "sequence": ["S", "A", "D", "D", "W"],
@@ -445,6 +453,22 @@
     "category": "Supply",
     "dept": "Robotics Workshop",
     "icon": "exo-49-emancipator-exosuit.png"
+  },
+  {
+    "name": "EXO-51 Lumberer Exosuit",
+    "short": "Lumberer Exosuit",
+    "sequence": ["A", "S", "D", "W", "D", "A", "W"],
+    "category": "Supply",
+    "dept": "Exo Experts",
+    "icon": "exo-51-lumberer-exosuit.png"
+  },
+  {
+    "name": "EXO-55 Breakthrough Exosuit",
+    "short": "Breakthrough Exosuit",
+    "sequence": ["A", "S", "D", "A", "D", "S", "W"],
+    "category": "Supply",
+    "dept": "Exo Experts",
+    "icon": "exo-55-breakthrough-exosuit.png"
   },
   {
     "name": "FAF-14 Spear",
@@ -576,6 +600,14 @@
     "icon": "mg-43-machine-gun.png"
   },
   {
+    "name": "MGX-42 Bullet Storm",
+    "short": "Bullet Storm",
+    "sequence": ["S", "A", "S", "D", "W", "A"],
+    "category": "Supply",
+    "dept": "Exo Experts",
+    "icon": "mgx-42-bullet-storm.png"
+  },
+  {
     "name": "MLS-4X Commando",
     "short": "Commando",
     "sequence": ["S", "A", "W", "S", "D"],
@@ -703,6 +735,14 @@
     "category": "Defense",
     "dept": "Robotics Workshop",
     "icon": "ag-16-gatling-sentry.png"
+  },
+  {
+    "name": "A/GM-17 Gas Mortar Sentry",
+    "short": "Gas Mortar Sentry",
+    "sequence": ["S", "W", "D", "S", "A"],
+    "category": "Defense",
+    "dept": "Entrenched Division",
+    "icon": "agm-17-gas-mortar-sentry.png"
   },
   {
     "name": "A/LAS-98 Laser Sentry",
