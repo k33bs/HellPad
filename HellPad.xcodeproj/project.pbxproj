@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A21D84C258298A5B4CA2C16 /* mgx-42-bullet-storm.png in Resources */ = {isa = PBXBuildFile; fileRef = CCDAD34A1CB0EEF6027A52C4 /* mgx-42-bullet-storm.png */; };
+		0B69AC81DB3F3A9FA01A329E /* exo-55-breakthrough-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FB9AB3FE6418351E56638B /* exo-55-breakthrough-exosuit.png */; };
+		12F02E91CCED4B40932F16D6 /* m-1000-maxigun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */; };
+		25260184460F6C4F2AAE1888 /* bflam-80-cremator.png in Resources */ = {isa = PBXBuildFile; fileRef = D91B5F69E97D484D5CB4FEC7 /* bflam-80-cremator.png */; };
 		267E641F2EC77D86001EDD15 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E64182EC77D86001EDD15 /* Constants.swift */; };
 		267E64202EC77D86001EDD15 /* EventTapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B82EC77D86001EDD15 /* EventTapManager.swift */; };
 		267E64212EC77D86001EDD15 /* KeyPressSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */; };
@@ -17,9 +21,6 @@
 		267E64262EC77D86001EDD15 /* NSImage+Stratagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */; };
 		267E64272EC77D86001EDD15 /* AccessibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E63B72EC77D86001EDD15 /* AccessibilityManager.swift */; };
 		267E64282EC77D86001EDD15 /* StratagemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */; };
-		B1A2C3D4E5F6A7B8C9D0E1F2 /* LoadoutGridDebugViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */; };
-		DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91505007F29F4789AA69109A /* ScreenCapture.swift */; };
-		A3B4C5D6E7F8A9B0C1D2E3F4 /* LoadoutGridReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */; };
 		267E64292EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63CC2EC77D86001EDD15 /* axtx-13-guard-dog-dog-breath.png */; };
 		267E642A2EC77D86001EDD15 /* stratagems.json in Resources */ = {isa = PBXBuildFile; fileRef = 267E63B22EC77D86001EDD15 /* stratagems.json */; };
 		267E642B2EC77D86001EDD15 /* illumination-flare.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E82EC77D86001EDD15 /* illumination-flare.png */; };
@@ -112,24 +113,25 @@
 		267E64832EC77D86001EDD15 /* hive-breaker-drill.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E72EC77D86001EDD15 /* hive-breaker-drill.png */; };
 		267E64842EC77D86001EDD15 /* md-8-gas-mines.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63F12EC77D86001EDD15 /* md-8-gas-mines.png */; };
 		267E64852EC77D86001EDD15 /* gr-8-recoilless-rifle.png in Resources */ = {isa = PBXBuildFile; fileRef = 267E63E52EC77D86001EDD15 /* gr-8-recoilless-rifle.png */; };
-		EE326F6B9F214901970DE614 /* axflam-75-guard-dog-hot-dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */; };
-		B7B8DC96161B47E1B1AE5E63 /* cqc-9-defoliation-tool.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */; };
-		12F02E91CCED4B40932F16D6 /* m-1000-maxigun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */; };
-		8A3F19D2B4E7C6A5F0821D47 /* b-md-c4-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */; };
-		7B4E28F3A5D6F7E890B234A9 /* call-in-super-destroyer.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */; };
-		6D5E37B4A6E7F8D901C345BB /* cargo-container.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E37B4A6E7F8D901C345BA /* cargo-container.png */; };
-		3E7A92F1C8D4B5A6E0F31B73 /* cqc-20-breaching-hammer.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E7A92F1C8D4B5A6E0F31B72 /* cqc-20-breaching-hammer.png */; };
-		5C2D81E4A9F6B3C7D0E42A86 /* eat-411-leveller.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2D81E4A9F6B3C7D0E42A85 /* eat-411-leveller.png */; };
-		9F4B63D2E7A8C1B5F0D24E94 /* gl-28-belt-fed-grenade-launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4B63D2E7A8C1B5F0D24E93 /* gl-28-belt-fed-grenade-launcher.png */; };
 		2A8E47C5B1D9F3A6E0C52F05 /* td-220-bastion-mk-xvi.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A8E47C5B1D9F3A6E0C52F04 /* td-220-bastion-mk-xvi.png */; };
+		3E7A92F1C8D4B5A6E0F31B73 /* cqc-20-breaching-hammer.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E7A92F1C8D4B5A6E0F31B72 /* cqc-20-breaching-hammer.png */; };
 		567672707B4A95F7BA8704CF /* agm-17-gas-mortar-sentry.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB3A95BA2799FD190635167 /* agm-17-gas-mortar-sentry.png */; };
-		25260184460F6C4F2AAE1888 /* bflam-80-cremator.png in Resources */ = {isa = PBXBuildFile; fileRef = D91B5F69E97D484D5CB4FEC7 /* bflam-80-cremator.png */; };
+		5C2D81E4A9F6B3C7D0E42A86 /* eat-411-leveller.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2D81E4A9F6B3C7D0E42A85 /* eat-411-leveller.png */; };
+		6D5E37B4A6E7F8D901C345BB /* cargo-container.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D5E37B4A6E7F8D901C345BA /* cargo-container.png */; };
+		7B4E28F3A5D6F7E890B234A9 /* call-in-super-destroyer.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */; };
+		8A3F19D2B4E7C6A5F0821D47 /* b-md-c4-pack.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */; };
+		9F4B63D2E7A8C1B5F0D24E94 /* gl-28-belt-fed-grenade-launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4B63D2E7A8C1B5F0D24E93 /* gl-28-belt-fed-grenade-launcher.png */; };
+		A3B4C5D6E7F8A9B0C1D2E3F4 /* LoadoutGridReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */; };
+		B1A2C3D4E5F6A7B8C9D0E1F2 /* LoadoutGridDebugViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */; };
+		B7B8DC96161B47E1B1AE5E63 /* cqc-9-defoliation-tool.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */; };
 		C365A251CE2BEDCEE2DF8F1A /* exo-51-lumberer-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1BA24A2CA7F649D930F271 /* exo-51-lumberer-exosuit.png */; };
-		0B69AC81DB3F3A9FA01A329E /* exo-55-breakthrough-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FB9AB3FE6418351E56638B /* exo-55-breakthrough-exosuit.png */; };
-		0A21D84C258298A5B4CA2C16 /* mgx-42-bullet-storm.png in Resources */ = {isa = PBXBuildFile; fileRef = CCDAD34A1CB0EEF6027A52C4 /* mgx-42-bullet-storm.png */; };
+		DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91505007F29F4789AA69109A /* ScreenCapture.swift */; };
+		EE326F6B9F214901970DE614 /* axflam-75-guard-dog-hot-dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0DB3A95BA2799FD190635167 /* agm-17-gas-mortar-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agm-17-gas-mortar-sentry.png"; sourceTree = "<group>"; };
+		1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "axflam-75-guard-dog-hot-dog.png"; sourceTree = "<group>"; };
 		267E639F2EC77CFB001EDD15 /* HellPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellPad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		267E63AF2EC77D86001EDD15 /* NSImage+Stratagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Stratagem.swift"; sourceTree = "<group>"; };
 		267E63B22EC77D86001EDD15 /* stratagems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stratagems.json; sourceTree = "<group>"; };
@@ -139,8 +141,6 @@
 		267E63B82EC77D86001EDD15 /* EventTapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapManager.swift; sourceTree = "<group>"; };
 		267E63BA2EC77D86001EDD15 /* KeyPressSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressSimulator.swift; sourceTree = "<group>"; };
 		267E63BB2EC77D86001EDD15 /* StratagemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemManager.swift; sourceTree = "<group>"; };
-		91505007F29F4789AA69109A /* ScreenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCapture.swift; sourceTree = "<group>"; };
-		A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridReader.swift; sourceTree = "<group>"; };
 		267E63BD2EC77D86001EDD15 /* aac-8-autocannon-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aac-8-autocannon-sentry.png"; sourceTree = "<group>"; };
 		267E63BE2EC77D86001EDD15 /* aarc-3-tesla-tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aarc-3-tesla-tower.png"; sourceTree = "<group>"; };
 		267E63BF2EC77D86001EDD15 /* aflam-40-flame-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aflam-40-flame-sentry.png"; sourceTree = "<group>"; };
@@ -235,22 +235,22 @@
 		267E641A2EC77D86001EDD15 /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		267E641B2EC77D86001EDD15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		267E641C2EC77D86001EDD15 /* StratagemPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StratagemPickerView.swift; sourceTree = "<group>"; };
-		B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridDebugViews.swift; sourceTree = "<group>"; };
-		1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "axflam-75-guard-dog-hot-dog.png"; sourceTree = "<group>"; };
-		DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-9-defoliation-tool.png"; sourceTree = "<group>"; };
-		5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-1000-maxigun.png"; sourceTree = "<group>"; };
-		8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "b-md-c4-pack.png"; sourceTree = "<group>"; };
-		7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call-in-super-destroyer.png"; sourceTree = "<group>"; };
-		6D5E37B4A6E7F8D901C345BA /* cargo-container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargo-container.png"; sourceTree = "<group>"; };
+		28FB9AB3FE6418351E56638B /* exo-55-breakthrough-exosuit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exo-55-breakthrough-exosuit.png"; sourceTree = "<group>"; };
+		2A8E47C5B1D9F3A6E0C52F04 /* td-220-bastion-mk-xvi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "td-220-bastion-mk-xvi.png"; sourceTree = "<group>"; };
 		3E7A92F1C8D4B5A6E0F31B72 /* cqc-20-breaching-hammer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-20-breaching-hammer.png"; sourceTree = "<group>"; };
 		5C2D81E4A9F6B3C7D0E42A85 /* eat-411-leveller.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eat-411-leveller.png"; sourceTree = "<group>"; };
-		9F4B63D2E7A8C1B5F0D24E93 /* gl-28-belt-fed-grenade-launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-28-belt-fed-grenade-launcher.png"; sourceTree = "<group>"; };
-		2A8E47C5B1D9F3A6E0C52F04 /* td-220-bastion-mk-xvi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "td-220-bastion-mk-xvi.png"; sourceTree = "<group>"; };
-		0DB3A95BA2799FD190635167 /* agm-17-gas-mortar-sentry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agm-17-gas-mortar-sentry.png"; sourceTree = "<group>"; };
-		D91B5F69E97D484D5CB4FEC7 /* bflam-80-cremator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bflam-80-cremator.png"; sourceTree = "<group>"; };
+		5DE1C7A24EED44F7B4153FB0 /* m-1000-maxigun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-1000-maxigun.png"; sourceTree = "<group>"; };
+		6D5E37B4A6E7F8D901C345BA /* cargo-container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargo-container.png"; sourceTree = "<group>"; };
+		7B4E28F3A5D6F7E890B234A8 /* call-in-super-destroyer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call-in-super-destroyer.png"; sourceTree = "<group>"; };
 		8A1BA24A2CA7F649D930F271 /* exo-51-lumberer-exosuit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exo-51-lumberer-exosuit.png"; sourceTree = "<group>"; };
-		28FB9AB3FE6418351E56638B /* exo-55-breakthrough-exosuit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exo-55-breakthrough-exosuit.png"; sourceTree = "<group>"; };
+		8A3F19D2B4E7C6A5F0821D46 /* b-md-c4-pack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "b-md-c4-pack.png"; sourceTree = "<group>"; };
+		91505007F29F4789AA69109A /* ScreenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCapture.swift; sourceTree = "<group>"; };
+		9F4B63D2E7A8C1B5F0D24E93 /* gl-28-belt-fed-grenade-launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-28-belt-fed-grenade-launcher.png"; sourceTree = "<group>"; };
+		A3B4C5D6E7F8A9B0C1D2E3F5 /* LoadoutGridReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridReader.swift; sourceTree = "<group>"; };
+		B1A2C3D4E5F6A7B8C9D0E1F3 /* LoadoutGridDebugViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadoutGridDebugViews.swift; sourceTree = "<group>"; };
 		CCDAD34A1CB0EEF6027A52C4 /* mgx-42-bullet-storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mgx-42-bullet-storm.png"; sourceTree = "<group>"; };
+		D91B5F69E97D484D5CB4FEC7 /* bflam-80-cremator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bflam-80-cremator.png"; sourceTree = "<group>"; };
+		DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-9-defoliation-tool.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -510,7 +510,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					267E639E2EC77CFB001EDD15 = {
 						CreatedOnToolsVersion = 26.1;
@@ -712,6 +712,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -736,6 +737,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -775,6 +777,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -792,6 +795,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -807,6 +811,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -859,6 +864,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
