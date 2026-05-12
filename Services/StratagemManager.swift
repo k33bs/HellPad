@@ -55,7 +55,11 @@ class StratagemManager: ObservableObject {
     private var appObserver: NSObjectProtocol?
     private let eventTapManager = EventTapManager()
     private let keySimulator = KeyPressSimulator()
-    private var stratagemLookup: [String: Stratagem] = [:]
+    // derived from allStratagems on every read; removes the duplicate stored dictionary that
+    // previously had to be kept in sync inside loadStratagems()
+    private var stratagemLookup: [String: Stratagem] {
+        Dictionary(uniqueKeysWithValues: allStratagems.map { ($0.name, $0) })
+    }
     private var userDataURL: URL?
     private var keyCodeToSlotIndex: [CGKeyCode: Int] = [:]
 
@@ -177,11 +181,9 @@ class StratagemManager: ObservableObject {
             return
         }
 
-        // Sort by category order (Common, Objectives, Offensive, Supply, Defense)
+        // sort by category order (Common, Objectives, Offensive, Supply, Defense)
+        // dropped the explicit stratagemLookup population — it's now a computed property
         allStratagems = stratagems.sorted { $0.categorySortIndex < $1.categorySortIndex }
-        for stratagem in stratagems {
-            stratagemLookup[stratagem.name] = stratagem
-        }
     }
 
     private func loadUserData() {
