@@ -25,11 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var alwaysOnTopMenuItem: NSMenuItem?
     var stratagemManager: StratagemManager?
 
-    // Loadout menu management
-    private var loadoutMenuItems: [NSMenuItem] = []
+    // loadout menu management has been extracted into LoadoutMenuController.
+    // we still hold the separator references so we can hand them to the controller
+    // once stratagemManager exists (after the accessibility permission flow finishes)
     private var loadoutSeparatorBefore: NSMenuItem?
     private var loadoutSeparatorAfter: NSMenuItem?
-    private var loadoutCancellables = Set<AnyCancellable>()
+    private var loadoutMenuController: LoadoutMenuController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hide from dock
@@ -49,7 +50,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         // Create menu
         let menu = NSMenu()
 
-        // Save Loadout item
+        // Save Loadout item — target stays on AppDelegate because the controller is created later;
+        // the @objc func showSaveLoadoutDialog below forwards to the controller
         menu.addItem(NSMenuItem(title: "Save Loadout...", action: #selector(showSaveLoadoutDialog), keyEquivalent: ""))
 
         // Separators and placeholder for loadout items (will be populated dynamically)
@@ -76,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         // Check accessibility permissions
         AccessibilityManager.shared.ensureAccessibilityPermission {
             self.createFloatingWindow()
-            self.setupLoadoutMenuObservers()
+            self.setupLoadoutMenuController()
         }
     }
 
@@ -202,51 +204,92 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         return false
     }
 
-    // MARK: - Loadout Menu Management
+    // MARK: - Loadout Menu
 
-    private func setupLoadoutMenuObservers() {
-        guard let manager = stratagemManager else { return }
+    private func setupLoadoutMenuController() {
+        // build the controller once stratagemManager exists; from here on it owns rebuilding
+        // and click handling for loadout items between the two separators
+        guard let manager = stratagemManager,
+              let menu = statusItem?.menu,
+              let before = loadoutSeparatorBefore,
+              let after = loadoutSeparatorAfter else { return }
+        loadoutMenuController = LoadoutMenuController(
+            menu: menu,
+            manager: manager,
+            separatorBefore: before,
+            separatorAfter: after
+        )
+    }
 
-        // Observe loadouts and activeLoadoutId changes
+    @objc func showSaveLoadoutDialog() {
+        // thin shim — the menu item was created at startup with target=self because the controller
+        // doesn't exist yet at that point. once it does, we just forward.
+        loadoutMenuController?.showSaveLoadoutDialog()
+    }
+}
+
+// MARK: - LoadoutMenuController
+
+/// owns the dynamic loadout entries between two separators in the status item menu,
+/// plus the "Save Loadout…" dialog and helpers. extracted from AppDelegate to keep
+/// the application-lifecycle code focused on application-lifecycle concerns.
+final class LoadoutMenuController: NSObject {
+    private weak var menu: NSMenu?
+    private let manager: StratagemManager
+    private let separatorBefore: NSMenuItem
+    private let separatorAfter: NSMenuItem
+    private var loadoutMenuItems: [NSMenuItem] = []
+    private var cancellables = Set<AnyCancellable>()
+
+    init(menu: NSMenu,
+         manager: StratagemManager,
+         separatorBefore: NSMenuItem,
+         separatorAfter: NSMenuItem) {
+        self.menu = menu
+        self.manager = manager
+        self.separatorBefore = separatorBefore
+        self.separatorAfter = separatorAfter
+        super.init()
+
+        // observe loadouts and active id changes and rebuild the menu on the main thread
         manager.$loadouts
             .combineLatest(manager.$activeLoadoutId)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _, _ in
-                self?.rebuildLoadoutMenuItems()
+                self?.rebuild()
             }
-            .store(in: &loadoutCancellables)
+            .store(in: &cancellables)
 
-        // Initial build
-        rebuildLoadoutMenuItems()
+        rebuild()
     }
 
-    private func rebuildLoadoutMenuItems() {
-        guard let menu = statusItem?.menu,
-              let manager = stratagemManager,
-              let separatorBefore = loadoutSeparatorBefore,
-              let separatorAfter = loadoutSeparatorAfter else { return }
-
+    private func rebuild() {
+        guard let menu = menu else { return }
         // find indices — NSMenuItem doesn't override Equatable so firstIndex(of:) here matches by
         // object identity, which works because we hold the same NSMenuItem references stored above
         guard let beforeIndex = menu.items.firstIndex(of: separatorBefore),
-              let _ = menu.items.firstIndex(of: separatorAfter) else { return }
+              menu.items.firstIndex(of: separatorAfter) != nil else { return }
 
-        // Remove existing loadout items (between the separators)
+        // remove existing loadout items between the separators
         for item in loadoutMenuItems {
             menu.removeItem(item)
         }
         loadoutMenuItems.removeAll()
 
-        // Hide separators if no loadouts
+        // hide both separators if there are no loadouts
         separatorBefore.isHidden = manager.loadouts.isEmpty
         separatorAfter.isHidden = manager.loadouts.isEmpty
 
-        // Add loadout items with numbers (1-9 for keyboard shortcuts)
+        // add loadout items with numbers (1-9 for keyboard shortcuts)
         var insertIndex = beforeIndex + 1
         for (index, loadout) in manager.loadouts.enumerated() {
-            // Show number prefix for first 9 loadouts (keyboard shortcuts)
+            // show number prefix for first 9 loadouts (keyboard shortcuts)
             let numberPrefix = index < 9 ? "\(index + 1)  " : ""
-            let item = NSMenuItem(title: "\(numberPrefix)\(loadout.name)", action: #selector(loadoutMenuItemClicked(_:)), keyEquivalent: "")
+            let item = NSMenuItem(
+                title: "\(numberPrefix)\(loadout.name)",
+                action: #selector(loadoutClicked(_:)),
+                keyEquivalent: ""
+            )
             item.target = self
             item.representedObject = loadout.id
             item.state = (manager.activeLoadoutId == loadout.id) ? .on : .off
@@ -257,15 +300,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
 
-    @objc func loadoutMenuItemClicked(_ sender: NSMenuItem) {
-        guard let loadoutId = sender.representedObject as? UUID,
-              let manager = stratagemManager else { return }
+    @objc private func loadoutClicked(_ sender: NSMenuItem) {
+        guard let loadoutId = sender.representedObject as? UUID else { return }
         manager.loadLoadout(id: loadoutId)
     }
 
-    @objc func showSaveLoadoutDialog() {
-        guard let manager = stratagemManager else { return }
-
+    func showSaveLoadoutDialog() {
         let alert = NSAlert()
         alert.messageText = "Save Loadout"
         alert.informativeText = "Enter a name for a new loadout, or select an existing one to overwrite."
@@ -281,7 +321,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         // Name text field
         let textField = NSTextField(frame: NSRect(x: 0, y: viewHeight - 24, width: 280, height: 22))
-        textField.placeholderString = generateUniqueLoadoutName(manager: manager)
+        textField.placeholderString = generateUniqueLoadoutName()
         accessoryView.addSubview(textField)
 
         // Overwrite dropdown (only if loadouts exist)
@@ -300,7 +340,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-            let defaultName = generateUniqueLoadoutName(manager: manager)
+            let defaultName = generateUniqueLoadoutName()
             let enteredName = textField.stringValue.trimmingCharacters(in: .whitespaces)
             let userTypedName = !enteredName.isEmpty
 
@@ -352,7 +392,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         alert.runModal()
     }
 
-    private func generateUniqueLoadoutName(manager: StratagemManager) -> String {
+    private func generateUniqueLoadoutName() -> String {
         var counter = manager.loadouts.count + 1
         var name = "Loadout \(counter)"
         while manager.loadouts.contains(where: { $0.name == name }) {
