@@ -220,7 +220,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
               let separatorBefore = loadoutSeparatorBefore,
               let separatorAfter = loadoutSeparatorAfter else { return }
 
-        // Find indices
+        // find indices — NSMenuItem doesn't override Equatable so firstIndex(of:) here matches by
+        // object identity, which works because we hold the same NSMenuItem references stored above
         guard let beforeIndex = menu.items.firstIndex(of: separatorBefore),
               let _ = menu.items.firstIndex(of: separatorAfter) else { return }
 
