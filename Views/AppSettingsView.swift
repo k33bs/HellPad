@@ -341,18 +341,17 @@ struct ControlsTabView: View {
 
             // Hover Preview
             VStack(alignment: .leading, spacing: 8) {
-                Toggle(isOn: Binding(
-                    get: { stratagemManager.hoverPreviewEnabled },
-                    set: {
-                        stratagemManager.hoverPreviewEnabled = $0
-                        stratagemManager.saveAllSettings()
-                    }
-                )) {
+                // simplified the manual Binding wrapper — direct $ binding with onChange does the same
+                // job (write the new value, then persist) and reads more clearly
+                Toggle(isOn: $stratagemManager.hoverPreviewEnabled) {
                     Text("Hover Preview")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
                 .toggleStyle(.switch)
+                .onChange(of: stratagemManager.hoverPreviewEnabled) { _ in
+                    stratagemManager.saveAllSettings()
+                }
 
                 Text("Show magnified icon when hovering in stratagem picker")
                     .font(.caption)
@@ -363,18 +362,16 @@ struct ControlsTabView: View {
 
             // Voice Feedback
             VStack(alignment: .leading, spacing: 8) {
-                Toggle(isOn: Binding(
-                    get: { stratagemManager.voiceFeedbackEnabled },
-                    set: {
-                        stratagemManager.voiceFeedbackEnabled = $0
-                        stratagemManager.saveAllSettings()
-                    }
-                )) {
+                // same simplification as Hover Preview above — direct $ binding plus onChange
+                Toggle(isOn: $stratagemManager.voiceFeedbackEnabled) {
                     Text("Voice Feedback")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
                 .toggleStyle(.switch)
+                .onChange(of: stratagemManager.voiceFeedbackEnabled) { _ in
+                    stratagemManager.saveAllSettings()
+                }
 
                 Text("Speak loadout name when switching loadouts")
                     .font(.caption)
