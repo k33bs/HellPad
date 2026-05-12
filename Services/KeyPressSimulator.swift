@@ -3,16 +3,20 @@ import CoreGraphics
 import AppKit
 
 class KeyPressSimulator {
-    // Modifier key codes
+    // grouped each modifier as a left+right pair so the relationship is obvious
     private let modifierKeyCodes: [CGKeyCode: CGEventFlags] = [
-        0x3B: .maskControl,    // Left Control
-        0x3E: .maskControl,    // Right Control
-        0x3A: .maskAlternate,  // Left Option
-        0x3D: .maskAlternate,  // Right Option
-        0x37: .maskCommand,    // Left Command
-        0x36: .maskCommand,    // Right Command
-        0x38: .maskShift,      // Left Shift
-        0x3C: .maskShift,      // Right Shift
+        // control
+        0x3B: .maskControl,
+        0x3E: .maskControl,
+        // option
+        0x3A: .maskAlternate,
+        0x3D: .maskAlternate,
+        // command
+        0x37: .maskCommand,
+        0x36: .maskCommand,
+        // shift
+        0x38: .maskShift,
+        0x3C: .maskShift,
     ]
 
     func executeStratagem(
