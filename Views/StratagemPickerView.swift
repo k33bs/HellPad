@@ -17,6 +17,11 @@ struct StratagemPickerView: View {
     @State private var hoverDebounceTask: DispatchWorkItem?
     @State private var searchQuery: String = ""
     @State private var selectedIndex: Int = 0
+    // tracks whether keyboard navigation is currently engaged. starts equal to the
+    // keyboardNavigationEnabled prop (true if the picker was opened via Enter, false if
+    // via mouse click). flips to true on the first arrow-key press so mouse-opened pickers
+    // can be driven by the keyboard too.
+    @State private var keyboardNavActivated: Bool = false
 
     private var searchFilteredStratagems: [Stratagem] {
         if searchQuery.isEmpty {
@@ -97,7 +102,7 @@ struct StratagemPickerView: View {
     )
 
     private var isKeyboardNavigationActive: Bool {
-        keyboardNavigationEnabled || !searchQuery.isEmpty
+        keyboardNavActivated || !searchQuery.isEmpty
     }
 
     // shared helper: report the stratagem currently focused via arrow keys (or search),
@@ -219,6 +224,8 @@ struct StratagemPickerView: View {
         .frame(width: HBConstants.UI.pickerWidth, height: HBConstants.UI.pickerHeight)
         .background(Color.black)
         .onAppear {
+            // seed activation from the prop: keyboard-opened pickers start active, mouse-opened don't
+            keyboardNavActivated = keyboardNavigationEnabled
             // if the picker opened with keyboard nav already enabled, show the initially focused
             // stratagem (selectedIndex starts at 0) in the title bar straight away
             notifyKeyboardFocus()
@@ -256,47 +263,51 @@ struct StratagemPickerView: View {
                     return event
                 }
 
-                // Arrow keys: navigate grid (6 columns)
-                if isKeyboardNavigationActive {
-                    let columns = HBConstants.UI.pickerColumns
-                    switch event.keyCode {
-                    case 0x7B:  // Left arrow
-                        if selectedIndex > 0 {
-                            let target = selectedIndex - 1
-                            selectedIndex = nextSelectableIndex(from: target, step: -1)
-                        }
-                        notifyKeyboardFocus()
-                        return nil
-                    case 0x7C:  // Right arrow
-                        if selectedIndex < gridItems.count - 1 {
-                            let target = selectedIndex + 1
+                // Arrow keys always work in the picker, regardless of how it was opened.
+                // first press flips keyboardNavActivated true so the white border + Enter-to-select
+                // start working from this point on.
+                let columns = HBConstants.UI.pickerColumns
+                switch event.keyCode {
+                case 0x7B:  // Left arrow
+                    keyboardNavActivated = true
+                    if selectedIndex > 0 {
+                        let target = selectedIndex - 1
+                        selectedIndex = nextSelectableIndex(from: target, step: -1)
+                    }
+                    notifyKeyboardFocus()
+                    return nil
+                case 0x7C:  // Right arrow
+                    keyboardNavActivated = true
+                    if selectedIndex < gridItems.count - 1 {
+                        let target = selectedIndex + 1
+                        selectedIndex = nextSelectableIndex(from: target, step: 1)
+                    }
+                    notifyKeyboardFocus()
+                    return nil
+                case 0x7E:  // Up arrow
+                    keyboardNavActivated = true
+                    if selectedIndex >= columns {
+                        selectedIndex = nextSelectableIndexUp(from: selectedIndex)
+                    }
+                    notifyKeyboardFocus()
+                    return nil
+                case 0x7D:  // Down arrow
+                    keyboardNavActivated = true
+                    if selectedIndex + columns < gridItems.count {
+                        let target = selectedIndex + columns
+                        if isSelectable(target) {
+                            selectedIndex = target
+                        } else {
                             selectedIndex = nextSelectableIndex(from: target, step: 1)
                         }
-                        notifyKeyboardFocus()
-                        return nil
-                    case 0x7E:  // Up arrow
-                        if selectedIndex >= columns {
-                            selectedIndex = nextSelectableIndexUp(from: selectedIndex)
-                        }
-                        notifyKeyboardFocus()
-                        return nil
-                    case 0x7D:  // Down arrow
-                        if selectedIndex + columns < gridItems.count {
-                            let target = selectedIndex + columns
-                            if isSelectable(target) {
-                                selectedIndex = target
-                            } else {
-                                selectedIndex = nextSelectableIndex(from: target, step: 1)
-                            }
-                        } else if selectedIndex < gridItems.count - 1 {
-                            // No icon directly below - jump to last icon
-                            selectedIndex = nextSelectableIndex(from: gridItems.count - 1, step: -1)
-                        }
-                        notifyKeyboardFocus()
-                        return nil
-                    default:
-                        break
+                    } else if selectedIndex < gridItems.count - 1 {
+                        // No icon directly below - jump to last icon
+                        selectedIndex = nextSelectableIndex(from: gridItems.count - 1, step: -1)
                     }
+                    notifyKeyboardFocus()
+                    return nil
+                default:
+                    break
                 }
 
                 // Backspace: remove last character
