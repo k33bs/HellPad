@@ -371,6 +371,10 @@ struct PickerIconButton: View {
             }
         }
         .buttonStyle(.plain)
+        // suppress the system focus ring — Tab would otherwise cycle 100+ picker icons with
+        // a yellow halo (accent color matches our flash yellow). picker keyboard nav is custom
+        // (arrow keys via NSEvent monitor), so we don't need SwiftUI focus at all.
+        .focusable(false)
         .background(
             isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
             isHovered ? HBConstants.Visual.pickerItemHoverBackground :
