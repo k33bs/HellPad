@@ -417,8 +417,11 @@ final class LoadoutGridReader {
         }
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
-        let provider = CGDataProvider(data: data as CFData)!
-        return CGImage(
+        // replaced two force-unwraps with explicit failure points so a future regression is easier to trace
+        guard let provider = CGDataProvider(data: data as CFData) else {
+            fatalError("createPlaceholderImage: failed to make CGDataProvider for 4x4 RGBA buffer")
+        }
+        guard let image = CGImage(
             width: size, height: size,
             bitsPerComponent: 8, bitsPerPixel: 32,
             bytesPerRow: size * 4,
@@ -426,7 +429,10 @@ final class LoadoutGridReader {
             bitmapInfo: CGBitmapInfo(rawValue: bitmapInfo),
             provider: provider,
             decode: nil, shouldInterpolate: false, intent: .defaultIntent
-        )!
+        ) else {
+            fatalError("createPlaceholderImage: CGImage init failed for 4x4 RGBA buffer")
+        }
+        return image
     }
     #endif
 
