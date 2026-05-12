@@ -658,19 +658,14 @@ class StratagemManager: ObservableObject {
     }
 
     private func executeStratagemAtSlot(slotIndex: Int) {
-        guard slotIndex < equippedStratagems.count else { return }
-
-        let stratagemName = equippedStratagems[slotIndex]
-        guard let stratagem = stratagemLookup[stratagemName],
-            let superKeyCode = keySimulator.hexStringToKeyCode(superKey.keyCode)
-        else {
-            return
-        }
-
-        logger.info("Executing stratagem: \(stratagemName)")
-        keySimulator.executeStratagem(
-            sequence: stratagem.sequence,
-            superKeyCode: superKeyCode,
+        // route the single-fire path through the snapshot variant so both paths share one
+        // implementation. previously this function duplicated executeStratagemAtSlotWithConfig
+        // and the two could silently drift apart.
+        executeStratagemAtSlotWithConfig(
+            slotIndex: slotIndex,
+            equippedStratagems: equippedStratagems,
+            stratagemLookup: stratagemLookup,
+            superKey: superKey,
             directionalKeys: directionalKeys,
             activationMode: activationMode
         )
