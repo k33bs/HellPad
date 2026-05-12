@@ -5,6 +5,11 @@ import os.log
 private let logger = Logger(subsystem: "com.hellpad.app", category: "icons")
 
 // Image cache for stratagem icons
+// the cache is read from main (views) and from LoadoutGridReader's background queue.
+// the bare Dictionary was a data race; an NSLock around reads/writes makes it safe.
+// note: two threads asking for the same slug at the same time may both load it once
+// (we only lock the dictionary access, not the disk read) — wasteful but harmless.
+private let stratagemIconCacheLock = NSLock()
 private var stratagemIconCache = [String: NSImage]()
 
 extension NSImage {
@@ -12,12 +17,15 @@ extension NSImage {
         // Convert stratagem name to slug (matches icon filename format)
         let slug = name.slugified()
 
-        // Check cache first
+        // Check cache first (locked)
+        stratagemIconCacheLock.lock()
         if let cachedImage = stratagemIconCache[slug] {
+            stratagemIconCacheLock.unlock()
             return cachedImage
         }
+        stratagemIconCacheLock.unlock()
 
-        // Load from disk if not cached
+        // Load from disk if not cached (no lock held during disk i/o)
         guard let url = Bundle.main.url(forResource: slug, withExtension: "png"),
               let image = NSImage(contentsOf: url) else {
             // missing icon now logs via os.log instead of print
@@ -30,8 +38,10 @@ extension NSImage {
             image.size = NSSize(width: CGFloat(rep.pixelsWide) / 2.0, height: CGFloat(rep.pixelsHigh) / 2.0)
         }
 
-        // Cache the image
+        // Cache the image (locked)
+        stratagemIconCacheLock.lock()
         stratagemIconCache[slug] = image
+        stratagemIconCacheLock.unlock()
         return image
     }
 }
