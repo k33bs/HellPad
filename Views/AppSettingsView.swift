@@ -264,13 +264,16 @@ struct ControlsTabView: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Picker("", selection: Binding(
+                // added a real accessibility label and hid it visually; voiceover now reads
+                // "Activation mode" instead of the previous empty/unlabeled picker
+                Picker("Activation mode", selection: Binding(
                     get: { stratagemManager.activationMode },
                     set: { stratagemManager.updateActivationMode($0) }
                 )) {
                     Text("Hold").tag(ActivationMode.hold)
                     Text("Toggle").tag(ActivationMode.toggle)
                 }
+                .labelsHidden()
                 .pickerStyle(SegmentedPickerStyle())
                 .frame(width: 200)
 
