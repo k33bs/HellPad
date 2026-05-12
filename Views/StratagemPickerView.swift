@@ -102,7 +102,9 @@ struct StratagemPickerView: View {
     )
 
     private var isKeyboardNavigationActive: Bool {
-        keyboardNavActivated || !searchQuery.isEmpty
+        // include the original prop as a fallback so a keyboard-opened picker has the white
+        // border on the very first frame, before .onAppear seeds keyboardNavActivated
+        keyboardNavActivated || keyboardNavigationEnabled || !searchQuery.isEmpty
     }
 
     // shared helper: report the stratagem currently focused via arrow keys (or search),
@@ -241,9 +243,12 @@ struct StratagemPickerView: View {
                     if !searchQuery.isEmpty {
                         searchQuery = ""
                         selectedIndex = 0
-                        // search cleared — if the picker wasn't opened via keyboard there's no
-                        // keyboard focus anymore, so clear the title bar back to default
-                        if !keyboardNavigationEnabled {
+                        // search cleared — if keyboard nav is still active (either by prop or by
+                        // the user having pressed arrows earlier), update title to the new first
+                        // item. otherwise clear the title bar back to the app name.
+                        if isKeyboardNavigationActive {
+                            notifyKeyboardFocus()
+                        } else {
                             onTitleSubjectChange?(nil)
                         }
                         return nil
@@ -318,11 +323,12 @@ struct StratagemPickerView: View {
                         // Clear hover preview when search changes
                         hoverDebounceTask?.cancel()
                         hoveredStratagem = nil
-                        // search query changed — title should track new first filtered item, or clear if empty
-                        if searchQuery.isEmpty && !keyboardNavigationEnabled {
-                            onTitleSubjectChange?(nil)
-                        } else {
+                        // title tracks new first item if keyboard nav is still active (search,
+                        // prop, or user activation). otherwise clear title back to app name.
+                        if isKeyboardNavigationActive {
                             notifyKeyboardFocus()
+                        } else {
+                            onTitleSubjectChange?(nil)
                         }
                     }
                     return nil
