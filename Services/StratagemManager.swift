@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import Combine
 import Foundation
 import SwiftUI
@@ -32,14 +33,15 @@ class StratagemManager: ObservableObject {
     @Published var voiceFeedbackEnabled: Bool = false
     @Published var selectedVoice: String? = nil  // nil = system default
     @Published var voiceVolume: Float = 0.5  // 0.0 to 1.0
-    private let speechSynthesizer = NSSpeechSynthesizer()
+    // switched from NSSpeechSynthesizer (deprecated) to AVSpeechSynthesizer. behavior is the same
+    // (system voices, volume 0-1, speak text); identifiers differ between the two apis, so we
+    // also migrate stale selectedVoice values in loadUserData()
+    private let speechSynthesizer = AVSpeechSynthesizer()
 
     // Available voices for TTS (computed once to avoid repeated I/O)
     let availableVoices: [(identifier: String, name: String)] = {
-        NSSpeechSynthesizer.availableVoices.compactMap { voiceId in
-            let attrs = NSSpeechSynthesizer.attributes(forVoice: voiceId)
-            guard let name = attrs[.name] as? String else { return nil }
-            return (identifier: voiceId.rawValue, name: name)
+        AVSpeechSynthesisVoice.speechVoices().map { voice in
+            (identifier: voice.identifier, name: voice.name)
         }.sorted { $0.name < $1.name }
     }()
     private var comboExecutionSemaphore: DispatchSemaphore?
@@ -214,7 +216,13 @@ class StratagemManager: ObservableObject {
         activeLoadoutId = userData.activeLoadoutId.flatMap { UUID(uuidString: $0) }
         hoverPreviewEnabled = userData.hoverPreviewEnabled ?? true
         voiceFeedbackEnabled = userData.voiceFeedbackEnabled ?? false
-        selectedVoice = userData.selectedVoice
+        // migrate from old NSSpeechSynthesizer identifiers — if the stored voice id doesn't
+        // resolve as an AVSpeechSynthesisVoice we drop it and fall back to the system default
+        if let stored = userData.selectedVoice, AVSpeechSynthesisVoice(identifier: stored) == nil {
+            selectedVoice = nil
+        } else {
+            selectedVoice = userData.selectedVoice
+        }
         voiceVolume = userData.voiceVolume ?? 0.5
         recentStratagemNames = Array((userData.recentStratagemNames ?? []).prefix(6))
     }
@@ -504,14 +512,8 @@ class StratagemManager: ObservableObject {
                         self.stratagemLookup[name]?.voiceText
                     }
                     if !voiceTexts.isEmpty {
-                        let announcement = "loadout: " + voiceTexts.joined(separator: ", ")
-                        if let voice = self.selectedVoice {
-                            self.speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
-                        } else {
-                            self.speechSynthesizer.setVoice(nil)
-                        }
-                        self.speechSynthesizer.volume = self.voiceVolume
-                        self.speechSynthesizer.startSpeaking(announcement)
+                        // routed through the speak() helper so both speech call sites share one path
+                        self.speak("loadout: " + voiceTexts.joined(separator: ", "))
                     }
                 }
             }
@@ -856,14 +858,21 @@ class StratagemManager: ObservableObject {
         logger.info("Loaded loadout: \(loadout.name)")
 
         if voiceFeedbackEnabled {
-            if let voice = selectedVoice {
-                speechSynthesizer.setVoice(NSSpeechSynthesizer.VoiceName(rawValue: voice))
-            } else {
-                speechSynthesizer.setVoice(nil)  // Reset to system default
-            }
-            speechSynthesizer.volume = voiceVolume
-            speechSynthesizer.startSpeaking("\(loadout.name) loaded")
+            // see speak() helper — picks current voice + volume and submits an AVSpeechUtterance
+            speak("\(loadout.name) loaded")
         }
+    }
+
+    // builds an AVSpeechUtterance with the user's selected voice and current volume, then queues it
+    // on the synthesizer. centralizing this keeps the two callers (loadout grid read + loadLoadout)
+    // identical in behavior.
+    private func speak(_ text: String) {
+        let utterance = AVSpeechUtterance(string: text)
+        if let voiceId = selectedVoice, let voice = AVSpeechSynthesisVoice(identifier: voiceId) {
+            utterance.voice = voice
+        }
+        utterance.volume = voiceVolume
+        speechSynthesizer.speak(utterance)
     }
 
     func deleteLoadout(id: UUID) {
