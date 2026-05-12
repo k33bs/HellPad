@@ -124,7 +124,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         Inspired by HellBuddy (Windows) by chris-codes1
         Stratagem icons by Nicolas Vigneux
 
-        © 2025 \(HBConstants.appName)
+        © 2026 \(HBConstants.appName)
         Licensed under GPL v3
 
         Not affiliated with Arrowhead Game Studios or Sony Interactive Entertainment.
