@@ -139,7 +139,10 @@ class EventTapManager {
 
     func disable() {
         if let source = runLoopSource {
-            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
+            // remove from the main run loop, the same one we added to in setupEventTap().
+            // previously this used CFRunLoopGetCurrent() which only worked when disable() was
+            // called on the main thread; from any other thread it would silently leak the source.
+            CFRunLoopRemoveSource(CFRunLoopGetMain(), source, .commonModes)
             runLoopSource = nil
         }
 
