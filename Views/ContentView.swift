@@ -6,6 +6,12 @@ private let logger = Logger(subsystem: "com.hellpad.app", category: "ui")
 
 struct ContentView: View {
     @ObservedObject var stratagemManager: StratagemManager
+    // optional callback fired while the stratagem picker is open and the user hovers
+    // or arrow-key-navigates between icons. app delegate uses this to swap the window
+    // title bar to the focused stratagem's short name, and back to the app name when
+    // the picker closes or focus clears
+    var onTitleSubjectChange: ((String?) -> Void)? = nil
+
     @State private var showingStratagemPicker = false
     @State private var selectedSlotIndex = 0
     @State private var pickerOpenedFromKeyboard = false
@@ -107,6 +113,8 @@ struct ContentView: View {
                         pickerOpenedFromKeyboard = false
                         keyboardSelectedSlotIndex = nil
                         cancelSlotNavigationTimeout()
+                        // picker dismissed by clicking the dim backdrop — revert title bar
+                        onTitleSubjectChange?(nil)
                     }
 
                 StratagemPickerView(
@@ -122,13 +130,19 @@ struct ContentView: View {
                         pickerOpenedFromKeyboard = false
                         keyboardSelectedSlotIndex = nil
                         cancelSlotNavigationTimeout()
+                        // picker closed by selecting — revert title bar
+                        onTitleSubjectChange?(nil)
                     },
                     onCancel: {
                         showingStratagemPicker = false
                         pickerOpenedFromKeyboard = false
                         keyboardSelectedSlotIndex = nil
                         cancelSlotNavigationTimeout()
-                    }
+                        // picker dismissed by ESC or escape gesture — revert title bar
+                        onTitleSubjectChange?(nil)
+                    },
+                    // bubble hover + arrow-key changes from the picker up to the app delegate
+                    onTitleSubjectChange: onTitleSubjectChange
                 )
             }
         }

@@ -8,6 +8,9 @@ struct StratagemPickerView: View {
     let keyboardNavigationEnabled: Bool
     let onSelect: (Stratagem) -> Void
     let onCancel: () -> Void
+    // bubbles the currently focused stratagem (hover or arrow-key) up to the parent so the
+    // app delegate can update the window title bar. nil clears the title back to app name.
+    var onTitleSubjectChange: ((String?) -> Void)? = nil
     @State private var keyMonitor: Any?
     @State private var hoveredStratagem: Stratagem?
     @State private var hoverPosition: CGPoint = .zero
@@ -97,6 +100,15 @@ struct StratagemPickerView: View {
         keyboardNavigationEnabled || !searchQuery.isEmpty
     }
 
+    // shared helper: report the stratagem currently focused via arrow keys (or search),
+    // used for window title bar updates. ignored if keyboard nav isn't active.
+    private func notifyKeyboardFocus() {
+        guard isKeyboardNavigationActive,
+              selectedIndex < gridItems.count,
+              let stratagem = gridItems[selectedIndex].stratagem else { return }
+        onTitleSubjectChange?(stratagem.name)
+    }
+
     var body: some View {
         ZStack {
             ScrollView {
@@ -110,6 +122,10 @@ struct StratagemPickerView: View {
                                 onSelect: onSelect,
                                 onHover: { isHovered, position in
                                     if isHovered {
+                                        // title bar updates immediately on hover entry — no debounce,
+                                        // so the title tracks the cursor even before the magnified preview appears
+                                        onTitleSubjectChange?(stratagem.name)
+
                                         // Cancel any pending hover
                                         hoverDebounceTask?.cancel()
 
@@ -124,11 +140,23 @@ struct StratagemPickerView: View {
                                         }
                                         hoverDebounceTask = task
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.22, execute: task)
-                                    } else if hoveredStratagem?.id == stratagem.id {
-                                        // Cancel pending and hide immediately
-                                        hoverDebounceTask?.cancel()
-                                        withAnimation(.easeOut(duration: 0.12)) {
-                                            hoveredStratagem = nil
+                                    } else {
+                                        // hover exit always reverts the title — fall back to the
+                                        // keyboard-focused stratagem if arrow-nav is active, else clear
+                                        if isKeyboardNavigationActive,
+                                           selectedIndex < gridItems.count,
+                                           let kbFocus = gridItems[selectedIndex].stratagem {
+                                            onTitleSubjectChange?(kbFocus.name)
+                                        } else {
+                                            onTitleSubjectChange?(nil)
+                                        }
+
+                                        if hoveredStratagem?.id == stratagem.id {
+                                            // Cancel pending and hide immediately
+                                            hoverDebounceTask?.cancel()
+                                            withAnimation(.easeOut(duration: 0.12)) {
+                                                hoveredStratagem = nil
+                                            }
                                         }
                                     }
                                 }
@@ -191,6 +219,9 @@ struct StratagemPickerView: View {
         .frame(width: HBConstants.UI.pickerWidth, height: HBConstants.UI.pickerHeight)
         .background(Color.black)
         .onAppear {
+            // if the picker opened with keyboard nav already enabled, show the initially focused
+            // stratagem (selectedIndex starts at 0) in the title bar straight away
+            notifyKeyboardFocus()
             keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 // Ignore events with Command, Control, or Option modifiers (allow system shortcuts)
                 let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
@@ -203,6 +234,11 @@ struct StratagemPickerView: View {
                     if !searchQuery.isEmpty {
                         searchQuery = ""
                         selectedIndex = 0
+                        // search cleared — if the picker wasn't opened via keyboard there's no
+                        // keyboard focus anymore, so clear the title bar back to default
+                        if !keyboardNavigationEnabled {
+                            onTitleSubjectChange?(nil)
+                        }
                         return nil
                     }
                     onCancel()
@@ -229,17 +265,20 @@ struct StratagemPickerView: View {
                             let target = selectedIndex - 1
                             selectedIndex = nextSelectableIndex(from: target, step: -1)
                         }
+                        notifyKeyboardFocus()
                         return nil
                     case 0x7C:  // Right arrow
                         if selectedIndex < gridItems.count - 1 {
                             let target = selectedIndex + 1
                             selectedIndex = nextSelectableIndex(from: target, step: 1)
                         }
+                        notifyKeyboardFocus()
                         return nil
                     case 0x7E:  // Up arrow
                         if selectedIndex >= columns {
                             selectedIndex = nextSelectableIndexUp(from: selectedIndex)
                         }
+                        notifyKeyboardFocus()
                         return nil
                     case 0x7D:  // Down arrow
                         if selectedIndex + columns < gridItems.count {
@@ -253,6 +292,7 @@ struct StratagemPickerView: View {
                             // No icon directly below - jump to last icon
                             selectedIndex = nextSelectableIndex(from: gridItems.count - 1, step: -1)
                         }
+                        notifyKeyboardFocus()
                         return nil
                     default:
                         break
@@ -267,6 +307,12 @@ struct StratagemPickerView: View {
                         // Clear hover preview when search changes
                         hoverDebounceTask?.cancel()
                         hoveredStratagem = nil
+                        // search query changed — title should track new first filtered item, or clear if empty
+                        if searchQuery.isEmpty && !keyboardNavigationEnabled {
+                            onTitleSubjectChange?(nil)
+                        } else {
+                            notifyKeyboardFocus()
+                        }
                     }
                     return nil
                 }
@@ -280,6 +326,8 @@ struct StratagemPickerView: View {
                         // Clear hover preview when search changes
                         hoverDebounceTask?.cancel()
                         hoveredStratagem = nil
+                        // typing activates keyboard nav — update title to first filtered match
+                        notifyKeyboardFocus()
                         return nil
                     }
                 }

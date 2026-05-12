@@ -174,7 +174,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             stratagemManager = StratagemManager()
         }
 
-        let contentView = ContentView(stratagemManager: stratagemManager!)
+        // callback that ContentView/StratagemPickerView call when the user is hovering or
+        // arrow-navigating a stratagem in the picker. updates the window title to the
+        // short stratagem name, or back to the app name when the focused stratagem is nil.
+        let contentView = ContentView(stratagemManager: stratagemManager!) { [weak self] focusedStratagemName in
+            self?.updateMainWindowTitle(forStratagem: focusedStratagemName)
+        }
             .padding(EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1))
             .background(Color.black)  // Ensure padding area is black
             .frame(width: 186, height: 475)
@@ -196,6 +201,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         mainWindow?.delegate = self
         mainWindow?.center()  // Center on screen
         mainWindow?.makeKeyAndOrderFront(nil)
+    }
+
+    // updates the floating window's title bar from the StratagemPickerView focus callback.
+    // passing nil reverts to the app name; passing a stratagem name swaps it to that
+    // stratagem's short form (falls back to the full name when no short alias is set)
+    func updateMainWindowTitle(forStratagem stratagemName: String?) {
+        guard let window = mainWindow else { return }
+        if let name = stratagemName, let manager = stratagemManager {
+            window.title = manager.shortName(for: name)
+        } else {
+            window.title = HBConstants.appName
+        }
     }
 
     // Handle window close button - quit the app

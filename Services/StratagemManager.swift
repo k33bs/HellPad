@@ -102,6 +102,12 @@ class StratagemManager: ObservableObject {
         }
     }
 
+    // returns the short display name for a stratagem ("500kg Bomb" instead of "Eagle 500kg Bomb"),
+    // falling back to the full name if no short alias is set. used by the window title bar.
+    func shortName(for stratagemName: String) -> String {
+        stratagemLookup[stratagemName]?.short ?? stratagemName
+    }
+
     private func isHellPadFrontmost() -> Bool {
         let frontmost = NSWorkspace.shared.frontmostApplication
         if let bundleId = Bundle.main.bundleIdentifier, !bundleId.isEmpty {
