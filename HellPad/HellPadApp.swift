@@ -6,8 +6,14 @@ struct HellPadApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
+        // app protocol requires a scene; real ui is built by AppDelegate.
+        // we still need the placeholder Settings scene, but we drop its "Settings…" / cmd+,
+        // menu entry so users don't get an empty preferences window
         Settings {
             EmptyView()
+        }
+        .commands {
+            CommandGroup(replacing: .appSettings) {}
         }
     }
 }
