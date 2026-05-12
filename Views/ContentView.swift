@@ -214,15 +214,15 @@ struct ContentView: View {
                 if let conflictIndex = duplicateSlotIndex {
                     logger.debug("Key \(keyString) already assigned to slot \(conflictIndex)")
 
-                    // Flash the conflicting slot twice
-                    duplicateKeys.insert(conflictIndex)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.flashDuration) {
-                        duplicateKeys.remove(conflictIndex)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.flashDuration) {
+                    // flash the conflicting slot twice — same on/off cadence as before,
+                    // but flattened from triple-nested asyncAfter so it's one readable loop
+                    let flashNanos = UInt64(HBConstants.Timing.flashDuration * 1_000_000_000)
+                    Task { @MainActor in
+                        for _ in 0..<2 {
                             duplicateKeys.insert(conflictIndex)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + HBConstants.Timing.flashDuration) {
-                                duplicateKeys.remove(conflictIndex)
-                            }
+                            try? await Task.sleep(nanoseconds: flashNanos)
+                            duplicateKeys.remove(conflictIndex)
+                            try? await Task.sleep(nanoseconds: flashNanos)
                         }
                     }
 
