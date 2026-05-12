@@ -282,7 +282,8 @@ struct ContentView: View {
         }
 
         slotNavigationEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [self] event in
-            guard NSApp.keyWindow?.title == "HellPad" else { return event }
+            // scope slot-nav keys to our own window only — uses shared appName constant
+            guard NSApp.keyWindow?.title == HBConstants.appName else { return event }
             guard !listeningForKeybind, !showingStratagemPicker else { return event }
 
             switch event.keyCode {

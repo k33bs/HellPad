@@ -3,6 +3,10 @@ import Carbon
 import SwiftUI
 
 enum HBConstants {
+    // app name used as window title, application support folder, and frontmost-app check
+    // must stay constant — changing it would orphan user_data.json on existing installs
+    static let appName = "HellPad"
+
     // MARK: - Key Codes
     enum KeyCode {
         static let pause: CGKeyCode = CGKeyCode(kVK_ANSI_P)  // 0x23

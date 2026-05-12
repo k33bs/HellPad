@@ -177,7 +177,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        mainWindow?.title = "HellPad"
+        // use shared appName constant so window title matches keyWindow checks
+        mainWindow?.title = HBConstants.appName
         mainWindow?.contentView = NSHostingView(rootView: contentView)
         mainWindow?.level = .floating  // Default to always on top
         mainWindow?.isOpaque = true

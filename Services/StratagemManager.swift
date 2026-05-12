@@ -100,7 +100,8 @@ class StratagemManager: ObservableObject {
         if let bundleId = Bundle.main.bundleIdentifier, !bundleId.isEmpty {
             return frontmost?.bundleIdentifier == bundleId
         }
-        return frontmost?.localizedName == "HellPad"
+        // fallback to shared appName constant when bundle id isn't available
+        return frontmost?.localizedName == HBConstants.appName
     }
 
     private func setupAppObserver() {
@@ -141,7 +142,8 @@ class StratagemManager: ObservableObject {
             return
         }
 
-        let hellPadDir = appSupport.appendingPathComponent("HellPad", isDirectory: true)
+        // application support subfolder name is locked to appName so existing user_data.json keeps loading
+        let hellPadDir = appSupport.appendingPathComponent(HBConstants.appName, isDirectory: true)
 
         // Create directory if it doesn't exist
         if !FileManager.default.fileExists(atPath: hellPadDir.path) {
