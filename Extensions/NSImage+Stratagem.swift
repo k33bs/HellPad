@@ -1,4 +1,8 @@
 import AppKit
+import os.log
+
+// logger for icon load failures, replaces ad-hoc print() so output is consistent with the rest of the app
+private let logger = Logger(subsystem: "com.hellpad.app", category: "icons")
 
 // Image cache for stratagem icons
 private var stratagemIconCache = [String: NSImage]()
@@ -16,7 +20,8 @@ extension NSImage {
         // Load from disk if not cached
         guard let url = Bundle.main.url(forResource: slug, withExtension: "png"),
               let image = NSImage(contentsOf: url) else {
-            print("Stratagem icon not found: \(slug).png (from name: \(name))")
+            // missing icon now logs via os.log instead of print
+            logger.error("Stratagem icon not found: \(slug).png (from name: \(name))")
             return nil
         }
 
