@@ -113,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "\(HBConstants.appName) v1.1.7"
+        alert.messageText = "\(HBConstants.appName) v1.1.8"
         alert.informativeText = """
         A native macOS application for executing HELLDIVERS™ 2 stratagems via customizable hotkeys.
 

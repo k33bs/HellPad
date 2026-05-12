@@ -43,7 +43,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.7.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.8.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -250,6 +250,13 @@ Build the project (Cmd+B) and verify the new stratagem appears in the picker wit
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.8
+
+- **macOS Tahoe Icon** - New layered Icon Composer app icon — no more white frame on macOS 26.
+- **Dynamic Window Title** - When the stratagem picker is open, the window title shows the short name of the focused stratagem (mouse hover or arrow keys), reverting to "HellPad" once the picker closes.
+- **Arrow Keys Always Work in Picker** - Previously, opening the picker by mouse click required typing to activate keyboard navigation. Arrow keys now work in the picker regardless of how it was opened.
+- **No More Yellow Focus Ring** - Pressing Tab inside the stratagem picker no longer cycles a yellow halo through each tiny icon.
 
 ### v1.1.7
 
