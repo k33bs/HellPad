@@ -1,7 +1,10 @@
 import Foundation
 
 struct Stratagem: Codable, Identifiable, Hashable {
-    let id = UUID()
+    // identifiable id derived from name. names are unique in stratagems.json, so this gives a stable
+    // identity across decodes; the previous `let id = UUID()` was regenerated every decode even
+    // though equality and hash were already by name, which made Identifiable inconsistent
+    var id: String { name }
     let name: String
     let short: String?
     let speak: String?
