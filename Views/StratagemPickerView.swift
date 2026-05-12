@@ -323,7 +323,7 @@ struct PickerIconButton: View {
                                height: HBConstants.UI.pickerIconSize)
                 }
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .background(
                 isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
                 isHovered ? HBConstants.Visual.pickerItemHoverBackground :

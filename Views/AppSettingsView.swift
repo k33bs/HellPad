@@ -79,7 +79,7 @@ struct TabButton: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
         .background(
             RoundedRectangle(cornerRadius: 6)
                 .fill(isSelected ? Color.accentColor.opacity(0.15) : Color.clear)
@@ -118,7 +118,7 @@ struct AppsTabView: View {
                                     Image(systemName: "minus.circle.fill")
                                         .foregroundColor(.red)
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -151,7 +151,7 @@ struct AppsTabView: View {
                                     Image(systemName: "plus.circle.fill")
                                         .foregroundColor(.green)
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                                .buttonStyle(.plain)
                                 .disabled(stratagemManager.allowedApps.contains(app.name))
                             }
                         }
@@ -668,7 +668,7 @@ struct LoadoutsTabView: View {
                                 Image(systemName: "square.and.arrow.up")
                                     .foregroundColor(.accentColor)
                             }
-                            .buttonStyle(PlainButtonStyle())
+                            .buttonStyle(.plain)
                             .help("Export this loadout")
 
                             // Delete button
@@ -679,7 +679,7 @@ struct LoadoutsTabView: View {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
-                            .buttonStyle(PlainButtonStyle())
+                            .buttonStyle(.plain)
                         }
                         .padding(.vertical, 4)
                     }
@@ -806,7 +806,7 @@ struct KeybindButton: View {
                 )
                 .contentShape(Rectangle())
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
 }
 

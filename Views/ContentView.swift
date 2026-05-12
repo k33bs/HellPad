@@ -382,7 +382,7 @@ struct StratagemSlotView: View {
                         .frame(width: HBConstants.UI.iconSize, height: HBConstants.UI.iconSize)
                 }
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .focusable(false)
             .frame(width: HBConstants.UI.iconFrameSize, height: HBConstants.UI.iconFrameSize)
             .background(
@@ -432,7 +432,7 @@ struct StratagemSlotView: View {
                 .frame(width: HBConstants.UI.iconFrameSize, height: HBConstants.UI.keybindHeight)
                 .clipShape(RoundedCorner(radius: HBConstants.UI.cornerRadius, corners: [.bottomLeft, .bottomRight]))
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .focusable(false)
             .contextMenu {
                 Button("Clear") {
