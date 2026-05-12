@@ -7,7 +7,15 @@ private let logger = Logger(subsystem: "com.hellpad.app", category: "accessibili
 class AccessibilityManager {
     static let shared = AccessibilityManager()
 
+    // holds the polling timer so we can invalidate it from anywhere
+    private var permissionPollTimer: Timer?
+
     private init() {}
+
+    deinit {
+        // stop polling if the singleton is ever torn down
+        permissionPollTimer?.invalidate()
+    }
 
     func checkAccessibilityPermission() -> Bool {
         return AXIsProcessTrusted()
@@ -64,11 +72,17 @@ class AccessibilityManager {
                 self.showAccessibilityAlert()
             }
 
-            // Check every second if permission has been granted
-            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            // poll every second; store the timer so it can be cancelled on teardown
+            permissionPollTimer?.invalidate()
+            permissionPollTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+                guard let self else {
+                    timer.invalidate()
+                    return
+                }
                 if self.checkAccessibilityPermission() {
                     logger.info("Accessibility permission granted!")
                     timer.invalidate()
+                    self.permissionPollTimer = nil
                     onSuccess()
                 }
             }
