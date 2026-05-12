@@ -21,7 +21,8 @@ struct Stratagem: Codable, Identifiable, Hashable {
     static let categoryOrder = ["Common", "Objectives", "Offensive", "Supply", "Defense"]
 
     var categorySortIndex: Int {
-        Self.categoryOrder.firstIndex(of: category) ?? 999
+        // unknown categories sort last; using .max avoids the previous 999 magic number
+        Self.categoryOrder.firstIndex(of: category) ?? .max
     }
 
     func hash(into hasher: inout Hasher) {
