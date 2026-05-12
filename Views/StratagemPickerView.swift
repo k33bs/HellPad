@@ -305,44 +305,53 @@ struct PickerIconButton: View {
     @State private var isHovered = false
 
     var body: some View {
-        GeometryReader { geo in
-            Button(action: {
-                onSelect(stratagem)
-            }) {
-                if let image = NSImage.stratagemIcon(named: stratagem.name) {
-                    Image(nsImage: image)
-                        .resizable()
-                        .interpolation(.high)
-                        .scaledToFit()
-                        .frame(width: HBConstants.UI.pickerIconSize,
-                               height: HBConstants.UI.pickerIconSize)
-                } else {
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(width: HBConstants.UI.pickerIconSize,
-                               height: HBConstants.UI.pickerIconSize)
+        Button(action: {
+            onSelect(stratagem)
+        }) {
+            if let image = NSImage.stratagemIcon(named: stratagem.name) {
+                Image(nsImage: image)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: HBConstants.UI.pickerIconSize,
+                           height: HBConstants.UI.pickerIconSize)
+            } else {
+                Rectangle()
+                    .fill(Color.gray)
+                    .frame(width: HBConstants.UI.pickerIconSize,
+                           height: HBConstants.UI.pickerIconSize)
+            }
+        }
+        .buttonStyle(.plain)
+        .background(
+            isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
+            isHovered ? HBConstants.Visual.pickerItemHoverBackground :
+            HBConstants.Visual.pickerItemBackground
+        )
+        .cornerRadius(HBConstants.UI.pickerIconCornerRadius)
+        .overlay(
+            // White inner border for keyboard selection
+            RoundedRectangle(cornerRadius: HBConstants.UI.pickerIconCornerRadius)
+                .strokeBorder(Color.white, lineWidth: isKeyboardSelected ? HBConstants.UI.pickerKeyboardBorderWidth : 0)
+        )
+        // dropped the per-icon GeometryReader. onContinuousHover gives the cursor location in the
+        // picker coordinate space directly. the preview now anchors at the cursor position on entry
+        // instead of the icon center; while you stay inside the icon the position stays locked.
+        .onContinuousHover(coordinateSpace: .named("picker")) { phase in
+            switch phase {
+            case .active(let location):
+                if !isHovered {
+                    isHovered = true
+                    onHover?(true, location)
+                }
+            case .ended:
+                if isHovered {
+                    isHovered = false
+                    onHover?(false, .zero)
                 }
             }
-            .buttonStyle(.plain)
-            .background(
-                isCurrentlySelected ? HBConstants.Visual.flashYellow.opacity(HBConstants.Visual.flashBackgroundOpacity) :
-                isHovered ? HBConstants.Visual.pickerItemHoverBackground :
-                HBConstants.Visual.pickerItemBackground
-            )
-            .cornerRadius(HBConstants.UI.pickerIconCornerRadius)
-            .overlay(
-                // White inner border for keyboard selection
-                RoundedRectangle(cornerRadius: HBConstants.UI.pickerIconCornerRadius)
-                    .strokeBorder(Color.white, lineWidth: isKeyboardSelected ? HBConstants.UI.pickerKeyboardBorderWidth : 0)
-            )
-            .onHover { hovering in
-                isHovered = hovering
-                let frame = geo.frame(in: .named("picker"))
-                let center = CGPoint(x: frame.midX, y: frame.midY)
-                onHover?(hovering, center)
-            }
-            .help(stratagem.name)
         }
+        .help(stratagem.name)
         .frame(width: HBConstants.UI.pickerIconSize, height: HBConstants.UI.pickerIconSize)
     }
 }
