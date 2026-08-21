@@ -127,6 +127,9 @@
 		C365A251CE2BEDCEE2DF8F1A /* exo-51-lumberer-exosuit.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1BA24A2CA7F649D930F271 /* exo-51-lumberer-exosuit.png */; };
 		DE18D2A5AA434B21B7B9DAC9 /* ScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91505007F29F4789AA69109A /* ScreenCapture.swift */; };
 		EE326F6B9F214901970DE614 /* axflam-75-guard-dog-hot-dog.png in Resources */ = {isa = PBXBuildFile; fileRef = 1950BCEAF1C64BE2B80B1A75 /* axflam-75-guard-dog-hot-dog.png */; };
+		867EA830E85168AC5D1AAB55 /* 40-k-meltagun.png in Resources */ = {isa = PBXBuildFile; fileRef = 64FD92EFE44F4BAD1F344825 /* 40-k-meltagun.png */; };
+		69C56116F0E435295CF1B639 /* m-103-supply-frv.png in Resources */ = {isa = PBXBuildFile; fileRef = B6A0A455AAE87C705D78FCC4 /* m-103-supply-frv.png */; };
+		029DCB527B3699481B2A1796 /* m-104-incinerator-frv.png in Resources */ = {isa = PBXBuildFile; fileRef = 182D63661E0BBDD339C583AD /* m-104-incinerator-frv.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -251,6 +254,9 @@
 		CCDAD34A1CB0EEF6027A52C4 /* mgx-42-bullet-storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mgx-42-bullet-storm.png"; sourceTree = "<group>"; };
 		D91B5F69E97D484D5CB4FEC7 /* bflam-80-cremator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bflam-80-cremator.png"; sourceTree = "<group>"; };
 		DDC019CA9F7B40E59C399FE9 /* cqc-9-defoliation-tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cqc-9-defoliation-tool.png"; sourceTree = "<group>"; };
+		64FD92EFE44F4BAD1F344825 /* 40-k-meltagun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "40-k-meltagun.png"; sourceTree = "<group>"; };
+		B6A0A455AAE87C705D78FCC4 /* m-103-supply-frv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-103-supply-frv.png"; sourceTree = "<group>"; };
+		182D63661E0BBDD339C583AD /* m-104-incinerator-frv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "m-104-incinerator-frv.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -454,6 +460,9 @@
 				8A1BA24A2CA7F649D930F271 /* exo-51-lumberer-exosuit.png */,
 				28FB9AB3FE6418351E56638B /* exo-55-breakthrough-exosuit.png */,
 				CCDAD34A1CB0EEF6027A52C4 /* mgx-42-bullet-storm.png */,
+				64FD92EFE44F4BAD1F344825 /* 40-k-meltagun.png */,
+				B6A0A455AAE87C705D78FCC4 /* m-103-supply-frv.png */,
+				182D63661E0BBDD339C583AD /* m-104-incinerator-frv.png */,
 			);
 			path = StratagemIcons;
 			sourceTree = "<group>";
@@ -649,6 +658,9 @@
 				C365A251CE2BEDCEE2DF8F1A /* exo-51-lumberer-exosuit.png in Resources */,
 				0B69AC81DB3F3A9FA01A329E /* exo-55-breakthrough-exosuit.png in Resources */,
 				0A21D84C258298A5B4CA2C16 /* mgx-42-bullet-storm.png in Resources */,
+				867EA830E85168AC5D1AAB55 /* 40-k-meltagun.png in Resources */,
+				69C56116F0E435295CF1B639 /* m-103-supply-frv.png in Resources */,
+				029DCB527B3699481B2A1796 /* m-104-incinerator-frv.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,7 +845,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.8;
+				MARKETING_VERSION = 1.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -886,7 +898,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 1.1.8;
+				MARKETING_VERSION = 1.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = de.lolco.HellPad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

@@ -293,6 +293,15 @@
     "icon": "orbital-walking-barrage.png"
   },
   {
+    "name": "40-K Meltagun",
+    "short": "Meltagun",
+    "sequence": ["S", "A", "W", "A", "A", "S"],
+    "category": "Supply",
+    "dept": "Castellan’s Creed",
+    "icon": "40-k-meltagun.png",
+    "speak": "forty k. meltagun"
+  },
+  {
     "name": "AC-8 Autocannon",
     "short": "Autocannon",
     "sequence": ["S", "A", "S", "W", "W", "D"],
@@ -574,6 +583,24 @@
     "category": "Supply",
     "dept": "Hangar",
     "icon": "m-102-fast-recon-vehicle.png"
+  },
+  {
+    "name": "M-103 Supply FRV",
+    "short": "Supply FRV",
+    "sequence": ["A", "S", "A", "A", "S", "W", "D"],
+    "category": "Supply",
+    "dept": "Hangar",
+    "icon": "m-103-supply-frv.png",
+    "speak": "supply f.r.v."
+  },
+  {
+    "name": "M-104 Incinerator FRV",
+    "short": "Incinerator FRV",
+    "sequence": ["A", "S", "D", "A", "S", "W", "W"],
+    "category": "Supply",
+    "dept": "Hangar",
+    "icon": "m-104-incinerator-frv.png",
+    "speak": "incinerator f.r.v."
   },
   {
     "name": "M-105 Stalwart",

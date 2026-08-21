@@ -43,7 +43,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.8.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.1.9.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -250,6 +250,13 @@ Build the project (Cmd+B) and verify the new stratagem appears in the picker wit
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.1.9
+
+- **New Stratagems** - Added 3 new stratagems:
+  - 40-K Meltagun
+  - M-103 Supply FRV
+  - M-104 Incinerator FRV
 
 ### v1.1.8
 
