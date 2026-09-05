@@ -44,7 +44,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 
 ### Download Pre-Built App
 
-1. Download the latest `HellPad-v1.1.9.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
+1. Download the latest `HellPad-v1.2.0.zip` from [Releases](https://github.com/k33bs/HellPad/releases)
 2. Unzip and move HellPad.app to your Applications folder
 3. **Important:** Right-click HellPad.app → "Open" (first time only)
    - You'll see "unidentified developer" warning
@@ -228,6 +228,13 @@ No icon files or Xcode project edits are needed — the zip is the only data art
 Developed for the HELLDIVERS™ 2 community.
 
 ## Version History
+
+### v1.2.0
+
+- **Stratagem Data Updates** - HellPad checks the stratagem generator's GitHub releases once at startup and offers newer data in a small floating panel with release notes and **Update Now** / **Later**. It never steals focus or blocks hotkeys; updating relaunches the app.
+- **Settings → Data Tab** - Shows the installed, bundled and previous data versions with **Check Now**, **Revert to Previous** and **Reset to Bundled**.
+- **Bundled Data as Release Zip** - Stratagem sequences and icons now ship as the generator's release zip and are installed to Application Support on first launch. Downloads are SHA256-verified and validated before install, with rollback to the previous data or the bundle.
+- **Bug Fix** - Removed the permanent focus ring on the first Settings tab.
 
 ### v1.1.9
 
