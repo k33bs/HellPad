@@ -177,20 +177,40 @@ class StratagemManager: ObservableObject {
     }
 
     private func loadStratagems() {
-        guard let url = Bundle.main.url(forResource: "stratagems", withExtension: "json"),
-            let data = try? Data(contentsOf: url),
-            let stratagems = try? JSONDecoder().decode([Stratagem].self, from: data)
-        else {
-            logger.error("Failed to load stratagems.json - FATAL")
+        // data lives in App Support, seeded from the bundled zip. on a corrupt install walk the
+        // rollback chain (previous zip → bundle) before giving up — only the bundle failing is fatal
+        func decodeInstalled() -> [Stratagem]? {
+            guard let data = try? Data(contentsOf: StratagemDataStore.stratagemsJSONURL) else { return nil }
+            return try? JSONDecoder().decode([Stratagem].self, from: data)
+        }
+
+        var loaded: [Stratagem]?
+        do {
+            try StratagemDataStore.seedIfNeeded()
+            loaded = decodeInstalled()
+            if loaded == nil, (try? StratagemDataStore.revertToPrevious()) != nil {
+                logger.error("Installed stratagem data was unreadable — reverted to previous")
+                loaded = decodeInstalled()
+            }
+            if loaded == nil {
+                logger.error("Stratagem data unreadable — reinstalling bundled data")
+                try StratagemDataStore.installBundled()
+                loaded = decodeInstalled()
+            }
+        } catch {
+            logger.error("Stratagem data install failed: \(error.localizedDescription)")
+        }
+
+        guard let stratagems = loaded, !stratagems.isEmpty else {
+            logger.error("Failed to load stratagem data - FATAL")
             showFatalError(
                 message:
-                    "Critical Error: stratagems.json is missing or corrupt.\n\nPlease reinstall the application."
+                    "Critical Error: stratagem data is missing or corrupt.\n\nPlease reinstall the application."
             )
             return
         }
 
         // sort by category order (Common, Objectives, Offensive, Supply, Defense)
-        // dropped the explicit stratagemLookup population — it's now a computed property
         allStratagems = stratagems.sorted { $0.categorySortIndex < $1.categorySortIndex }
     }
 

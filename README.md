@@ -21,6 +21,7 @@ A native macOS application for executing HELLDIVERS™ 2 stratagems via customiz
 - **Loadout Export/Import** - Share loadouts with friends via `.hellpad` files
 - **Loadout Keyboard Shortcuts** - Hold modifier key (default: Option) + 1-9 to switch loadouts instantly
 - **Auto-Detect Loadout** - Press Option+0 at the mission "READY UP" screen to automatically detect and assign your equipped stratagems (uses Vision framework for icon recognition)
+- **Stratagem Data Updates** - New stratagems arrive without an app update: HellPad checks the [stratagem generator](https://github.com/k33bs/Helldivers-2-Stratagem-JSON-Generator/releases) once at startup and offers to install newer data (with release notes). Revert or reset any time from Settings → Data
 - **Right-Click to Clear** - Right-click any stratagem or keybind to clear it
 - **Global Hotkeys** - Trigger stratagems from anywhere (T, Y, H, N, U, J, M, K)
 - **Combo Mode** - Hold a configurable combo key and press multiple hotkeys to queue stratagems, release to execute sequentially
@@ -139,6 +140,14 @@ Press any of the assigned keys (default: T, Y, H, N, U, J, M, K) to execute the 
      - _Toggle_: Press menu key once, then press directions
    - **Directional Keys** - Map Up/Down/Left/Right to any keys (default: WASD, can use arrow keys)
 
+### Stratagem Data Updates
+
+Stratagem sequences and icons ship inside the app but are installed to `~/Library/Application Support/HellPad/stratagems/` and can be updated independently.
+
+- On startup HellPad checks GitHub for a newer data release. If one exists, a small floating panel shows the release notes with **Update Now** / **Later**. It never steals focus or blocks hotkeys, so it is safe if you are already in a mission. Updating downloads the zip, verifies its SHA256, installs it and relaunches HellPad.
+- **Settings → Data** shows the installed, bundled and previous versions, with **Check Now**, **Revert to Previous** and **Reset to Bundled**. Every apply relaunches the app.
+- Offline? Nothing happens — the bundled data keeps working.
+
 ## Permissions
 
 HellPad requires **Accessibility** permissions to:
@@ -156,6 +165,7 @@ Grant permissions in:
 - **Combo Execution:** Serial queue with semaphore-based mouse click detection
 - **Thread-Safe:** Proper locking for all shared state
 - **Logging:** OSLog for debugging (viewable in Console.app)
+- **Stratagem Data:** bundled `stratagems.zip` seeded into App Support on launch; runtime updates from GitHub Releases with SHA256 verification; rollback via kept zips
 
 ## Development
 
@@ -199,45 +209,13 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Adding New Stratagems
 
-When new stratagems are added to HELLDIVERS 2, you can add them to HellPad:
+Stratagem data comes from [Helldivers-2-Stratagem-JSON-Generator](https://github.com/k33bs/Helldivers-2-Stratagem-JSON-Generator). Add the stratagem there and cut a release; users get it through the in-app update. To refresh the offline copy that ships inside HellPad:
 
-### 1. Add the Icon
+1. `./scripts/sync_stratagems.py` (from the workspace root, one level above this repo) — downloads the latest release zip, verifies its SHA256, writes `JsonData/stratagems.zip` and updates `bundledVersion` in `Utils/Constants.swift`.
+2. Build and run — the picker should show the new stratagems.
+3. Commit `JsonData/stratagems.zip` and `Utils/Constants.swift`.
 
-Place a PNG icon (ideally 128x128) in `StratagemIcons/` folder. Use lowercase kebab-case naming (e.g., `my-new-stratagem.png`).
-
-### 2. Add the Stratagem Entry
-
-Add an entry to `JsonData/stratagems.json`:
-
-```json
-{
-  "name": "Full Stratagem Name",
-  "short": "Short Name",
-  "sequence": ["W", "A", "S", "D", "W"],
-  "category": "Supply",
-  "dept": "Department Name",
-  "icon": "my-new-stratagem.png"
-}
-```
-
-- `sequence`: Array of directional keys (W/A/S/D for Up/Left/Down/Right)
-- `category`: One of "Supply", "Mission", "Defensive", "Offensive", "Eagle", or "Support"
-- `dept`: The in-game warbond/department name
-- `speak` (optional): Custom text for voice announcements
-
-### 3. Add Icon to Xcode Project
-
-Open `HellPad.xcodeproj` in Xcode, then drag the new icon from `StratagemIcons/` into the StratagemIcons group in the Project Navigator. Ensure "Copy items if needed" is unchecked and "Add to target: HellPad" is checked.
-
-Alternatively, manually edit `HellPad.xcodeproj/project.pbxproj` and add the icon reference to:
-- `PBXBuildFile` section
-- `PBXFileReference` section
-- `StratagemIcons` group children
-- `PBXResourcesBuildPhase` files
-
-### 4. Build and Test
-
-Build the project (Cmd+B) and verify the new stratagem appears in the picker with its icon.
+No icon files or Xcode project edits are needed — the zip is the only data artifact.
 
 ## Credits
 

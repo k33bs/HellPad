@@ -1,5 +1,8 @@
 import SwiftUI
 import Combine
+import os.log
+
+private let logger = Logger(subsystem: "com.hellpad.app", category: "app")
 
 @main
 struct HellPadApp: App {
@@ -24,6 +27,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var settingsWindow: NSWindow?
     var alwaysOnTopMenuItem: NSMenuItem?
     var stratagemManager: StratagemManager?
+    var stratagemDataController: StratagemDataController?
+    private var updatePromptPanel: NSPanel?
 
     // loadout menu management has been extracted into LoadoutMenuController.
     // we still hold the separator references so we can hand them to the controller
@@ -33,6 +38,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var loadoutMenuController: LoadoutMenuController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG
+            StratagemDataStore.runSelfChecks()
+        #endif
+
         // Hide from dock
         NSApp.setActivationPolicy(.accessory)
 
@@ -79,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         AccessibilityManager.shared.ensureAccessibilityPermission {
             self.createFloatingWindow()
             self.setupLoadoutMenuController()
+            self.checkForStratagemUpdateOnLaunch()
         }
     }
 
@@ -145,13 +155,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     @objc func showAppSettings() {
-        guard let manager = stratagemManager else {
-            print("StratagemManager not initialized yet")
+        guard let manager = stratagemManager, let dataController = stratagemDataController else {
+            logger.error("StratagemManager not initialized yet")
             return
         }
 
         if settingsWindow == nil {
-            let settingsView = AppSettingsView(stratagemManager: manager)
+            let settingsView = AppSettingsView(stratagemManager: manager, dataController: dataController)
             settingsWindow = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 600, height: 400),
                 styleMask: [.titled, .closable],
@@ -172,6 +182,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         // Create StratagemManager if needed
         if stratagemManager == nil {
             stratagemManager = StratagemManager()
+        }
+
+        // created after StratagemManager so its first refreshVersions() sees the seeded data dir.
+        // assumeIsolated: this runs on the main thread (accessibility callback / menu action)
+        if stratagemDataController == nil {
+            stratagemDataController = MainActor.assumeIsolated { StratagemDataController() }
         }
 
         // callback that ContentView/StratagemPickerView call when the user is hovering or
@@ -213,6 +229,42 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         } else {
             window.title = HBConstants.appName
         }
+    }
+
+    // MARK: - Stratagem data updates
+
+    /// one check per launch. offline / API errors are logged by the controller and never prompt.
+    private func checkForStratagemUpdateOnLaunch() {
+        guard let controller = stratagemDataController else { return }
+        Task { @MainActor in
+            if let release = await controller.checkForUpdate() {
+                self.promptForStratagemUpdate(release)
+            }
+        }
+    }
+
+    /// non-activating floating panel: visible over the game, never steals focus, never blocks
+    /// the run loop — the event tap keeps firing while it is up. `orderFront`, not `makeKey`.
+    private func promptForStratagemUpdate(_ release: StratagemRelease) {
+        guard let controller = stratagemDataController else { return }
+        let panel = NSPanel(
+            contentRect: NSRect(x: 0, y: 0, width: 380, height: 320),
+            styleMask: [.titled, .closable, .nonactivatingPanel],
+            backing: .buffered,
+            defer: false
+        )
+        panel.title = "Stratagem Data Update"
+        panel.level = .floating
+        panel.isReleasedWhenClosed = false
+        panel.contentView = NSHostingView(
+            rootView: StratagemUpdatePromptView(release: release, controller: controller) { [weak self] in
+                self?.updatePromptPanel?.close()
+                self?.updatePromptPanel = nil
+            }
+        )
+        panel.center()
+        updatePromptPanel = panel
+        panel.orderFront(nil)
     }
 
     // Handle window close button - quit the app
@@ -417,5 +469,51 @@ final class LoadoutMenuController: NSObject {
             name = "Loadout \(counter)"
         }
         return name
+    }
+}
+
+// MARK: - StratagemUpdatePromptView
+
+/// contents of the startup update panel: release notes + Update Now / Later
+struct StratagemUpdatePromptView: View {
+    let release: StratagemRelease
+    @ObservedObject var controller: StratagemDataController
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Stratagem data \(release.version.description) available")
+                .font(.headline)
+            Text("Installed: \(controller.installedVersion?.description ?? "—"). Updating relaunches HellPad.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            ScrollView {
+                Text(release.displayNotes)
+                    .font(.caption)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxHeight: 180)
+            .padding(8)
+            .background(Color.secondary.opacity(0.1))
+            .cornerRadius(6)
+            if !controller.status.isEmpty {
+                Text(controller.status)
+                    .font(.caption)
+                    .foregroundColor(controller.status.hasPrefix("Update failed") ? .red : .secondary)
+            }
+            HStack {
+                Spacer()
+                Button("Later", action: onDismiss)
+                    .keyboardShortcut(.cancelAction)
+                Button(controller.isBusy ? "Updating…" : "Update Now") {
+                    Task { try? await controller.applyUpdate(release) }
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+            .disabled(controller.isBusy)
+        }
+        .padding(16)
+        .frame(width: 380)
     }
 }

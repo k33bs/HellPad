@@ -9,6 +9,7 @@ extension UTType {
 
 struct AppSettingsView: View {
     @ObservedObject var stratagemManager: StratagemManager
+    @ObservedObject var dataController: StratagemDataController
     @State private var runningApps: [RunningApp] = []
     @State private var selectedTab = 0
 
@@ -24,6 +25,9 @@ struct AppSettingsView: View {
                 }
                 TabButton(title: "Loadouts", isSelected: selectedTab == 2) {
                     selectedTab = 2
+                }
+                TabButton(title: "Data", isSelected: selectedTab == 3) {
+                    selectedTab = 3
                 }
                 Spacer()
             }
@@ -43,6 +47,9 @@ struct AppSettingsView: View {
 
                 LoadoutsTabView(stratagemManager: stratagemManager)
                     .opacity(selectedTab == 2 ? 1 : 0)
+
+                DataTabView(controller: dataController, stratagemCount: stratagemManager.allStratagems.count)
+                    .opacity(selectedTab == 3 ? 1 : 0)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
@@ -80,6 +87,9 @@ struct TabButton: View {
                 .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
+        // the first tab took keyboard focus whenever the window became key, drawing a permanent
+        // accent-colored ring around "Apps". same fix as the picker icons in v1.1.8.
+        .focusable(false)
         .background(
             RoundedRectangle(cornerRadius: 6)
                 .fill(isSelected ? Color.accentColor.opacity(0.15) : Color.clear)
@@ -781,6 +791,104 @@ struct LoadoutsTabView: View {
                 alert.runModal()
             }
         }
+    }
+}
+
+// MARK: - Data Tab
+
+struct DataTabView: View {
+    @ObservedObject var controller: StratagemDataController
+    let stratagemCount: Int
+    @State private var confirmRevert = false
+    @State private var confirmReset = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Stratagem sequences and icons come from the generator's GitHub releases. HellPad checks once at startup; applying an update, revert or reset relaunches the app.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 6) {
+                GridRow {
+                    Text("Installed").foregroundColor(.secondary)
+                    Text("\(label(controller.installedVersion)) · \(stratagemCount) stratagems")
+                }
+                GridRow {
+                    Text("Bundled with app").foregroundColor(.secondary)
+                    Text(controller.bundledVersion.description)
+                }
+                GridRow {
+                    Text("Previous").foregroundColor(.secondary)
+                    Text(label(controller.previousVersion) + (controller.previousIsBundle ? " (bundled)" : ""))
+                }
+            }
+            .font(.system(size: 12))
+
+            HStack {
+                Button("Check Now") {
+                    Task { _ = await controller.checkForUpdate() }
+                }
+                if let release = controller.availableRelease {
+                    Button("Update to \(release.version.description)") {
+                        Task { try? await controller.applyUpdate(release) }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .disabled(controller.isBusy)
+
+            if !controller.status.isEmpty {
+                Text(controller.status)
+                    .font(.caption)
+                    .foregroundColor(controller.status.hasPrefix("Update failed") || controller.status.hasPrefix("Check failed") ? .red : .secondary)
+            }
+
+            if let release = controller.availableRelease {
+                ScrollView {
+                    Text(release.displayNotes)
+                        .font(.caption)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxHeight: 120)
+                .padding(8)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(6)
+            }
+
+            Divider()
+
+            HStack {
+                Button("Revert to Previous…") { confirmRevert = true }
+                    .disabled(controller.previousVersion == nil)
+                Button("Reset to Bundled…") { confirmReset = true }
+                    .disabled(controller.installedVersion == controller.bundledVersion)
+            }
+            .disabled(controller.isBusy)
+
+            Spacer()
+        }
+        .padding()
+        .alert("Revert to \(label(controller.previousVersion))?", isPresented: $confirmRevert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Revert & Relaunch") {
+                Task { try? await controller.revertToPrevious() }
+            }
+        } message: {
+            Text("HellPad will reinstall the previous stratagem data and relaunch.")
+        }
+        .alert("Reset to bundled \(controller.bundledVersion.description)?", isPresented: $confirmReset) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset & Relaunch") {
+                Task { try? await controller.resetToBundled() }
+            }
+        } message: {
+            Text("HellPad will reinstall the stratagem data that shipped with this version and relaunch. The current data stays available under \"Previous\".")
+        }
+    }
+
+    private func label(_ version: DataVersion?) -> String {
+        version?.description ?? "—"
     }
 }
 

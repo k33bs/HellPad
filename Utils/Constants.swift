@@ -99,6 +99,15 @@ enum HBConstants {
         static let fp: Double = 0.40
     }
 
+    // MARK: - Stratagem Data (bundled zip + GitHub release updates)
+    enum StratagemData {
+        // version of JsonData/stratagems.zip in this build. rewritten by scripts/sync_stratagems.py — keep the format `"vX.Y.Z"`
+        static let bundledVersion = "v1.0.8"
+        static let releasesAPI = URL(string: "https://api.github.com/repos/k33bs/Helldivers-2-Stratagem-JSON-Generator/releases/latest")!
+        static let assetPrefix = "helldivers2-stratagems-"
+        static let maxDownloadBytes = 20_000_000
+    }
+
     // MARK: - Visual Effects
     enum Visual {
         // Opacities

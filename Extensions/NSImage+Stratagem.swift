@@ -25,10 +25,8 @@ extension NSImage {
         }
         stratagemIconCacheLock.unlock()
 
-        // Load from disk if not cached (no lock held during disk i/o)
-        guard let url = Bundle.main.url(forResource: slug, withExtension: "png"),
-              let image = NSImage(contentsOf: url) else {
-            // missing icon now logs via os.log instead of print
+        // Load from App Support (seeded from the bundled zip) if not cached (no lock held during disk i/o)
+        guard let image = NSImage(contentsOf: StratagemDataStore.iconURL(slug: slug)) else {
             logger.error("Stratagem icon not found: \(slug).png (from name: \(name))")
             return nil
         }
